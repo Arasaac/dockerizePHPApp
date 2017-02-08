@@ -1,0 +1,3 @@
+// change include and require for require_once
+buscador.php:include 'inc/xss.php';
+buscar_por_palabra.php:require('inc/xss.php');

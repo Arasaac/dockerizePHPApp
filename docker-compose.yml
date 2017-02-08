@@ -1,0 +1,84 @@
+version: '2'
+
+services:
+
+  nginx-proxy:
+    hostname: nginx-proxy
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      - frontend
+  varnish:
+    hostname: varnish
+    build: 
+      context: ./varnish
+    networks:
+      - frontend
+    depends_on:
+      - arasaac
+    environment:
+      VARNISH_BACKEND_HOST: arasaac
+      VARNISH_BACKEND_PORT: 80
+      VIRTUAL_HOST: "www.arasaac.catedu.aragon.es arasaac.catedu.aragon.es"
+  db:
+    hostname: db
+    image: mysql:5.7
+    container_name: db-arasaac
+    volumes:
+      - ./bbdd:/var/lib/mysql
+      - ./dump:/docker-entrypoint-initdb.d
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root-password
+      MYSQL_DATABASE: saac
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user-password
+    networks:
+      - backend
+
+  arasaac:
+    container_name: arasaac
+    hostname: arasaac
+    volumes:
+       - ./php:/var/www/html
+    depends_on:
+      - db
+    build: ./arasaac
+    restart: always
+    networks:
+      - frontend
+      - backend
+
+  phpmyadmin:
+    hostname: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+     - PMA_ARBITRARY=1
+    restart: always
+    volumes:
+     - /sessions
+    environment:
+      VIRTUAL_HOST: "phpmyadmin.arasaac.catedu.aragon.es www.phpmyadmin.arasaac.catedu.aragon.es"
+    networks:
+      - frontend
+      - backend   
+  sftp:
+    hostname: sftp
+    container_name: sftp-arasaac
+    image: atmoz/sftp
+    volumes:
+      - ./php:/home/arasaac/php
+    ports:
+      - "2222:22"
+    command: juanda:123:1001
+    networks:
+      - frontend
+
+networks:
+  frontend:
+  backend:
