@@ -874,9 +874,9 @@ function encadenar_imagenes_arriba($top,$img_para_procesar,$salida) {
 
 function strtoupper_utf8($string){
 	
-    $string=utf8_decode($string);
-    $string=mb_strtoupper($string); // importante utilizar la funcion mb_strtoupper porque strtoupper no funcionaba en el servidor aunque si en local
-    $string=utf8_encode($string);
+    //$string=utf8_decode($string);
+    $string=mb_strtoupper($string,'UTF-8'); // importante utilizar la funcion mb_strtoupper porque strtoupper no funcionaba en el servidor aunque si en local
+    //$string=utf8_encode($string);
     return $string;
 }
 
@@ -1797,7 +1797,7 @@ function CleanFiles($dir)
 
             $path=$dir.'/'.$file;
 
-            if($t-filemtime($path)>1800) //Establezo el tiempo 3600 (segundos) = 1h
+            if($t-filemtime($path)>10800) //Establezo el tiempo 3600 (segundos) = 1h
 
                 @unlink($path);
 

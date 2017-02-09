@@ -137,20 +137,20 @@ function rmdir_recurse($path)
 }
 
 /*****************************************************************************************************************/
-/*    FUNCION PARA TRANSFORMAR EN MAYUSCULAS CARACTERES CON ACENTOS Y E�ES EN UTF-8 (UTILIZADO LOS SIMBOLOS)  */
+/*    FUNCION PARA TRANSFORMAR EN MAYUSCULAS CARACTERES CON ACENTOS Y EÑES EN UTF-8 (UTILIZADO LOS SIMBOLOS)  */
 /******************************************************************************************************************/
 
 function strtoupper_utf8($string){
-    $string=utf8_decode($string);
-    $string=mb_strtoupper($string); // importante utilizar la funcion mb_strtoupper porque strtoupper no funcionaba en el servidor aunque si en local
-    $string=utf8_encode($string);
+    //$string=utf8_decode($string);
+    $string=mb_strtoupper($string,'UTF-8'); // importante utilizar la funcion mb_strtoupper porque strtoupper no funcionaba en el servidor aunque si en local
+    //$string=utf8_encode($string);
     return $string;
 }
 
 function strtolower_utf8($string){
-    $string=utf8_decode($string);
-    $string=mb_strtolower($string); // importante utilizar la funcion mb_strtolower porque strtoupper no funcionaba en el servidor aunque si en local
-    $string=utf8_encode($string);
+    //$string=utf8_decode($string);
+    $string=mb_strtolower($string,'UTF-8'); // importante utilizar la funcion mb_strtolower porque strtoupper no funcionaba en el servidor aunque si en local
+    //$string=utf8_encode($string);
     return $string;
 }
 
@@ -2475,7 +2475,7 @@ function CleanFiles($dir)
                    //$Diff = (time() - filectime("$dir/$file"))/60/60/24;
                    //if ($Diff > 1) unlink("$dir/$file"); //Borro los archivos con mas de 2 dias de antiguedad
 				   $path=$dir.'/'.$file;
-				   if($t-filemtime($path)>1800) //Establezo el tiempo 3600 (segundos) = 1h
+				   if($t-filemtime($path)>10800) //Establezo el tiempo 3600 (segundos) = 1h
 				   @unlink($path);
 
                } 

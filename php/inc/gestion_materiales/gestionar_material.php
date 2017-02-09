@@ -43,6 +43,19 @@ $id_material='';
 <head>
 <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
 <title>Simple example</title>
+<script type="text/javascript" src="../../js/nicEdit/nicEdit.js"></script>
+<script type="text/javascript">
+var area1, area2, area3;
+function toggleAreas() {
+    area1=new nicEditor({iconsPath : '../../js/nicEdit/nicEditorIcons.gif'}).panelInstance('texto');
+}
+
+function removeAreas() {
+	area1.removeInstance('texto');
+}
+
+bkLib.onDomLoaded(function() { toggleAreas(); });
+</script>
 <script type="text/javascript">
 function cargar_div(page,param,div){
 
@@ -78,26 +91,12 @@ function cargar_div(page,param,div){
 
 <script language="javascript" type="text/javascript" src="../../js/tiny_mce/tiny_mce_gzip.php"></script>
 <script language="javascript" type="text/javascript">
-	tinyMCE.init({
-		theme : "advanced",
-		mode : "exact",
-		elements : "texto",
-		save_callback : "customSave",
-		content_css : "example_advanced.css",
-	theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,link,unlink",
-	theme_advanced_buttons2 : "",
-	theme_advanced_buttons3 : "",
-	theme_advanced_toolbar_location : "top",
-	theme_advanced_toolbar_align : "left",
-	theme_advanced_path_location : "bottom",
-	extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]",
-		debug : false
-	});
+	
 
 	// Custom save callback, gets called when the contents is to be submitted
-	function customSave(id, content) {
+	function customSave() {
 	
-	var contenido=Url.encode(content);
+	var contenido=Url.encode(document.getElementById('texto').value);
 	
 		selIt_sin(); 
 	
@@ -801,7 +800,7 @@ function selIt_sin() {
         </table>        </td>
     </tr>
   </table>
-  <p align="center"><input type="button" name="save" value="<?php echo $boton_enviar; ?>" onclick="tinyMCE.triggerSave();" />
+  <p align="center"><input type="button" name="save" value="<?php echo $boton_enviar; ?>" onclick="removeAreas(); customSave();" />
   </p>
   </form>
 </div>
