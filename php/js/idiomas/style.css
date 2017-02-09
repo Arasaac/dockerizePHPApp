@@ -1,0 +1,42 @@
+A:link {
+	COLOR: #330066; TEXT-DECORATION: underline
+}
+A:visited {
+	COLOR: #660099; TEXT-DECORATION: underline
+}
+A:hover {
+	COLOR: #dd0000; TEXT-DECORATION: underline
+}
+A.lien:link {
+	COLOR: #0000e6; TEXT-DECORATION: none
+}
+A.lien:visited {
+	COLOR: #0000e6; TEXT-DECORATION: none
+}
+A.lien:hover {
+	COLOR: #dd0000; TEXT-DECORATION: underline
+}
+BODY {
+	BACKGROUND: #ffffff; COLOR: #330066; FONT-FAMILY: Verdana; 
+}
+.ti {
+	FONT-SIZE: 20pt; COLOR: #33cc00; FONT-FAMILY: Comic Sans MS; TEXT-ALIGN: center
+}
+.tl {
+	FONT-SIZE: 16pt; COLOR: #009900; FONT-FAMILY: Arial
+}
+.st {
+	FONT-WEIGHT: bolder; COLOR: #9d4098
+}
+.da {
+	COLOR: #0000cc; FONT-FAMILY: Times New Roman
+}
+.cr {
+	COLOR: #cc0033
+}
+.su {
+	COLOR: #d9a4d7
+}
+.bo {
+	BORDER-TOP-WIDTH: 1px; BORDER-LEFT-WIDTH: 1px; BORDER-LEFT-COLOR: #aeaeff; BORDER-BOTTOM-WIDTH: 1px; BORDER-BOTTOM-COLOR: #aeaeff; COLOR: #0000d7; BORDER-TOP-COLOR: #aeaeff; FONT-FAMILY: Arial; BACKGROUND-COLOR: #dfdfff; BORDER-RIGHT-WIDTH: 1px; BORDER-RIGHT-COLOR: #aeaeff
+}

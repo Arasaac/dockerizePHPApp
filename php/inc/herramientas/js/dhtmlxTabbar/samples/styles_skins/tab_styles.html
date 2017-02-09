@@ -1,0 +1,112 @@
+<!--conf
+<sample in_favorites="true">
+              <product version="1.1" edition="std"/>
+                     <modifications>
+                            <modified date="070101"/>
+                     </modifications>
+               </sample>
+ --> 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+	<title>Predefined designs</title>
+	<link rel="STYLESHEET" type="text/css" href="../../codebase/dhtmlxtabbar.css">
+	
+	<script  src="../../codebase/dhtmlxcommon.js"></script>
+	<script  src="../../codebase/dhtmlxtabbar.js"></script>
+</head>
+
+<body>
+<link rel='STYLESHEET' type='text/css' href='../common/style.css'>
+<table cellspacing="0" cellpadding="0" class="sample_header" border="0">
+	<tr valign="middle">
+		<!-- COMPONENT ICON -->
+		<td width="40" align="center"><img src="../common/dhtmlxtabbar_icon.gif" border="0"></td>
+		<!-- COMPONENT NAME -->
+		<td width="150" align="left" nowrap="true">Sample: dhtmlxTabbar</td>
+		<!-- SAMPLE TITLE -->
+		<td width="0" align="left" nowrap><b>Predefined designs</b></td>
+		<!-- LINK TO COMPONENT PAGE -->
+		<td width="0" align="right"><a href="http://www.dhtmlx.com/docs/products/dhtmlxTabbar/index.shtml">dhtmlxTabbar main page</a></td>
+		<!-- CLOSE BUTTON -->
+		<td width="50"><div class="sample_close"><a href="javascript:void(0);" onclick="self.close();"><img src="../common/sample_close.gif" width="14" height="14" border="0" alt="X"></a></div></td>
+	</tr>
+</table>
+	
+	
+	
+	<table>
+		<tr>
+			<td>
+				<h3>winDflt</h3>
+				<div id="a_tabbar" style="width:612; height:150;"></div>
+			</td> </tr>
+			<tr>
+			<td>
+				<h3>Modern</h3>
+				<div id="b_tabbar" style="width:612; height:150;"></div>
+			</td> </tr>
+			<tr>
+			<td>
+				<h3>Silver</h3>
+				<div id="c_tabbar" style="width:612; height:150;"></div>
+			</td> </tr>
+			<!--- <tr>
+			<td>
+				<h3>winRound</h3>
+				<div id="d_tabbar" style="width:612; height:150;"></div>
+			</td> </tr> --->
+	</table>
+<br>
+<div class='sample_code'><div class="hl-main"><pre><span class="hl-code"> 
+</span><span class="hl-brackets">&lt;</span><span class="hl-reserved">div</span><span class="hl-code"> </span><span class="hl-var">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">style</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">width:400;height:100</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">&gt;</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">div</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+</span><span class="hl-brackets">&lt;</span><span class="hl-reserved">div</span><span class="hl-code"> </span><span class="hl-var">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">style</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">width:400;height:100</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">&gt;</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">div</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+</span><span class="hl-brackets">&lt;</span><span class="hl-reserved">script</span><span class="hl-brackets">&gt;</span><span class="hl-code"><div class="hl-main"><pre><span class="hl-code"> 
+    </span><span class="hl-comment">//</span><span class="hl-comment">use one of predefined schemas</span><span class="hl-comment"></span><span class="hl-code">
+    </span><span class="hl-identifier">tabbar</span><span class="hl-code">=</span><span class="hl-reserved">new</span><span class="hl-code"> </span><span class="hl-identifier">dhtmlXTabBar</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">a_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">top</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+    </span><span class="hl-identifier">tabbar</span><span class="hl-code">.</span><span class="hl-identifier">setImagePath</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">../../imgs/</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+    </span><span class="hl-identifier">tabbar</span><span class="hl-code">.</span><span class="hl-identifier">setStyle</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">silver</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+    
+    </span><span class="hl-comment">//</span><span class="hl-comment">define custom schema. paths are related to images directory set with setImagePath method</span><span class="hl-comment"></span><span class="hl-code">
+    </span><span class="hl-identifier">customStyleSchema</span><span class="hl-code"> = </span><span class="hl-brackets">[</span><span class="hl-quotes">&quot;</span><span class="hl-string">custom/p_left.gif</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">custom/p_middle.gif</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">custom/p_right.gif</span><span class="hl-quotes">&quot;</span><span class="hl-code">,
+                        </span><span class="hl-quotes">&quot;</span><span class="hl-string">custom/a_left.gif</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">custom/a_middle.gif</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">custom/a_right.gif</span><span class="hl-quotes">&quot;</span><span class="hl-code">,
+                        </span><span class="hl-quotes">&quot;</span><span class="hl-string">custom/p_middle_over.gif</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-number">5</span><span class="hl-code">,</span><span class="hl-number">6</span><span class="hl-code">,</span><span class="hl-number">6</span><span class="hl-code">,</span><span class="hl-reserved">false</span><span class="hl-code">,</span><span class="hl-reserved">false</span><span class="hl-code">,</span><span class="hl-reserved">false</span><span class="hl-brackets">]</span><span class="hl-code">;
+    
+    </span><span class="hl-identifier">tabbar2</span><span class="hl-code">=</span><span class="hl-reserved">new</span><span class="hl-code"> </span><span class="hl-identifier">dhtmlXTabBar</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">c_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">top</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+    </span><span class="hl-identifier">tabbar2</span><span class="hl-code">.</span><span class="hl-identifier">setImagePath</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">../../imgs/</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+    </span><span class="hl-identifier">tabbar2</span><span class="hl-code">.</span><span class="hl-identifier">setStyle</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">custom</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;</span></pre></div></span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">script</span><span class="hl-brackets">&gt;</span></pre></div></div>
+	<script>
+			//modernStyleSchema = ["modern/p_left.gif","modern/p_middle.gif","modern/p_right.gif","modern/a_left.gif","modern/a_middle.gif","modern/a_right.gif","modern/p_middle_over.gif",5,6,6,false,false,false];
+			//silverStyleSchema = ["silver/p_left.gif","silver/p_middle.gif","silver/p_right.gif","silver/a_left.gif","silver/a_middle.gif","silver/a_right.gif","silver/p_middle_over.gif",5,6,6,false,false,false];
+			
+			tabbar=new dhtmlXTabBar("a_tabbar","top");
+            tabbar.setImagePath("../../codebase/imgs/");
+            tabbar.loadXML("tabs1.xml");
+
+			tabbar2=new dhtmlXTabBar("b_tabbar","top");
+            tabbar2.setImagePath("../../codebase/imgs/");
+			tabbar2.setStyle("modern");
+            tabbar2.setMargin(-1);
+            tabbar2.loadXML("tabs1.xml");
+
+			tabbar3=new dhtmlXTabBar("c_tabbar","top");
+            tabbar3.setImagePath("../../codebase/imgs/");
+            tabbar3.setStyle("silver");
+            tabbar3.setMargin(-1);
+            tabbar3.loadXML("tabs1.xml");
+
+			/*tabbar4=new dhtmlXTabBar("d_tabbar","top",45);
+            tabbar4.setImagePath("../../codebase/imgs/");
+            
+            tabbar4.setMargin(-20);            
+            tabbar4.setStyle("winRound");
+            tabbar4.loadXML("tabs1.xml");*/
+	</script>
+
+<!-- FOOTER -->
+<table callspacing="0" cellpadding="0" border="0" class="sample_footer"><tr><td style="padding-left: 8px;">&copy; <a href="http://www.dhtmlx.com">DHTMLX LTD</a>. All rights reserved</td></tr></table>
+<!-- FOOTER -->
+
+</body>
+</html>

@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tabbar  hrefmode="ajax-html">
+    <row>
+        <tab id="b1" width='100px' selected="1"  href="alfa.html">features</tab>
+        <tab id="b2" width='100px' href="alfa2.html">dhtmlx</tab>
+        <tab id="b3" width='100px' href="gamma.htm">browsers</tab>
+		<tab id="b4" width='100px' href="betta.txt">other</tab>
+    </row>
+</tabbar>

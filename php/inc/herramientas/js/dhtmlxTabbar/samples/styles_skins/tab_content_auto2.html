@@ -1,0 +1,81 @@
+<!--conf
+<sample>
+              <product version="1.1" edition="std"/>
+                     <modifications>
+                            <modified date="070101"/>
+                     </modifications>
+               </sample>
+ --> 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+	<title>Initialization from HTML and styles</title>
+	<link rel="STYLESHEET" type="text/css" href="../../codebase/dhtmlxtabbar.css">
+	<script  src="../../codebase/dhtmlxcommon.js"></script>
+	<script  src="../../codebase/dhtmlxtabbar.js"></script>
+	<script  src="../../codebase/dhtmlxtabbar_start.js"></script>
+	<style>
+	.dhx_tab_element div{
+		valign:center;
+	}
+	</style>
+</head>
+
+<body>
+<link rel='STYLESHEET' type='text/css' href='../common/style.css'>
+<table cellspacing="0" cellpadding="0" class="sample_header" border="0">
+	<tr valign="middle">
+		<!-- COMPONENT ICON -->
+		<td width="40" align="center"><img src="../common/dhtmlxtabbar_icon.gif" border="0"></td>
+		<!-- COMPONENT NAME -->
+		<td width="150" align="left" nowrap="true">Sample: dhtmlxTabbar</td>
+		<!-- SAMPLE TITLE -->
+		<td width="0" align="left" nowrap><b>Initialization from HTML and styles</b></td>
+		<!-- LINK TO COMPONENT PAGE -->
+		<td width="0" align="right"><a href="http://www.dhtmlx.com/docs/products/dhtmlxTabbar/index.shtml">dhtmlxTabbar main page</a></td>
+		<!-- CLOSE BUTTON -->
+		<td width="50"><div class="sample_close"><a href="javascript:void(0);" onclick="self.close();"><img src="../common/sample_close.gif" width="14" height="14" border="0" alt="X"></a></div></td>
+	</tr>
+</table>
+	
+	
+	<p>When tabbar is initialized automatically and its styles attributes can be set directly in div tag without any javascript (see sample code below).</p>
+	
+	<table>
+		<tr>
+			<td>
+                <div mode="top" tabheight="20" align="left" offset="30" margin="-10" skinColors="#FCFBFC,#F4F3EE" id="a_tabbar" tabstyle="silver" class="dhtmlxTabBar" imgpath="../../codebase/imgs/" style="width:398; height:395;">
+                    <div id="a1" width="100" name="Properties" style="display:none"><img src="../images/page_a.gif"></div>
+                    <div id="a2" width="100" name="Setting" style="display:none"><img src="../images/page_b.gif"></div>
+                    <div id="a3" width="100" name="Other" style="display:none">Content 3</div>
+                </div>
+			</td>
+        </tr>
+	</table>
+    <a></a>
+<br>
+<div class='sample_code'><div class="hl-main"><pre><span class="hl-code"> 
+&lt;</span><span class="hl-identifier">script</span><span class="hl-code">  </span><span class="hl-identifier">src</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">../../codebase/dhtmlXTabbar.js</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;&lt;/</span><span class="hl-identifier">script</span><span class="hl-code">&gt;
+&lt;</span><span class="hl-identifier">script</span><span class="hl-code">  </span><span class="hl-identifier">src</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">../../codebase/dhtmlXTabbar_start.js</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;&lt;/</span><span class="hl-identifier">script</span><span class="hl-code">&gt;
+ 
+&lt;</span><span class="hl-identifier">div</span><span class="hl-code"> </span><span class="hl-identifier">mode</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">top</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">tabheight</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">20</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">align</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">left</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">offset</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">20</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">margin</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">-10</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">skinColors</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">#FCFBFC,#F4F3EE</span><span class="hl-quotes">&quot;</span><span class="hl-code">
+        </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-reserved">class</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">dhtmlxTabBar</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">imgpath</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">../../codebase/imgs/</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">style</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">width:390; height:390;</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;
+    &lt;</span><span class="hl-identifier">div</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a1</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">name</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">Tab 1</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">style</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">display:none</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;
+        &lt;</span><span class="hl-identifier">img</span><span class="hl-code"> </span><span class="hl-identifier">src</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">../images/page_a.gif</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;
+    &lt;/</span><span class="hl-identifier">div</span><span class="hl-code">&gt;
+    &lt;</span><span class="hl-identifier">div</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a2</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">name</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">Tab 2</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">style</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">display:none</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;
+        &lt;</span><span class="hl-identifier">img</span><span class="hl-code"> </span><span class="hl-identifier">src</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">../images/page_b.gif</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;
+    &lt;/</span><span class="hl-identifier">div</span><span class="hl-code">&gt;
+    &lt;</span><span class="hl-identifier">div</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a3</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">name</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">Tab 1</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">style</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">display:none</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;
+        </span><span class="hl-identifier">Content</span><span class="hl-code"> </span><span class="hl-number">3</span><span class="hl-code">
+    &lt;/</span><span class="hl-identifier">div</span><span class="hl-code">&gt;
+&lt;/</span><span class="hl-identifier">div</span><span class="hl-code">&gt;</span></pre></div></div>
+
+
+<!-- FOOTER -->
+<table callspacing="0" cellpadding="0" border="0" class="sample_footer"><tr><td style="padding-left: 8px;">&copy; <a href="http://www.dhtmlx.com">DHTMLX LTD</a>. All rights reserved</td></tr></table>
+<!-- FOOTER -->
+
+</body>
+</html>

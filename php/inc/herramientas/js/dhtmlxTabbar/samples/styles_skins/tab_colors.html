@@ -1,0 +1,87 @@
+<!--conf
+<sample in_favorites="true">
+              <product version="1.1" edition="std"/>
+                     <modifications>
+                            <modified date="070101"/>
+                     </modifications>
+               </sample>
+ --> 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+	<title>Custom colors</title>
+	<link rel="STYLESHEET" type="text/css" href="../../codebase/dhtmlxtabbar.css">
+	
+	<script  src="../../codebase/dhtmlxcommon.js"></script>
+	<script  src="../../codebase/dhtmlxtabbar.js"></script>
+</head>
+
+<body>
+<link rel='STYLESHEET' type='text/css' href='../common/style.css'>
+<table cellspacing="0" cellpadding="0" class="sample_header" border="0">
+	<tr valign="middle">
+		<!-- COMPONENT ICON -->
+		<td width="40" align="center"><img src="../common/dhtmlxtabbar_icon.gif" border="0"></td>
+		<!-- COMPONENT NAME -->
+		<td width="150" align="left" nowrap="true">Sample: dhtmlxTabbar</td>
+		<!-- SAMPLE TITLE -->
+		<td width="0" align="left" nowrap><b>Custom colors</b></td>
+		<!-- LINK TO COMPONENT PAGE -->
+		<td width="0" align="right"><a href="http://www.dhtmlx.com/docs/products/dhtmlxTabbar/index.shtml">dhtmlxTabbar main page</a></td>
+		<!-- CLOSE BUTTON -->
+		<td width="50"><div class="sample_close"><a href="javascript:void(0);" onclick="self.close();"><img src="../common/sample_close.gif" width="14" height="14" border="0" alt="X"></a></div></td>
+	</tr>
+</table>
+	
+	<p>You can set background color for active and other tabs using setSkinColors method</p>
+	<table width="500px">
+		<tr>
+			<td>
+				<div id="a_tabbar" style="width:100%; height:50;"/>
+			</td> </tr>
+			<td>
+				<div id="b_tabbar" style="width:100%; height:50;"/>
+			</td> </tr>
+			<td>
+				<div id="c_tabbar" style="width:100%; height:50;"/>
+			</td> </tr>
+			<td>
+				<div id="d_tabbar" style="width:100%; height:50;"/>
+			</td> </tr>
+	</table>
+<br>
+<div class='sample_code'><div class="hl-main"><pre><span class="hl-code"> 
+</span><span class="hl-brackets">&lt;</span><span class="hl-reserved">div</span><span class="hl-code"> </span><span class="hl-var">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">style</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">width:400;height:100</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">&gt;</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">div</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+</span><span class="hl-brackets">&lt;</span><span class="hl-reserved">script</span><span class="hl-brackets">&gt;</span><span class="hl-code"><div class="hl-main"><pre><span class="hl-code"> 
+    </span><span class="hl-identifier">tabbar2</span><span class="hl-code">=</span><span class="hl-reserved">new</span><span class="hl-code"> </span><span class="hl-identifier">dhtmlXTabBar</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">b_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">top</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+    </span><span class="hl-identifier">tabbar2</span><span class="hl-code">.</span><span class="hl-identifier">setImagePath</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">../../imgs/</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+    </span><span class="hl-identifier">tabbar2</span><span class="hl-code">.</span><span class="hl-identifier">loadXML</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">tabs1.xml</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+    </span><span class="hl-identifier">tabbar2</span><span class="hl-code">.</span><span class="hl-identifier">setSkinColors</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">#FFFF00</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">#FFFACD</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;</span></pre></div></span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">script</span><span class="hl-brackets">&gt;</span></pre></div></div>
+	<script>
+			tabbar=new dhtmlXTabBar("a_tabbar","top");
+            tabbar.setImagePath("../../codebase/imgs/");
+            tabbar.loadXML("tabs1.xml");
+
+			tabbar2=new dhtmlXTabBar("b_tabbar","top");
+            tabbar2.setImagePath("../../codebase/imgs/");
+            tabbar2.loadXML("tabs1.xml");
+            tabbar2.setSkinColors("#FFFF00","#FFFACD");
+
+			tabbar3=new dhtmlXTabBar("c_tabbar","top");
+            tabbar3.setImagePath("../../codebase/imgs/");
+            tabbar3.loadXML("tabs1.xml");
+            tabbar3.setSkinColors("#7FFF00","#9ACD32");
+
+			tabbar4=new dhtmlXTabBar("d_tabbar","top");
+            tabbar4.setImagePath("../../codebase/imgs/");
+            tabbar4.loadXML("tabs1.xml");
+            tabbar4.setSkinColors("#FF69B4","#FFC0CB");
+	</script>
+
+<!-- FOOTER -->
+<table callspacing="0" cellpadding="0" border="0" class="sample_footer"><tr><td style="padding-left: 8px;">&copy; <a href="http://www.dhtmlx.com">DHTMLX LTD</a>. All rights reserved</td></tr></table>
+<!-- FOOTER -->
+
+</body>
+</html>

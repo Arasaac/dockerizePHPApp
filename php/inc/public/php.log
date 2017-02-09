@@ -1,0 +1,2 @@
+[02-Dec-2009 12:51:31] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /var/home/vsftpd/dromero/saac/inc/public/materiales.php on line 602
+[02-Dec-2009 12:52:32] PHP Warning:  mysql_fetch_array(): supplied argument is not a valid MySQL result resource in /var/home/vsftpd/dromero/saac/inc/public/materiales.php on line 602

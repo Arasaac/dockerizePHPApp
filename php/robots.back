@@ -1,0 +1,15 @@
+User-agent: * 
+Disallow: /repositorio/
+Disallow: /classes/
+Disallow: /funciones/
+Disallow: /css/
+Disallow: /images/
+Disallow: /inc/
+Disallow: /js/
+Disallow: /lang/
+Disallow: /plugins/
+Disallow: /temp/
+Disallow: /configuration/
+Allow: index.php
+
+ 

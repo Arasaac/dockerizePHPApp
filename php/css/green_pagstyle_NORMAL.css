@@ -1,0 +1,33 @@
+/*Scott*/
+#pagination {
+	padding:1%;
+	margin:1%;
+	text-align:center;
+}
+
+#pagination a {
+	padding: 0.5% 1% 0.5% 1%;
+	margin-right: 0.5%;
+	border: 0.1em solid #ddd;
+	text-decoration: none; 
+	color: #88AF3F;
+}
+#pagination a:hover, div.pagination a:active {
+	border:0.1em solid #85BD1E;
+	color: #638425;
+	background-color: #F1FFD6;
+}
+#pagination span.current {
+	padding: 0.5% 1% 0.5% 1%;
+	margin-right: 0.5%;
+	border: 0.1em solid #B2E05D;
+	font-weight: bold;
+	background-color: #B2E05D;
+	color: #FFF;
+}
+#pagination span.disabled {
+	padding: 0.5% 1% 0.5% 1%;
+	margin-right: 0.5%;
+	border: 0.1em solid #f3f3f3;
+	color: #ccc;
+}

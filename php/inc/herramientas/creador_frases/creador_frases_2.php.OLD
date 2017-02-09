@@ -1,0 +1,184 @@
+<?php 
+session_start();
+
+include ('../../../classes/querys/query.php');
+require('../../../funciones/funciones.php');
+require_once('../classes/crypt/5CR.php');
+require_once('../../../configuration/key.inc');
+$query=new query();
+$encript = new E5CR($llave); //definimos un nuevo elemento y pasamos la llave
+
+$orden_frase=$_POST['mi_seleccion'];
+
+if (isset($_POST['pictcolor'])) { $with_pictcolor=$_POST['pictcolor']; } else {  $with_pictcolor=0; }
+if (isset($_POST['pictnegro'])) { $with_pictnegro=$_POST['pictnegro']; } else {  $with_pictnegro=0; }
+if (isset($_POST['imagenes'])) {$with_imagenes=$_POST['imagenes']; } else {  $with_imagenes=0; }
+
+$partes_frase = explode("&",$orden_frase); 
+
+if (isset($_POST['mi_seleccion'])) {
+	
+	$orden=0;
+	foreach ($partes_frase as $indice=>$valor){ 
+			
+			$chopped_frase = explode("thelist2[]=",$valor);
+			$img=array();
+			
+			if ($chopped_frase[1] > 0) {
+			
+				$dp=$query->datos_palabra($chopped_frase[1]);
+				$img_disponibles=$query->imagenes_disponibles_tipos($chopped_frase[1],$with_pictcolor,$with_pictnegro,$with_imagenes);
+				$num_resultados=mysql_num_rows($img_disponibles);
+				
+				$alternativas='<td height="100px" style="border:1px dashed #CCCCCC; padding: 10px;">';
+				
+				if ($num_resultados > 0) {
+				
+					while ($row=mysql_fetch_array($img_disponibles)) {
+						
+						$ruta_img='size=30&ruta=../../../../repositorio/originales/'.$row['imagen'];
+						$encript->encriptar($ruta_img,1); //OJO uno(1) es para encriptar variables para URL
+						
+						$ruta='img=repositorio/originales/'.$row['imagen'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'];
+						$encript->encriptar($ruta,1);
+						
+						$ruta_cesto='ruta_cesto=repositorio/originales/'.$row['imagen'];
+						$encript->encriptar($ruta_cesto,1);
+					
+						$img[]='<a href="javascript:void(0);" onclick="Dialog.alert({url: \'imagen.php?i='.$ruta.'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src="../classes/img/thumbnail.php?i='.$ruta_img.'" alt="Imagen: '.$file.'" border="0"/></a><input type="radio" name="'.$orden.'" id="'.$orden.'" value="'.$row['id_imagen'].'" />'; 
+					
+					}			
+				}
+				
+				$y=0;
+				$alternativas.='<table>';
+						for ($i=1; $i<=20; $i++){ // FILAS
+							$alternativas.="<tr>"; 
+							for ($e=1; $e<=2; $e++){ //COLUMNAS 
+								$img_file=$img[$y];
+								if ($img_file != "") {
+								$alternativas.=$img_file;
+								 $y++;  			
+								} else { $y++;}
+														   
+							} 
+							$alternativas.="</tr>"; 
+						} 
+					$alternativas.='</table>';
+				
+				$alternativas.='<br /><br /><input type="text" name="p_'.$orden.'" id="p_'.$orden.'" value="'.$dp['palabra'].'"/><td/>';
+				$palabra[]=$alternativas;
+				
+			} else {
+				$palabra[]='<td style="border:1px dashed #CCCCCC; padding: 10px;"><span style="font-size:24px">'.$chopped_frase[1].'<span /><br /><br /><br /><input type="hidden" name="'.$orden.'" id="'.$orden.'" value="'.$chopped_frase[1].'"/><input name="p_'.$orden.'" type="text" id="p_'.$orden.'" value="'.$chopped_frase[1].'"/><br /><td/>';
+			}
+		$orden++; 
+	}
+	
+}
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"><head>
+<title>Herramientas ARASAAC: Creador de Frases - PASO 2</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <script src="../js/scriptaculous/prototype.js" type="text/javascript"></script>
+  <script src="../js/scriptaculous/scriptaculous.js" type="text/javascript"></script>
+  <script src="../js/scriptaculous/unittest.js" type="text/javascript"></script>
+  <script type="text/javascript" src="../js/ajax_herramientas.js"></script>
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
+
+    <script type="text/javascript" src="../js/windows_js_0.96.2/javascripts/effects.js"> </script>
+  	<script type="text/javascript" src="../js/windows_js_0.96.2/javascripts/window.js"> </script>
+  	<script type="text/javascript" src="../js/windows_js_0.96.2/javascripts/debug.js"> </script>
+	<link href="../js/windows_js_0.96.2/themes/default.css" rel="stylesheet" type="text/css" >	 </link>
+  	<link href="../js/windows_js_0.96.2/themes/alphacube.css" rel="stylesheet" type="text/css" >	 </link>
+	<link href="../js/windows_js_0.96.2/themes/alert.css" rel="stylesheet" type="text/css" >	 </link>
+	<link href="../js/windows_js_0.96.2/themes/alert_lite.css" rel="stylesheet" type="text/css" >	 </link>
+  	<link href="../js/windows_js_0.96.2/themes/debug.css" rel="stylesheet" type="text/css" >	 </link>
+</head>
+<body>
+<div class="body_content">
+<link rel="STYLESHEET" type="text/css" href="../js/dhtmlxMenu/css/dhtmlXMenu.css">
+<script language="JavaScript" src="../js/dhtmlxMenu/js/dhtmlXProtobar.js"></script>
+<script language="JavaScript" src="../js/dhtmlxMenu/js/dhtmlXMenuBar.js"></script>
+<script language="JavaScript" src="../js/dhtmlxMenu/js/dhtmlXCommon.js"></script>
+        <table width="100%">
+	  <tr>
+			<td width="78%">
+			  <div id="menu_zone" style="width:600;background-color:#f5f5f5;border :1px solid Silver;"/>
+			</td>
+     <td width="22%">
+<table width="100%" border="0">
+              <tr>
+                <td width="54%" align="right"> <img src="../../../images/refresh.png" alt="Refrescar página" width="48" height="48" onClick="javascript:window.location.reload();" /></td>
+        </tr>
+            </table>
+        </td>
+		</tr>
+	</table>	
+        <hr>
+
+	<script>
+		function onButtonClick(itemId,itemValue)
+		{};
+		aMenuBar=new dhtmlXMenuBarObject(document.getElementById('menu_zone'),'100%',16,"");
+		aMenuBar.setOnClickHandler(onButtonClick);
+		aMenuBar.setGfxPath("../../../images/");
+		<?php if ($_SESSION['ID_USER'] != '' || $_SESSION['ID_USER']!=0) {  ?>
+		aMenuBar.loadXML("../js/dhtmlxMenu/_menu4.xml");
+		<?php } else {  ?>
+		aMenuBar.loadXML("../js/dhtmlxMenu/_menu_invitado4.xml");
+		<?php } ?>
+		aMenuBar.showBar();
+	</script>
+	<div id="principal">
+<form action="creador_frases_3.php" method="post" name="seleccion_simbolos" id="seleccion_simbolos" >
+
+<div id="mi_repositorio">
+ <h4>CREADOR DE FRASES v 0.1: PASO 2</h4>
+      <table width="100%" border="0">
+        <tr>
+          <td width="100%" valign="top">
+          Escoge las palabras que forman tu frase. En caso de que la palabra no esté en el diccionario pulsa en el signo más.<br /></td>
+          </tr>
+        <tr>
+          <td height="22" align="center" valign="top">&nbsp;</td>
+        </tr>
+        <tr>
+          <td height="22" align="center" valign="top">
+          <?php 
+		  			$o=0;
+					echo '<table cellspacing="0" cellpadding="0" width="100%" style="border: 1px solid #999999; padding: 20px;">';
+						for ($i=1; $i<=20; $i++){ // FILAS
+							echo '<tr align="center" valign="bottom">'; 
+							for ($e=1; $e<=5; $e++){ //COLUMNAS 
+								$file=$palabra[$o];
+								if ($file != "") {
+								echo $file;
+								 $o++;  			
+								} else { $o++;}
+														   
+							} 
+							echo "</tr>"; 
+						} 
+					echo '</table>';
+		  ?>          </td>
+          </tr>
+        <tr>
+          <td height="22" align="center" valign="top"><p>
+          </p>
+            <p>
+              <input name="guardar" type="submit" id="guardar" value="IR AL PASO 3" style="font-size:24px;" /><input name="mi_seleccion" type="hidden" id="mi_seleccion" value="<?php echo $_POST['mi_seleccion']; ?>"/>
+              <input name="n_elementos" type="hidden" id="n_elementos" value="<?php echo $orden; ?>" />
+            </p>
+            </td>
+        </tr>
+      </table>
+ </div>
+</form>
+</div>
+</div>
+</body>
+</html>
+

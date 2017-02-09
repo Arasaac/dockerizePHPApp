@@ -1,0 +1,36 @@
+@charset "utf-8";
+/* CSS Document */
+
+	.suggestionsBox {
+		position:absolute;
+		left: 10%;
+		width:300%;
+		background-color: #212427;
+		border: 2px solid #000;	
+		color: #fff;
+		padding:2px;
+		z-index:20;
+	}
+	
+	.suggestionList {
+		margin: 0px;
+		padding: 0px;
+		text-align:justify;
+		z-index:20;
+		font-size:100%;
+		color:#CCCCCC;
+	}
+	
+	.suggestionList li {
+		
+		margin: 0px 0px 3px 0px;
+		padding: 3px;
+		cursor: pointer;
+		list-style:none;
+ 
+	}
+	
+	.suggestionList li:hover {
+		background-color: #1b5ccd;
+		color: #FFFFFF;
+	}

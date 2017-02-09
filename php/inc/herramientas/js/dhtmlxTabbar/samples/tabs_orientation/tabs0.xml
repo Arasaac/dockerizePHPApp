@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tabbar>
+    <row>
+        <tab id="b1" width='100px'>1</tab>
+        <tab id="b2" width='100px' selected="1">2</tab>
+    </row>
+</tabbar>

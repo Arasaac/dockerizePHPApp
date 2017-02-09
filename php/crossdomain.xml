@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<!-- http://www.mydomain.com/crossdomain.xml -->
+<cross-domain-policy>
+<allow-access-from domain="webdiis.unizar.es" /> 
+</cross-domain-policy>
+
+
+

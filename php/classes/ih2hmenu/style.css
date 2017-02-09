@@ -1,0 +1,75 @@
+#links {
+	margin: 0 auto;
+	font-size: 12px;
+	line-height:30px;
+	height:30px;
+	
+}
+
+.links2 {
+	margin: 0;
+	font-size: 12px;
+	line-height:30px;
+	height:30px;
+	float: left;
+	background-color:#D9E3EB;
+}
+.links2 a {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: bold;
+	text-decoration: none;
+	height: 30px;
+	line-height: 30px;
+	float:left;
+	padding:0 15px 0 15px;
+	display:block;
+	color:#000000;
+	font-weight:bold;
+	
+}
+.links2 a:hover {
+/*main bar hover*/
+ }
+.linkDIV {
+	position:absolute; 
+	left:0px; top:0px; 
+	z-index:1;  
+	visibility: hidden;
+	line-height:25px; 
+	border-bottom: solid 1px #A2B9CE; 
+	border-left: solid 1px #A2B9CE; 
+	border-right: solid 1px #A2B9CE;
+}
+
+
+.linkDIV ul {
+	display: inline;
+	width: auto;
+	margin: 0;
+	padding: 0;
+	list-style: none;		
+}
+	
+.linkDIV li {
+		display: inline;
+}
+
+.linkDIV ul a {
+	margin: 0;
+	padding: 0 15px 0 15px;
+	display: block;
+	text-decoration: none;
+	border-width: 0 0 0 0;
+	border-style: solid;
+	border-color: #CFCFD0;
+	font-weight: bold;
+	color: #000000;
+	font-family:Arial, Helvetica, sans-serif;
+	background-color:#D9E3EB;
+	width: 130px;
+	font-size: 12px;
+}
+.linkDIV ul a:hover{
+	color:#CC0000;
+}

@@ -1,0 +1,15 @@
+<?xml version='1.0' ?>
+<menu maxItems="12" name="Herramientas ARASAAC" mixedImages="yes">
+	<MenuItem name="Inicio" id="file"  width="50px" panelWidth="100px" href="index.php"></MenuItem>
+	<MenuItem name="Mis selecciones" id="file"  width="50px" panelWidth="100px">	
+			<MenuItem name="Nueva" href="seleccion.php" id="nueva_seleccion"/>
+			<MenuItem name="Editar" src="" id="editar_seleccion" href="editar_seleccion.php"/>					
+	</MenuItem>
+	<MenuItem name="Herramientas" id="main_edit" width="50px" panelWidth="100px">	
+			<MenuItem name="Creador de Animaciones" id="animaciones" href="creador_animaciones.php"/>	
+	</MenuItem>
+	<MenuItem name="Mi Repositorio" id="mi_repositorio" width="50px" panelWidth="100px">
+			<MenuItem name="Gestionar repositorio"  id="gestionar_repositorio" href="gestionar_repositorio.php"/>
+			<MenuItem name="Cesto de Símbolos" id="cesto" href="cesta.php"/>			
+	</MenuItem>
+</menu>

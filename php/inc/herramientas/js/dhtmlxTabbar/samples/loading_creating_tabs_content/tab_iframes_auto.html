@@ -1,0 +1,63 @@
+<!--conf
+<sample>
+              <product version="1.1" edition="std"/>
+                     <modifications>
+                            <modified date="070101"/>
+                     </modifications>
+               </sample>
+ --> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<head>
+	<title>Loading in iframes(init from html)</title>
+	<link rel="STYLESHEET" type="text/css" href="../../codebase/dhtmlxtabbar.css">
+	<script  src="../../codebase/dhtmlxcommon.js"></script>
+	<script  src="../../codebase/dhtmlxtabbar.js"></script>
+	<script  src="../../codebase/dhtmlxtabbar_start.js"></script>
+	
+</head>
+
+<body>
+<link rel='STYLESHEET' type='text/css' href='../common/style.css'>
+<table cellspacing="0" cellpadding="0" class="sample_header" border="0">
+	<tr valign="middle">
+		<!-- COMPONENT ICON -->
+		<td width="40" align="center"><img src="../common/dhtmlxtabbar_icon.gif" border="0"></td>
+		<!-- COMPONENT NAME -->
+		<td width="150" align="left" nowrap="true">Sample: dhtmlxTabbar</td>
+		<!-- SAMPLE TITLE -->
+		<td width="0" align="left" nowrap><b>Loading in iframes(init from html)</b></td>
+		<!-- LINK TO COMPONENT PAGE -->
+		<td width="0" align="right"><a href="http://www.dhtmlx.com/docs/products/dhtmlxTabbar/index.shtml">dhtmlxTabbar main page</a></td>
+		<!-- CLOSE BUTTON -->
+		<td width="50"><div class="sample_close"><a href="javascript:void(0);" onclick="self.close();"><img src="../common/sample_close.gif" width="14" height="14" border="0" alt="X"></a></div></td>
+	</tr>
+</table>
+	
+	<p>
+		Tabbar content can be loaded in iframes. Initialize Tabbar automaticaly without any javascript.
+	</p>
+	
+	<table>
+		<tr>
+			<td>
+                <div hrefmode="iframes"  id="a_tabbar" class="dhtmlxTabBar" imgpath="../../codebase/imgs/" style="width:500px; height:390px;"  skinColors="#FCFBFC,#F4F3EE" >
+                   	<div id="b2" width="100" name="google" href="http://www.google.com/"></div>
+                    <div id="b3" width="100" name="yahoo" href="http://www.yahoo.com/"></div>
+                </div>
+			</td>
+        </tr>
+	</table>
+<br>
+<div class='sample_code'><div class="hl-main"><pre><span class="hl-code"> 
+                &lt;</span><span class="hl-identifier">div</span><span class="hl-code"> </span><span class="hl-identifier">hrefmode</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">ajax</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-reserved">class</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">dhtmlxTabBar</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">imgpath</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">../../codebase/imgs/</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">style</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">width:390; height:390;</span><span class="hl-quotes">&quot;</span><span class="hl-code">  </span><span class="hl-identifier">skinColors</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">#FCFBFC,#F4F3EE</span><span class="hl-quotes">&quot;</span><span class="hl-code"> &gt;
+                    &lt;</span><span class="hl-identifier">div</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b2</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">width</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">100</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">name</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">google</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">href</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">http://www.google.com/</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;&lt;/</span><span class="hl-identifier">div</span><span class="hl-code">&gt;
+                    &lt;</span><span class="hl-identifier">div</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b3</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">width</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">100</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">name</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">yahoo</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">href</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">http://www.yahoo.com/</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;&lt;/</span><span class="hl-identifier">div</span><span class="hl-code">&gt;
+                &lt;/</span><span class="hl-identifier">div</span><span class="hl-code">&gt;</span></pre></div></div>
+<!-- FOOTER -->
+<table callspacing="0" cellpadding="0" border="0" class="sample_footer"><tr><td style="padding-left: 8px;">&copy; <a href="http://www.dhtmlx.com">DHTMLX LTD</a>. All rights reserved</td></tr></table>
+<!-- FOOTER -->
+
+</body>
+</html>

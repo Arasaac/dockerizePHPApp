@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+	<title>Loading from XML</title>
+</head>
+
+<body onload="init()">
+<link rel='STYLESHEET' type='text/css' href='../common/style.css'>
+<table cellspacing="0" cellpadding="0" class="sample_header" border="0">
+	<tr valign="middle">
+		<!-- COMPONENT ICON -->
+		<td width="40" align="center"><img src="../common/dhtmlxtabbar_icon.gif" border="0"></td>
+		<!-- COMPONENT NAME -->
+		<td width="150" align="left" nowrap="true">Sample: dhtmlxTabbar</td>
+		<!-- SAMPLE TITLE -->
+		<td width="0" align="left" nowrap><b>Loading from XML</b></td>
+		<!-- LINK TO COMPONENT PAGE -->
+		<td width="0" align="right"><a href="http://www.dhtmlx.com/docs/products/dhtmlxTabbar/index.shtml">dhtmlxTabbar main page</a></td>
+		<!-- CLOSE BUTTON -->
+		<td width="50"><div class="sample_close"><a href="javascript:void(0);" onclick="self.close();"><img src="../common/sample_close.gif" width="14" height="14" border="0" alt="X"></a></div></td>
+	</tr>
+</table>
+	
+	<link rel="STYLESHEET" type="text/css" href="../../codebase/dhtmlxtabbar.css">
+	<script  src="../../codebase/dhtmlxcommon.js"></script>
+	<script  src="../../codebase/dhtmlxtabbar.js"></script>
+	
+	<table>
+		<tr>
+			<td valign="top">
+				<div id="a_tabbar" style="width:412; height:150;"/>
+			</td>
+            <td valign="top">
+            <textarea id='a1' style="font-family:Tahoma; font-size:8pt; width:350px;" rows="9">
+<?xml version="1.0"?>
+<tabbar align="left" offset="20" margin="-10" tabstyle="silver" skinColors="#ffffff">
+    <row>
+        <tab id="b1" width='100px'>Tab 2-1</tab>
+        <tab id="b2" width='100px' selected="1">Tab 2-2</tab>
+        <tab id="b3" width='100px'>Tab 2-3</tab>
+        <tab id="b4" width='100px'>Tab 2-4</tab>
+    </row>
+</tabbar>
+            </textarea>
+            <div>
+            <a href='#' onclick='tabbar.clearAll(); tabbar.loadXMLString(document.getElementById("a1").value)'>Reload TabBar</a>
+            </div>
+            </td>
+	</table>
+<br>
+<div class='sample_code'><div class="hl-main"><pre><span class="hl-code"> 
+</span><span class="hl-brackets">&lt;</span><span class="hl-reserved">div</span><span class="hl-code"> </span><span class="hl-var">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">style</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">width:400;height:100</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">&gt;</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">div</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+</span><span class="hl-brackets">&lt;</span><span class="hl-reserved">script</span><span class="hl-brackets">&gt;</span><span class="hl-code"><div class="hl-main"><pre><span class="hl-code"> 
+            </span><span class="hl-identifier">tabbar</span><span class="hl-code">=</span><span class="hl-reserved">new</span><span class="hl-code"> </span><span class="hl-identifier">dhtmlXTabBar</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">a_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">top</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+            </span><span class="hl-identifier">tabbar</span><span class="hl-code">.</span><span class="hl-identifier">setImagePath</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">../../codebase/imgs/</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+            
+            </span><span class="hl-identifier">tabbar</span><span class="hl-code">.</span><span class="hl-identifier">loadXML</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">tabs_xml.xml</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+            </span><span class="hl-comment">//</span><span class="hl-comment"> or</span><span class="hl-comment"></span><span class="hl-code">
+            </span><span class="hl-identifier">tabbar</span><span class="hl-code">.</span><span class="hl-identifier">loadXMLString</span><span class="hl-brackets">(</span><span class="hl-identifier">varString</span><span class="hl-brackets">)</span><span class="hl-code">;</span></pre></div></span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">script</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+            ---------tabs.xml---------
+</span><span class="hl-brackets">&lt;?</span><span class="hl-reserved">xml</span><span class="hl-code"> </span><span class="hl-var">version</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">1.0</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">?&gt;</span><span class="hl-code">
+</span><span class="hl-brackets">&lt;</span><span class="hl-reserved">tabbar</span><span class="hl-code"> </span><span class="hl-var">align</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">left</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">offset</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">20</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">margin</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">-10</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">tabstyle</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">silver</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">skinColors</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">#ffffff</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+    </span><span class="hl-brackets">&lt;</span><span class="hl-reserved">row</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+        </span><span class="hl-brackets">&lt;</span><span class="hl-reserved">tab</span><span class="hl-code"> </span><span class="hl-var">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a1</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">width</span><span class="hl-code">='</span><span class="hl-var">200px</span><span class="hl-code">'</span><span class="hl-brackets">&gt;</span><span class="hl-code">Tab 1-1</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">tab</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+        </span><span class="hl-brackets">&lt;</span><span class="hl-reserved">tab</span><span class="hl-code"> </span><span class="hl-var">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a2</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">width</span><span class="hl-code">='</span><span class="hl-var">200px</span><span class="hl-code">'</span><span class="hl-brackets">&gt;</span><span class="hl-code">Tab 1-2</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">tab</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+    </span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">row</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+    </span><span class="hl-brackets">&lt;</span><span class="hl-reserved">row</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+        </span><span class="hl-brackets">&lt;</span><span class="hl-reserved">tab</span><span class="hl-code"> </span><span class="hl-var">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b1</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">width</span><span class="hl-code">='</span><span class="hl-var">150px</span><span class="hl-code">'</span><span class="hl-brackets">&gt;</span><span class="hl-code">Tab 2-1</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">tab</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+        </span><span class="hl-brackets">&lt;</span><span class="hl-reserved">tab</span><span class="hl-code"> </span><span class="hl-var">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b2</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">width</span><span class="hl-code">='</span><span class="hl-var">100px</span><span class="hl-code">' </span><span class="hl-var">selected</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">1</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">&gt;</span><span class="hl-code">Tab 2-2</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">tab</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+        </span><span class="hl-brackets">&lt;</span><span class="hl-reserved">tab</span><span class="hl-code"> </span><span class="hl-var">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b3</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">width</span><span class="hl-code">='</span><span class="hl-var">150px</span><span class="hl-code">'</span><span class="hl-brackets">&gt;</span><span class="hl-code">Tab 2-3</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">tab</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+    </span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">row</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">tabbar</span><span class="hl-brackets">&gt;</span></pre></div></div>
+	<script>
+            function init(){
+			tabbar=new dhtmlXTabBar("a_tabbar","top");
+            tabbar.setImagePath("../../codebase/imgs/");
+            
+            tabbar.loadXML("tabs1.xml");
+            }
+
+	</script>
+
+<!-- FOOTER -->
+<table callspacing="0" cellpadding="0" border="0" class="sample_footer"><tr><td style="padding-left: 8px;">&copy; <a href="http://www.dhtmlx.com">DHTMLX LTD</a>. All rights reserved</td></tr></table>
+<!-- FOOTER -->
+
+</body>
+</html>

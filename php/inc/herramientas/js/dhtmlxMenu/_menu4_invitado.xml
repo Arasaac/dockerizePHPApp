@@ -1,0 +1,11 @@
+<?xml version='1.0' ?>
+<menu absolutePosition="auto" mode="classic" maxItems="8" xname="Herramientas ARASAAC" mixedImages="yes" type="a2" name="Herramientas ARASAAC">
+	<MenuItem name="Inicio ARASAAC" id="inicio"  width="50px" panelWidth="100px" href="../../../index.php"></MenuItem>
+	<MenuItem name="Inicio Herramientas" id="file"  width="50px" panelWidth="100px" href="../index.php"></MenuItem>
+	<MenuItem name="Herramientas" id="herramientas"  width="30px" panelWidth="100px" withoutImages="true">	
+			<MenuItem name="Creador de Animaciones" id="creador_animaciones" href="../creador_animaciones.php"/>
+			<MenuItem name="Creador de Simbolos" id="creador_simbolos" href="../creador_simbolos/creador_simbolos.php"/>
+			<MenuItem name="Creador de Frases" id="creador_frases" href="creador_frases.php"/>
+	</MenuItem>
+	<MenuItem name="Cesto de Símbolos" id="cesto" width="50px" panelWidth="100px" href="../cesta.php"></MenuItem>
+</menu>

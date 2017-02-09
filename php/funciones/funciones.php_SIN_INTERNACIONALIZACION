@@ -1,0 +1,1724 @@
+<?php 
+/*****************************************************************************************************************/
+/*    FUNCION PARA RESALTAR UNA LETRA O APALBRA DENTRO DE UNA CADENA  */
+/******************************************************************************************************************/
+    //$sentence is the sentence that you are looking for
+    //$rech is the word you searching in the sentence
+	function CheckSentence($sentence, $rech, $estilo)
+	{	
+		$len = strlen($rech) ;
+		
+		if ($len != 0) 
+		{
+			$find = $sentence;
+		
+			while ($find = stristr($find, $rech)) // find $search text - case insensitiv
+			{	
+				$txt = substr($find, 0, $len);	// get new search text 
+				
+				$find = substr($find, $len);
+				
+				$subject = str_replace($txt, "<font style='".$estilo."'>" . $txt ."</font>", $sentence);
+			}
+		}			
+		// depend what you need. i used a return just for the demo page
+        return @$subject ;
+        //echo $subject ;
+	}
+/*****************************************************************************************************************/
+/*    FUNCION PARA BORRAR DE FORMA RECURSIVA  */
+/******************************************************************************************************************/
+function rmdir_recurse($path)
+{
+    $path= rtrim($path, '/').'/';
+    $handle = opendir($path);
+    for (;false !== ($file = readdir($handle));)
+        if($file != "." and $file != ".." )
+        {
+            $fullpath= $path.$file;
+            if( is_dir($fullpath) )
+            {
+                rmdir_recurse($fullpath);
+                rmdir($fullpath);
+            }
+            else
+              unlink($fullpath);
+        }
+    closedir($handle);
+}
+
+/*****************************************************************************************************************/
+/*    FUNCION PARA TRANSFORMAR EN MAYUSCULAS CARACTERES CON ACENTOS Y EÑES EN UTF-8 (UTILIZADO LOS SIMBOLOS)  */
+/******************************************************************************************************************/
+
+function strtoupper_utf8($string){
+    $string=utf8_decode($string);
+    $string=mb_strtoupper($string); // importante utilizar la funcion mb_strtoupper porque strtoupper no funcionaba en el servidor aunque si en local
+    $string=utf8_encode($string);
+    return $string;
+}
+
+/******************************************************************************************************************/
+
+function recursive_dirlist($base_dir)
+{
+global $getDirList_alldirs,$getDirList_allfiles;
+   function getDirList($base)
+   {
+   global $getDirList_alldirs,$getDirList_allfiles;
+   if(is_dir($base))
+       {
+           $dh = opendir($base);
+       while (false !== ($dir = readdir($dh)))
+           {
+           if (is_dir($base ."/". $dir) && $dir !== '.' && $dir !== '..') //note the change in this line
+               {
+                   $subs = $dir    ;
+                   $subbase = $base ."/". $dir;//note the change in this line
+                   $getDirList_alldirs[]=$subbase;
+                   getDirList($subbase);
+               }
+           elseif(is_file($base ."/". $dir) && $dir !== '.' && $dir !== '..')//change in this line too
+               {
+               $getDirList_allfiles[]=$base ."/". $dir;//change in this line too
+               }
+           }
+           closedir($dh);
+       }
+   }
+
+getDirList($base_dir);
+$retval['dirs']=$getDirList_alldirs;
+$retval['files']=$getDirList_allfiles;
+return $retval;
+}
+
+/******************************************************************************************************************/
+
+function imagenes_disponibes($tipos_imagen,$query,$id_palabra,$encript) {
+
+require_once('../../configuration/key.inc');
+require ('../../classes/crypt/5CR.php'); 
+$encript = new E5CR($llave);
+
+while ($salida=mysql_fetch_array($tipos_imagen)) {
+
+$img_disponibles=$query->imagenes_disponibles_tipo($id_palabra,$salida['id_tipo']);
+$num_resultados=mysql_num_rows($img_disponibles);
+
+// Inicializo las variables
+$o=0;
+$img=array();
+$file='';
+
+// Si el numero de resultados es mayor de 0 muestro los resultados
+if ($num_resultados > 0) {
+
+	$resultados.='<b>'.utf8_encode($salida['tipo_imagen']).' ('.$num_resultados.' imagen/es)</b><hr>';
+	
+		while ($row=mysql_fetch_array($img_disponibles)) {
+			$img[]=$row['imagen'];
+		}
+
+	$resultados.='<table class=\"tabla_img\">';
+	
+		for ($i=1; $i<=10; $i++){ // FILAS
+			$resultados.="<tr>"; 
+				for ($e=1; $e<=5; $e++){ //COLUMNAS
+				
+					$file=$img[$o];
+					
+					$ruta_img='size=50&ruta=../../repositorio/originales/'.$file;
+					$encript->encriptar($ruta_img,1); //OJO uno(1) es para encriptar variables para URL
+					
+					if ($file=="") { break; }
+					
+					 $ruta_creador='img=repositorio/originales/'.$file.'&id_palabra='.$row['id_palabra'];
+			  		 $encript->encriptar($ruta_creador,1); 
+			  
+					$resultados.="<td width=\"25%\" class=\"tabla_img\" style=\"padding:15px;\"><div align=\"center\">
+					<a href=\"inc/herramientas/creador_simbolos/creador_simbolos.php?i=".$ruta_creador."\" onclick=\"return GB_showFullScreen('Creador de Simbolos', this.href)\">
+					<img src=\"classes/img/thumbnail.php?i=".$ruta_img."\" alt=\"Imagen: ".$file."\" border=\"0\"/>
+					</a></div></td>"; 
+					$o++; 
+				} 
+			$resultados.="</tr>"; 
+		} 
+	$resultados.='</table></div>';
+
+	} // Cierro el IF de comprobacion de si hay resultados
+
+
+} // Cierro el While 
+
+return $resultados;
+}
+
+function imagenes_simbolos_disponibes_por_tag($query,$tag,$pictogramas_color,$pictogramas_byn,$fotografia,$simbolos,$videos_lse,$lse_color,$lse_byn) {
+
+require_once('../../configuration/key.inc');
+require ('../../classes/crypt/5CR.php'); 
+$encript = new E5CR($llave);
+
+$tipos_imagen=$query->listar_tipos_imagen_seleccionados($pictogramas_color,$pictogramas_byn,$fotografia,$videos_lse,$lse_color,$lse_byn);
+
+while ($salida=mysql_fetch_array($tipos_imagen)) {
+
+$img_disponibles=$query->imagenes_disponibles_tipo_por_tag($tag,$salida['id_tipo']);
+$num_resultados=mysql_num_rows($img_disponibles);
+
+// Inicializo las variables
+$o=0;
+$img=array();
+$file='';
+
+$resultados.='<table width="100%" border="0" cellspacing="0" cellpadding="0">';
+// Si el numero de resultados es mayor de 0 muestro los resultados
+if ($num_resultados > 0) {
+
+	if ($salida['ext']=='flv') { 
+		$resultados.='<tr><td><b>'.utf8_encode($salida['tipo_imagen']).' ('.$num_resultados.' video/s)</b><hr>';
+	} else { 
+		$resultados.='<tr><td><b>'.utf8_encode($salida['tipo_imagen']).' ('.$num_resultados.' imagen/es)</b><hr>';
+	}
+	
+		while ($row=mysql_fetch_array($img_disponibles)) {
+
+			if ($salida['id_tipo']==11) { //Si el tipo de original es Video de Acepciones en LSE
+			
+				$resultados.='<ul id="thelist6">';
+				
+				$ruta_cesto='ruta_cesto=repositorio/LSE_acepciones/'.$row['imagen'];
+				$encript->encriptar($ruta_cesto,1);
+				
+				$ruta='img=../../repositorio/LSE_acepciones/'.$row['imagen'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'];
+				$encript->encriptar($ruta,1);
+							
+				$resultados.='<li><object id="'.$row['id_imagen'].'" width="110" height="125" data="plugins/flowplayer/flowplayer-3.1.1.swf"  
+					type="application/x-shockwave-flash"> 
+					<param name="wmode" value="transparent">
+					<param name="movie" value="plugins/flowplayer/flowplayer-3.1.1.swf" />  
+					<param name="allowfullscreen" value="true" /> 
+					 
+					<param name="flashvars"  
+						value=\'config={"clip": { "url": "repositorio/LSE_acepciones/'.$row['imagen'].'", "bufferLength": 2, "autoBuffering": true,
+							"autoPlay": false, "scaling": "fit"}, "play": {"replayLabel": "Repetir" }, "plugins": { "controls": {"volume": false, "mute": false, "time":false, "height":15, "backgroundColor": "#FFFFFF", "progressColor": "#000000", "bufferColor": "#CCCCCC" } }  }\' /> 
+				   </object>
+						<br />
+						<b>'.$row['palabra'].'</b><br><a href="javascript:void(0);" onclick="Dialog.alert({url: \'inc/public/video_acepcion_lse.php?i='.$row['id_imagen'].'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src=\'images/search.png\' border="0" alt="Ampliar información de la acepción" title="Ampliar información de la acepción"></a>&nbsp;&nbsp;<a href="javascript:void(0);" onClick="sendData(\''.$ruta_cesto.'\');"><img src=\'images/cesto.gif\' border="0" alt="a&ntilde;adir video a mi cesto" title="a&ntilde;adir video a mi cesto"></a>&nbsp;&nbsp;<a href="javascript:MM_openBrWindow(\'inc/public/ver_acepcion.php?i='.$row['id_imagen'].'\',\'\',\'location=no,scrollbars=yes,resizable=no,width=710,height=730\')"><img src=\'images/icono_lse_16x16.jpg\' border="0" alt="Ver acepcion en tamaño original" title="Ver acepcion en tamaño original"></a>&nbsp;&nbsp;&nbsp;<a href="inc/public/descargar.php?i='.$ruta.'"><img src=\'images/download1.png\' border="0" alt="Descargar imagen" title="Descargar video"></a></li>';
+			
+			} else { //Para el resto de tipos de Originales
+			
+				$resultados.='<ul id="thelist3">';
+						
+					
+							$ruta_img='size=50&ruta=../../repositorio/originales/'.$row['imagen'];
+							$encript->encriptar($ruta_img,1); //OJO uno(1) es para encriptar variables para URL
+							
+							$ruta='img=../../repositorio/originales/'.$row['imagen'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'];
+							$encript->encriptar($ruta,1);
+							
+							$ruta_cesto='ruta_cesto=repositorio/originales/'.$row['imagen'];
+							$encript->encriptar($ruta_cesto,1);
+							
+							 $ruta_creador='img=repositorio/originales/'.$row['imagen'].'&id_palabra='.$row['id_palabra'];
+							 $encript->encriptar($ruta_creador,1); 
+						
+						$resultados.='<li>
+						<a href="javascript:void(0);" onclick="Dialog.alert({url: \'inc/public/imagen.php?i='.$ruta.'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src="classes/img/thumbnail.php?i='.$ruta_img.'" alt="Imagen: '.$file.'" border="0"/></a><br />
+						<b>'.$row['palabra'].'</b><br><a href="javascript:void(0);" onClick="sendData(\''.$ruta_cesto.'\');"><img src=\'images/cesto.gif\' border="0" alt="a&ntilde;adir imagen a mi cesto"></a>&nbsp;&nbsp;&nbsp;<a href="inc/herramientas/creador_simbolos/creador_simbolos.php?i='.$ruta_creador.'" onclick="return GB_showFullScreen(\'Creador de Simbolos\', this.href)"><img src=\'images/paint.gif\' border="0" alt="Utilizar imagen en el creador"></a>&nbsp;&nbsp;&nbsp;<a href="inc/public/descargar.php?i='.$ruta.'"><img src=\'images/download1.png\' border="0" alt="Descargar imagen" title="Descargar imagen"></a></li>'; 
+						
+			}		
+
+		}
+		
+	$resultados.='</ul></td></tr>';
+
+	} 
+$resultados.='</table>';
+	
+} // Cierro el While 
+
+
+if ($simbolos==1) {
+		
+		if (!isset($_SESSION['tipo_letra'])) {
+			$tipo_letra=99; 
+		} else { $tipo_letra=$_SESSION['tipo_letra']; }
+		
+		if (!isset($_SESSION['id_tipo'])) {
+			$id_tipo=99; 
+		} else { $id_tipo=$_SESSION['id_tipo']; }
+		
+		if (!isset($_SESSION['id_tipo_simbolo'])) {
+			$id_tipo_simbolo=99; 
+		} else { $id_tipo_simbolo=$_SESSION['id_tipo_simbolo'];}
+		
+		if (!isset($_SESSION['marco'])) {
+			$marco=99; 
+		} else { $marco=$_SESSION['marco']; }
+		
+		if (!isset($_SESSION['contraste'])) {
+			$contraste=99; 
+		} else { $contraste=$_SESSION['contraste']; }
+		
+		if (!isset($_SESSION['mayusculas'])) {
+			$mayusculas=0; 
+		} else { $mayusculas=$_SESSION['mayusculas']; }
+		
+		if (!isset($_SESSION['minusculas'])) {
+			$minusculas=0; 
+		} else { $minusculas=$_SESSION['minusculas']; }
+
+		if (!isset($_SESSION['castellano'])) {
+			$castellano=0; 
+		} else { $castellano=$_SESSION['castellano']; }
+		
+		if (!isset($_SESSION['ruso'])) {
+			$ruso=0; 
+		} else { $ruso=$_SESSION['ruso']; }
+		
+		if (!isset($_SESSION['rumano'])) {
+			$rumano=0; 
+		} else { $rumano=$_SESSION['rumano']; }
+		
+		if (!isset($_SESSION['arabe'])) {
+			$arabe=0; 
+		} else { $arabe=$_SESSION['arabe']; }
+		
+		if (!isset($_SESSION['chino'])) {
+			$chino=0; 
+		} else { $chino=$_SESSION['chino']; }
+		
+		if (!isset($_SESSION['bulgaro'])) {
+			$bulgaro=0; 
+		} else { $bulgaro=$_SESSION['bulgaro']; }
+		
+		if (!isset($_SESSION['polaco'])) {
+			$polaco=0; 
+		} else { $polaco=$_SESSION['polaco']; }
+		
+		if (!isset($_SESSION['ingles'])) {
+			$ingles=0; 
+		} else { $ingles=$_SESSION['ingles']; }
+		
+		if (!isset($_SESSION['frances'])) {
+			$frances=0; 
+		} else { $frances=$_SESSION['frances']; }
+		
+		if (!isset($_SESSION['catalan'])) {
+			$catalan=0; 
+		} else { $catalan=$_SESSION['catalan']; }
+		
+		$listado_simbolos=$query->simbolos_por_tag_con_filtro($tag,$id_tipo,$id_tipo_simbolo,false,$marco,$contraste,$tipo_letra,$mayusculas,$minusculas,$castellano,$ruso,$rumano,$arabe,$chino,$bulgaro,$polaco,$ingles,$frances,$catalan); 
+		
+		//$listado_simbolos=$query->simbolos_por_palabra($palabra,false); 
+		$num_resultados_simbolos=mysql_num_rows($listado_simbolos);
+		
+			if ($num_resultados_simbolos > 0) {
+			
+				$resultados.='<table width="100%" border="0" cellspacing="0" cellpadding="0">';
+				$resultados.='<tr><td><b>Simbolos ('.$num_resultados_simbolos.' simbolo/s)</b><hr>';
+				$resultados.='<ul id="thelist3">';
+				
+				while ($row=mysql_fetch_array($listado_simbolos)) {
+				
+					$folder=$row['id_tipo_simbolo'].$row['marco'].$row['contraste'].$row['sup_con_texto'].$row['sup_idioma'].$row['sup_mayusculas'].$row['sup_font'].$row['inf_con_texto'].$row['inf_idioma'].$row['inf_mayusculas'].$row['inf_font'];
+				
+					$ruta='img=../../repositorio/simbolos/fuente/'.$folder.'/'.$row['id_simbolo'].'.'.$row['ext'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'].'&id_simbolo='.$row['id_simbolo'];
+					$encript->encriptar($ruta,1);
+					
+					$ruta_img='size=50&ruta=../../repositorio/simbolos/fuente/'.$folder.'/'.$row['id_simbolo'].'.'.$row['ext'];
+					$encript->encriptar($ruta_img,1); //OJO uno(1) es para encriptar variables para URL
+					
+					$ruta_cesto='ruta_cesto=repositorio/simbolos/fuente/'.$folder.'/'.$row['id_simbolo'].'.'.$row['ext'];
+					$encript->encriptar($ruta_cesto,1);
+					
+					$resultados.='<li> <a href="javascript:void(0);" onclick="Dialog.alert({url: \'inc/public/simbolo.php?i='.$ruta.'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src="classes/img/thumbnail.php?i='.$ruta_img.'" alt="Image" border="0" class="image" title="'.$row['palabra'].': ';
+					if (strlen($row['definicion']) > 100) { $resultados.=substr (utf8_encode($row['definicion']), 0, 100)."..."; } else {$resultados.=utf8_encode($row['definicion']); }  
+					$resultados.='" /></a><br />';
+					$resultados.='<div id="products"><b>';
+			  		if (strlen($row['palabra']) > 15) { $resultados.=substr($row['palabra'],0,15).".."; } else {  $resultados.=$row['palabra'];  }
+					
+					$resultados.='</b><br><a href="javascript:void(0);" onClick="sendData(\''.$ruta_cesto.'\');"><img src=\'images/cesto.gif\' border="0" alt="a&ntilde;adir imagen a mi cesto" title="a&ntilde;adir imagen a mi cesto">&nbsp;&nbsp;&nbsp;<a href="inc/public/descargar.php?i='.$ruta.'"><img src=\'images/download1.png\' border="0" alt="Descargar Símbolo" title="Descargar Símbolo"></a></div></li>';
+					
+					
+				
+				}				
+				
+				$resultados.='</ul></td></tr>';
+				$resultados.='</table>';
+				
+			
+			}
+		
+	
+	}
+	
+return $resultados;
+}
+
+
+
+function imagenes_simbolos_disponibes_por_palabra($query,$palabra,$pictogramas_color,$pictogramas_byn,$fotografia,$simbolos,$videos_lse,$lse_color,$lse_byn) {
+
+require ('../../classes/highlight/highlight.class.php'); 
+$resaltar = new Highlighter();
+
+require_once('../../configuration/key.inc');
+require ('../../classes/crypt/5CR.php'); 
+$encript = new E5CR($llave);
+
+
+$tipos_imagen=$query->listar_tipos_imagen_seleccionados($pictogramas_color,$pictogramas_byn,$fotografia,$videos_lse,$lse_color,$lse_byn);
+
+while ($salida=mysql_fetch_array($tipos_imagen)) {
+
+$img_disponibles=$query->imagenes_disponibles_tipo_por_palabra($palabra,$salida['id_tipo']);
+$num_resultados=mysql_num_rows($img_disponibles);
+
+// Inicializo las variables
+$o=0;
+$img=array();
+$file='';
+
+$resultados.='<table width="100%" border="0" cellspacing="0" cellpadding="0">';
+// Si el numero de resultados es mayor de 0 muestro los resultados
+if ($num_resultados > 0) {
+
+	if ($salida['ext']=='flv') { 
+		$resultados.='<tr><td><b>'.utf8_encode($salida['tipo_imagen']).' ('.$num_resultados.' video/s)</b><hr>';
+	} else { 
+		$resultados.='<tr><td><b>'.utf8_encode($salida['tipo_imagen']).' ('.$num_resultados.' imagen/es)</b><hr>';
+	}
+	
+		while ($row=mysql_fetch_array($img_disponibles)) {
+
+			if ($salida['id_tipo']==11) { //Si el tipo de original es Video de Acepciones en LSE
+			
+				$resultados.='<ul id="thelist6">';
+				
+				$ruta_cesto='ruta_cesto=repositorio/LSE_acepciones/'.$row['imagen'];
+				$encript->encriptar($ruta_cesto,1);
+				
+				$ruta='img=../../repositorio/LSE_acepciones/'.$row['imagen'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'];
+				$encript->encriptar($ruta,1);
+							
+				$resultados.='<li>
+						<object id="'.$row['id_imagen'].'" width="110" height="125" data="plugins/flowplayer/flowplayer-3.1.1.swf"  
+					type="application/x-shockwave-flash"> 
+					 <param name="wmode" value="transparent">
+					<param name="movie" value="plugins/flowplayer/flowplayer-3.1.1.swf" />  
+					<param name="allowfullscreen" value="true" /> 
+					<param name="flashvars"  
+						value=\'config={"clip": { "url": "repositorio/LSE_acepciones/'.$row['imagen'].'", "bufferLength": 2, "autoBuffering": true,
+							"autoPlay": false, "scaling": "fit"}, "play": {"replayLabel": "Repetir" }, "plugins": { "controls": {"volume": false, "mute": false, "time":false, "height":15, "backgroundColor": "#FFFFFF", "progressColor": "#000000", "bufferColor": "#CCCCCC" } }  }\' /> 
+				   </object><br />
+						<b>'.$row['palabra'].'</b><br><a href="javascript:void(0);" onclick="Dialog.alert({url: \'inc/public/video_acepcion_lse.php?i='.$row['id_imagen'].'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src=\'images/search.png\' border="0" alt="Ampliar información de la acepción" title="Ampliar información de la acepción"></a>&nbsp;&nbsp;<a href="javascript:void(0);" onClick="sendData(\''.$ruta_cesto.'\');"><img src=\'images/cesto.gif\' border="0" alt="a&ntilde;adir video a mi cesto" title="a&ntilde;adir video a mi cesto"></a>&nbsp;&nbsp;<a href="javascript:MM_openBrWindow(\'inc/public/ver_acepcion.php?i='.$row['id_imagen'].'\',\'\',\'location=no,scrollbars=yes,resizable=no,width=710,height=730\')"><img src=\'images/icono_lse_16x16.jpg\' border="0" alt="Ver acepcion en tamaño original" title="Ver acepcion en tamaño original"></a>&nbsp;&nbsp;&nbsp;<a href="inc/public/descargar.php?i='.$ruta.'"><img src=\'images/download1.png\' border="0" alt="Descargar imagen" title="Descargar video"></a></li>';
+			
+			} else { //Para el resto de tipos de Originales
+		
+				$resultados.='<ul id="thelist3">';
+						
+					
+							$ruta_img='size=50&ruta=../../repositorio/originales/'.$row['imagen'];
+							$encript->encriptar($ruta_img,1); //OJO uno(1) es para encriptar variables para URL
+							
+							$ruta='img=../../repositorio/originales/'.$row['imagen'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'];
+							$encript->encriptar($ruta,1);
+							
+							$ruta_cesto='ruta_cesto=repositorio/originales/'.$row['imagen'];
+							$encript->encriptar($ruta_cesto,1);
+							
+							$ruta_creador='img=repositorio/originales/'.$row['imagen'].'&id_palabra='.$row['id_palabra'];
+							$encript->encriptar($ruta_creador,1); 
+						
+						$resultados.='<li>
+						<a href="javascript:void(0);" onclick="Dialog.alert({url: \'inc/public/imagen.php?i='.$ruta.'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src="classes/img/thumbnail.php?i='.$ruta_img.'" alt="Imagen: '.$file.'" border="0"/></a><br />
+						<b>'.$resaltar->CheckSentence($row['palabra'], $palabra).'</b><br><a href="javascript:void(0);" onClick="sendData(\''.$ruta_cesto.'\');"><img src=\'images/cesto.gif\' border="0" alt="a&ntilde;adir imagen a mi cesto"></a>&nbsp;&nbsp;&nbsp;<a href="inc/herramientas/creador_simbolos/creador_simbolos.php?i='.$ruta_creador.'" onclick="return GB_showFullScreen(\'Creador de Simbolos\', this.href)"><img src=\'images/paint.gif\' border="0" alt="Utilizar imagen en el creador"></a>&nbsp;&nbsp;&nbsp;<a href="inc/public/descargar.php?i='.$ruta.'"><img src=\'images/download1.png\' border="0" alt="Descargar imagen" title="Descargar imagen"></a></li>';
+						 
+			}		
+
+		}
+		
+	$resultados.='</ul></td></tr>';
+
+	} 
+$resultados.='</table>';
+	
+} // Cierro el While 
+
+if ($simbolos==1) {
+		
+		if (!isset($_SESSION['tipo_letra'])) {
+			$tipo_letra=99; 
+		} else { $tipo_letra=$_SESSION['tipo_letra']; }
+		
+		if (!isset($_SESSION['id_tipo'])) {
+			$id_tipo=99; 
+		} else { $id_tipo=$_SESSION['id_tipo']; }
+		
+		if (!isset($_SESSION['id_tipo_simbolo'])) {
+			$id_tipo_simbolo=99; 
+		} else { $id_tipo_simbolo=$_SESSION['id_tipo_simbolo'];}
+		
+		if (!isset($_SESSION['marco'])) {
+			$marco=99; 
+		} else { $marco=$_SESSION['marco']; }
+		
+		if (!isset($_SESSION['contraste'])) {
+			$contraste=99; 
+		} else { $contraste=$_SESSION['contraste']; }
+		
+		if (!isset($_SESSION['mayusculas'])) {
+			$mayusculas=0; 
+		} else { $mayusculas=$_SESSION['mayusculas']; }
+		
+		if (!isset($_SESSION['minusculas'])) {
+			$minusculas=0; 
+		} else { $minusculas=$_SESSION['minusculas']; }
+
+		if (!isset($_SESSION['castellano'])) {
+			$castellano=0; 
+		} else { $castellano=$_SESSION['castellano']; }
+		
+		if (!isset($_SESSION['ruso'])) {
+			$ruso=0; 
+		} else { $ruso=$_SESSION['ruso']; }
+		
+		if (!isset($_SESSION['rumano'])) {
+			$rumano=0; 
+		} else { $rumano=$_SESSION['rumano']; }
+		
+		if (!isset($_SESSION['arabe'])) {
+			$arabe=0; 
+		} else { $arabe=$_SESSION['arabe']; }
+		
+		if (!isset($_SESSION['chino'])) {
+			$chino=0; 
+		} else { $chino=$_SESSION['chino']; }
+		
+		if (!isset($_SESSION['bulgaro'])) {
+			$bulgaro=0; 
+		} else { $bulgaro=$_SESSION['bulgaro']; }
+		
+		if (!isset($_SESSION['polaco'])) {
+			$polaco=0; 
+		} else { $polaco=$_SESSION['polaco']; }
+		
+		if (!isset($_SESSION['ingles'])) {
+			$ingles=0; 
+		} else { $ingles=$_SESSION['ingles']; }
+		
+		if (!isset($_SESSION['frances'])) {
+			$frances=0; 
+		} else { $frances=$_SESSION['frances']; }
+		
+		if (!isset($_SESSION['catalan'])) {
+			$catalan=0; 
+		} else { $catalan=$_SESSION['catalan']; }
+		
+		$listado_simbolos=$query->simbolos_por_palabra_con_filtro($palabra,$id_tipo,$id_tipo_simbolo,false,$marco,$contraste,$tipo_letra,$mayusculas,$minusculas,$castellano,$ruso,$rumano,$arabe,$chino,$bulgaro,$polaco,$ingles,$frances,$catalan); 
+		
+		//$listado_simbolos=$query->simbolos_por_palabra($palabra,false); 
+		$num_resultados_simbolos=mysql_num_rows($listado_simbolos);
+		
+			if ($num_resultados_simbolos > 0) {
+			
+				$resultados.='<table width="100%" border="0" cellspacing="0" cellpadding="0">';
+				$resultados.='<tr><td><b>Simbolos ('.$num_resultados_simbolos.' simbolo/s)</b><hr>';
+				$resultados.='<ul id="thelist3">';
+				
+				while ($row=mysql_fetch_array($listado_simbolos)) {
+				
+					$folder=$row['id_tipo_simbolo'].$row['marco'].$row['contraste'].$row['sup_con_texto'].$row['sup_idioma'].$row['sup_mayusculas'].$row['sup_font'].$row['inf_con_texto'].$row['inf_idioma'].$row['inf_mayusculas'].$row['inf_font'];
+				
+					$ruta='img=../../repositorio/simbolos/fuente/'.$folder.'/'.$row['id_simbolo'].'.'.$row['ext'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'].'&id_simbolo='.$row['id_simbolo'];
+					$encript->encriptar($ruta,1);
+					
+					$ruta_img='size=50&ruta=../../repositorio/simbolos/fuente/'.$folder.'/'.$row['id_simbolo'].'.'.$row['ext'];
+					$encript->encriptar($ruta_img,1); //OJO uno(1) es para encriptar variables para URL
+					
+					$ruta_cesto='ruta_cesto=repositorio/simbolos/fuente/'.$folder.'/'.$row['id_simbolo'].'.'.$row['ext'];
+					$encript->encriptar($ruta_cesto,1);
+					
+					$resultados.='<li> <a href="javascript:void(0);" onclick="Dialog.alert({url: \'inc/public/simbolo.php?i='.$ruta.'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src="classes/img/thumbnail.php?i='.$ruta_img.'" alt="Image" border="0" class="image" title="'.$row['palabra'].': ';
+					if (strlen($row['definicion']) > 100) { $resultados.=substr (utf8_encode($row['definicion']), 0, 100)."..."; } else {$resultados.=utf8_encode($row['definicion']); }  
+					$resultados.='" /></a><br />';
+					$resultados.='<div id="products"><b>';
+			  		if (strlen($row['palabra']) > 15) { $resultados.=substr($resaltar->CheckSentence($row['palabra'], $palabra),0,15).".."; } else {  $resultados.=$resaltar->CheckSentence($row['palabra'], $palabra);  }
+					
+					$resultados.='</b><br><a href="javascript:void(0);" onClick="sendData(\''.$ruta_cesto.'\');"><img src=\'images/cesto.gif\' border="0" alt="a&ntilde;adir imagen a mi cesto" title="a&ntilde;adir imagen a mi cesto">&nbsp;&nbsp;&nbsp;<a href="inc/public/descargar.php?i='.$ruta.'"><img src=\'images/download1.png\' border="0" alt="Descargar Símbolo" title="Descargar Símbolo"></a></div></li>';
+					
+					
+				
+				}				
+				
+				$resultados.='</ul></td></tr>';
+				$resultados.='</table>';
+				
+			
+			}
+		
+	
+	}
+	
+return $resultados;
+}
+
+
+function imagenes_simbolos_disponibes_por_palabra_exacta($query,$palabra,$pictogramas_color,$pictogramas_byn,$fotografia,$simbolos,$videos_lse,$lse_color,$lse_byn) {
+
+require_once('../../configuration/key.inc');
+require ('../../classes/crypt/5CR.php'); 
+$encript = new E5CR($llave);
+
+
+$tipos_imagen=$query->listar_tipos_imagen_seleccionados($pictogramas_color,$pictogramas_byn,$fotografia,$videos_lse,$lse_color,$lse_byn);
+
+while ($salida=mysql_fetch_array($tipos_imagen)) {
+
+$img_disponibles=$query->imagenes_disponibles_tipo($palabra,$salida['id_tipo']);
+$num_resultados=mysql_num_rows($img_disponibles);
+
+// Inicializo las variables
+$o=0;
+$img=array();
+$file='';
+
+$resultados.='<table width="100%" border="0" cellspacing="0" cellpadding="0">';
+// Si el numero de resultados es mayor de 0 muestro los resultados
+if ($num_resultados > 0) {
+	
+	if ($salida['ext']=='flv') { 
+		$resultados.='<tr><td><b>'.utf8_encode($salida['tipo_imagen']).' ('.$num_resultados.' video/s)</b><hr>';
+	} else { 
+		$resultados.='<tr><td><b>'.utf8_encode($salida['tipo_imagen']).' ('.$num_resultados.' imagen/es)</b><hr>';
+	}
+		while ($row=mysql_fetch_array($img_disponibles)) {
+
+		if ($salida['id_tipo']==11) { //Si el tipo de original es Video de Acepciones en LSE
+		
+			$resultados.='<ul id="thelist6">';
+			
+			$ruta_cesto='ruta_cesto=repositorio/LSE_acepciones/'.$row['imagen'];
+			$encript->encriptar($ruta_cesto,1);
+			
+			$ruta='img=../../repositorio/LSE_acepciones/'.$row['imagen'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'];
+			$encript->encriptar($ruta,1);
+						
+			$resultados.='<li>
+					<object id="'.$row['id_imagen'].'" width="110" height="125" data="plugins/flowplayer/flowplayer-3.1.1.swf"  
+					type="application/x-shockwave-flash"> 
+					<param name="wmode" value="transparent">
+					<param name="movie" value="plugins/flowplayer/flowplayer-3.1.1.swf" />  
+					<param name="allowfullscreen" value="true" /> 
+					<param name="flashvars"  
+						value=\'config={"clip": { "url": "repositorio/LSE_acepciones/'.$row['imagen'].'", "bufferLength": 2, "autoBuffering": true,
+							"autoPlay": false, "scaling": "fit"}, "play": {"replayLabel": "Repetir" }, "plugins": { "controls": {"volume": false, "mute": false, "time":false, "height":15, "backgroundColor": "#FFFFFF", "progressColor": "#000000", "bufferColor": "#CCCCCC" } }  }\' /> 
+				   </object><br />
+					<b>'.$row['palabra'].'</b><br><a href="javascript:void(0);" onclick="Dialog.alert({url: \'inc/public/video_acepcion_lse.php?i='.$row['id_imagen'].'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src=\'images/search.png\' border="0" alt="Ampliar información de la acepción" title="Ampliar información de la acepción"></a>&nbsp;&nbsp;<a href="javascript:void(0);" onClick="sendData(\''.$ruta_cesto.'\');"><img src=\'images/cesto.gif\' border="0" alt="a&ntilde;adir video a mi cesto" title="a&ntilde;adir video a mi cesto"></a>&nbsp;&nbsp;<a href="javascript:MM_openBrWindow(\'inc/public/ver_acepcion.php?i='.$row['id_imagen'].'\',\'\',\'location=no,scrollbars=yes,resizable=no,width=710,height=730\')"><img src=\'images/icono_lse_16x16.jpg\' border="0" alt="Ver acepcion en tamaño original" title="Ver acepcion en tamaño original"></a>&nbsp;&nbsp;&nbsp;<a href="inc/public/descargar.php?i='.$ruta.'"><img src=\'images/download1.png\' border="0" alt="Descargar imagen" title="Descargar video"></a></li>';
+		
+		} else { //Para el resto de tipos de Originales
+		
+			$resultados.='<ul id="thelist3">';
+					
+				
+						$ruta_img='size=50&ruta=../../repositorio/originales/'.$row['imagen'];
+						$encript->encriptar($ruta_img,1); //OJO uno(1) es para encriptar variables para URL
+						
+						$ruta='img=../../repositorio/originales/'.$row['imagen'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'];
+						$encript->encriptar($ruta,1);
+						
+						$ruta_cesto='ruta_cesto=repositorio/originales/'.$row['imagen'];
+						$encript->encriptar($ruta_cesto,1);
+						
+						$ruta_creador='img=repositorio/originales/'.$row['imagen'].'&id_palabra='.$row['id_palabra'];
+			  			$encript->encriptar($ruta_creador,1); 
+					
+					$resultados.='<li>
+					<a href="javascript:void(0);" onclick="Dialog.alert({url: \'inc/public/imagen.php?i='.$ruta.'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src="classes/img/thumbnail.php?i='.$ruta_img.'" alt="Imagen: '.$file.'" border="0"/></a><br />
+					<b>'.$row['palabra'].'</b><br><a href="javascript:void(0);" onClick="sendData(\''.$ruta_cesto.'\');"><img src=\'images/cesto.gif\' border="0" alt="a&ntilde;adir imagen a mi cesto"></a>&nbsp;&nbsp;&nbsp;<a href="inc/herramientas/creador_simbolos/creador_simbolos.php?i='.$ruta_creador.'" onclick="return GB_showFullScreen(\'Creador de Simbolos\', this.href)"><img src=\'images/paint.gif\' border="0" alt="Utilizar imagen en el creador"></a>&nbsp;&nbsp;&nbsp;<a href="inc/public/descargar.php?i='.$ruta.'"><img src=\'images/download1.png\' border="0" alt="Descargar imagen" title="Descargar imagen"></a></li>';
+			} 
+					
+
+		}
+		
+	$resultados.='</ul></td></tr>';
+
+	} 
+$resultados.='</table>';
+
+} // Cierro el While 
+
+	if ($simbolos==1) {
+		
+		if (!isset($_SESSION['tipo_letra'])) {
+			$tipo_letra=99; 
+		} else { $tipo_letra=$_SESSION['tipo_letra']; }
+		
+		if (!isset($_SESSION['id_tipo'])) {
+			$id_tipo=99; 
+		} else { $id_tipo=$_SESSION['id_tipo']; }
+		
+		if (!isset($_SESSION['id_tipo_simbolo'])) {
+			$id_tipo_simbolo=99; 
+		} else { $id_tipo_simbolo=$_SESSION['id_tipo_simbolo'];}
+		
+		if (!isset($_SESSION['marco'])) {
+			$marco=99; 
+		} else { $marco=$_SESSION['marco']; }
+		
+		if (!isset($_SESSION['contraste'])) {
+			$contraste=99; 
+		} else { $contraste=$_SESSION['contraste']; }
+		
+		if (!isset($_SESSION['mayusculas'])) {
+			$mayusculas=0; 
+		} else { $mayusculas=$_SESSION['mayusculas']; }
+		
+		if (!isset($_SESSION['minusculas'])) {
+			$minusculas=0; 
+		} else { $minusculas=$_SESSION['minusculas']; }
+
+		if (!isset($_SESSION['castellano'])) {
+			$castellano=0; 
+		} else { $castellano=$_SESSION['castellano']; }
+		
+		if (!isset($_SESSION['ruso'])) {
+			$ruso=0; 
+		} else { $ruso=$_SESSION['ruso']; }
+		
+		if (!isset($_SESSION['rumano'])) {
+			$rumano=0; 
+		} else { $rumano=$_SESSION['rumano']; }
+		
+		if (!isset($_SESSION['arabe'])) {
+			$arabe=0; 
+		} else { $arabe=$_SESSION['arabe']; }
+		
+		if (!isset($_SESSION['chino'])) {
+			$chino=0; 
+		} else { $chino=$_SESSION['chino']; }
+		
+		if (!isset($_SESSION['bulgaro'])) {
+			$bulgaro=0; 
+		} else { $bulgaro=$_SESSION['bulgaro']; }
+		
+		if (!isset($_SESSION['polaco'])) {
+			$polaco=0; 
+		} else { $polaco=$_SESSION['polaco']; }
+		
+		if (!isset($_SESSION['ingles'])) {
+			$ingles=0; 
+		} else { $ingles=$_SESSION['ingles']; }
+		
+		if (!isset($_SESSION['frances'])) {
+			$frances=0; 
+		} else { $frances=$_SESSION['frances']; }
+		
+		if (!isset($_SESSION['catalan'])) {
+			$catalan=0; 
+		} else { $catalan=$_SESSION['catalan']; }
+		
+		$listado_simbolos=$query->simbolos_por_id_palabra_con_filtro($palabra,$id_tipo,$id_tipo_simbolo,false,$marco,$contraste,$tipo_letra,$mayusculas,$minusculas,$castellano,$ruso,$rumano,$arabe,$chino,$bulgaro,$polaco,$ingles,$frances,$catalan); 
+		
+		//$listado_simbolos=$query->simbolos_por_palabra($palabra,false); 
+		$num_resultados_simbolos=mysql_num_rows($listado_simbolos);
+		
+			if ($num_resultados_simbolos > 0) {
+			
+				$resultados.='<table width="100%" border="0" cellspacing="0" cellpadding="0">';
+				$resultados.='<tr><td><b>Simbolos ('.$num_resultados_simbolos.' simbolo/s)</b><hr>';
+				$resultados.='<ul id="thelist3">';
+				
+				while ($row=mysql_fetch_array($listado_simbolos)) {
+				
+					$folder=$row['id_tipo_simbolo'].$row['marco'].$row['contraste'].$row['sup_con_texto'].$row['sup_idioma'].$row['sup_mayusculas'].$row['sup_font'].$row['inf_con_texto'].$row['inf_idioma'].$row['inf_mayusculas'].$row['inf_font'];
+				
+					$ruta='img=../../repositorio/simbolos/fuente/'.$folder.'/'.$row['id_simbolo'].'.'.$row['ext'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'].'&id_simbolo='.$row['id_simbolo'];
+					$encript->encriptar($ruta,1);
+					
+					$ruta_img='size=50&ruta=../../repositorio/simbolos/fuente/'.$folder.'/'.$row['id_simbolo'].'.'.$row['ext'];
+					$encript->encriptar($ruta_img,1); //OJO uno(1) es para encriptar variables para URL
+					
+					$ruta_cesto='ruta_cesto=repositorio/simbolos/fuente/'.$folder.'/'.$row['id_simbolo'].'.'.$row['ext'];
+					$encript->encriptar($ruta_cesto,1);
+					
+					$resultados.='<li> <a href="javascript:void(0);" onclick="Dialog.alert({url: \'inc/public/simbolo.php?i='.$ruta.'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src="classes/img/thumbnail.php?i='.$ruta_img.'" alt="Image" border="0" class="image" title="'.$row['palabra'].': ';
+					if (strlen($row['definicion']) > 100) { $resultados.=substr (utf8_encode($row['definicion']), 0, 100)."..."; } else {$resultados.=utf8_encode($row['definicion']); }  
+					$resultados.='" /></a><br />';
+					$resultados.='<div id="products"><b>';
+			  		if (strlen($row['palabra']) > 15) { $resultados.=substr($row['palabra'],0,15).".."; } else {  $resultados.=$row['palabra'];  }
+					
+					$resultados.='</b><br><a href="javascript:void(0);" onClick="sendData(\''.$ruta_cesto.'\');"><img src=\'images/cesto.gif\' border="0" alt="a&ntilde;adir imagen a mi cesto" title="a&ntilde;adir imagen a mi cesto">&nbsp;&nbsp;&nbsp;<a href="inc/public/descargar.php?i='.$ruta.'"><img src=\'images/download1.png\' border="0" alt="Descargar Símbolo" title="Descargar Símbolo"></a></div></li>';
+					
+					
+				
+				}				
+				
+				$resultados.='</ul></td></tr>';
+				$resultados.='</table>';
+				
+			
+			}
+		
+	
+	}
+
+return $resultados;
+}
+
+function imagenes_simbolos_disponibes($query,$id_palabra) {
+
+require_once('../../configuration/key.inc');
+require ('../../classes/crypt/5CR.php'); 
+$encript = new E5CR($llave);
+
+$tipos_imagen=$query->listar_tipos_imagen();
+
+while ($salida=mysql_fetch_array($tipos_imagen)) {
+
+$img_disponibles=$query->imagenes_disponibles_tipo($id_palabra,$salida['id_tipo']);
+$num_resultados=mysql_num_rows($img_disponibles);
+
+// Inicializo las variables
+$o=0;
+$img=array();
+$file='';
+
+$resultados.='<table width="100%" border="0" cellspacing="0" cellpadding="0">';
+// Si el numero de resultados es mayor de 0 muestro los resultados
+if ($num_resultados > 0) {
+
+	$resultados.='<tr><td><b>'.utf8_encode($salida['tipo_imagen']).' ('.$num_resultados.' imagen/es)</b><hr>';
+	
+		while ($row=mysql_fetch_array($img_disponibles)) {
+
+		
+			$resultados.='<ul id="thelist3">';
+					
+				
+						$ruta_img='size=50&ruta=../../repositorio/originales/'.$row['imagen'];
+						$encript->encriptar($ruta_img,1); //OJO uno(1) es para encriptar variables para URL
+						
+						$ruta='img=../../repositorio/originales/'.$row['imagen'].'&id_imagen='.$row['id_imagen'].'&id_palabra='.$row['id_palabra'];
+						$encript->encriptar($ruta,1);
+						
+						$ruta_cesto='ruta_cesto=repositorio/originales/'.$row['imagen'];
+						$encript->encriptar($ruta_cesto,1);
+						
+						$ruta_creador='img=repositorio/originales/'.$row['imagen'].'&id_palabra='.$row['id_palabra'];
+			  			$encript->encriptar($ruta_creador,1);
+					
+					$resultados.='<li>
+					<a href="javascript:void(0);" onclick="Dialog.alert({url: \'inc/public/imagen.php?i='.$ruta.'\', options: {method: \'get\'}},{windowParameters: {className: \'alphacube\', width:600, height:570, hideEffect: Effect.SwitchOff, resizable: true}, okLabel: \'Cerrar\'});"><img src="classes/img/thumbnail.php?i='.$ruta_img.'" alt="Imagen: '.$file.'" border="0"/></a><br />
+					<b>'.$row['palabra'].'</b><br><a href="javascript:void(0);" onClick="sendData(\''.$ruta_cesto.'\');"><img src=\'images/cesto.gif\' border="0" alt="a&ntilde;adir imagen a mi cesto"></a>&nbsp;&nbsp;&nbsp;<a href="inc/herramientas/creador_simbolos/creador_simbolos.php?i='.$ruta_creador.'" onclick="return GB_showFullScreen(\'Creador de Simbolos\', this.href)"><img src=\'images/paint.gif\' border="0" alt="Utilizar imagen en el creador"></a>&nbsp;&nbsp;&nbsp;<a href="inc/public/descargar.php?i='.$ruta.'"><img src=\'images/download1.png\' border="0" alt="Descargar imagen" title="Descargar imagen"></a></li>'; 
+					
+
+		}
+		
+	$resultados.='</ul></td></tr>';
+
+	} 
+$resultados.='</table>';
+	
+} // Cierro el While 
+
+return $resultados;
+}
+
+
+
+function idiomas_disponibles($id_palabra,$idiomas_disponibles,$query) {
+
+define("MAP_DIR","../../classes/utf8/MAPPING");
+define("CP1250",MAP_DIR . "/CP1250.MAP");
+define("CP1251",MAP_DIR . "/CP1251.MAP");
+define("CP1252",MAP_DIR . "/CP1252.MAP");
+define("CP1253",MAP_DIR . "/CP1253.MAP");
+define("CP1254",MAP_DIR . "/CP1254.MAP");
+define("CP1255",MAP_DIR . "/CP1255.MAP");
+define("CP1256",MAP_DIR . "/CP1256.MAP");
+define("CP1257",MAP_DIR . "/CP1257.MAP");
+define("CP1258",MAP_DIR . "/CP1258.MAP");
+define("CP874", MAP_DIR . "/CP874.MAP");
+define("CP932", MAP_DIR . "/CP932.MAP");
+define("CP936", MAP_DIR . "/CP936.MAP");
+define("CP949", MAP_DIR . "/CP949.MAP");
+define("CP950", MAP_DIR . "/CP950.MAP");
+define("GB2312", MAP_DIR . "/GB2312.MAP");
+define("BIG5", MAP_DIR . "/BIG5.MAP");
+
+include_once('../../classes/utf8/utf8.class.php');
+$utfConverter = new utf8(CP1251); //defaults to CP1250.
+$utfConverter->loadCharset(CP1256);
+
+$utfConverter_ru = new utf8(CP1251); //defaults to CP1250.
+$utfConverter_ru->loadCharset(CP1251);
+
+$utfConverter_ch = new utf8(GB2312); 
+$utfConverter_ch->loadCharset(GB2312);
+
+$num_traducciones=mysql_num_rows($idiomas_disponibles);
+
+if ($num_traducciones > 0) {
+
+$idiomas='<select name="id_traduccion" size="1" id="id_traduccion">';
+
+while ($row=mysql_fetch_array($idiomas_disponibles)) {
+
+	switch ($row['idioma']) {
+		
+		case 'Chino':
+			$chino=$query->buscar_traduccion($id_palabra,4);
+			if (mysql_num_rows($chino) > 0) {
+				while ($row_chino=mysql_fetch_array($chino)) {
+					if ($row_chino['estado']==1) { $idiomas.='<option value="'.$row_chino['id_traduccion'].'">Chino - '.$row_chino['traduccion'].'</option>'; }
+				}
+			}
+			break;
+			
+			case 'Rumano':
+			$rumano=$query->buscar_traduccion($id_palabra,2);
+			if (mysql_num_rows($rumano) > 0) {
+				while ($row_rumano=mysql_fetch_array($rumano)) {
+					if ($row_rumano['estado']==1) { $idiomas.='<option value="'.$row_rumano['id_traduccion'].'">Rumano - '.$row_rumano['traduccion'].'</option>'; }
+				}
+			}
+			break;
+			
+			case 'Polaco':
+			$polaco=$query->buscar_traduccion($id_palabra,6);
+			if (mysql_num_rows($polaco) > 0) {
+				while ($row_polaco=mysql_fetch_array($polaco)) {
+					if ($row_polaco['estado']==1) { $idiomas.='<option value="'.$row_polaco['id_traduccion'].'">Polaco - '.$row_polaco['traduccion'].'</option>'; }
+				}
+			}
+			break;
+			
+			case 'Ruso':
+			$ruso=$query->buscar_traduccion($id_palabra,1);
+			if (mysql_num_rows($ruso) > 0) {
+				while ($row_ruso=mysql_fetch_array($ruso)) {
+					$res_ru = $utfConverter_ru->strToUtf8($row_ruso['traduccion']);
+					if ($row_ruso['estado']==1) { $idiomas.='<option value="'.$row_ruso['id_traduccion'].'">Ruso - '.$res_ru.'</option>'; }
+				}
+			}
+			break;
+			
+			case 'Bulgaro':
+			$bulgaro=$query->buscar_traduccion($id_palabra,5);
+			if (mysql_num_rows($bulgaro) > 0) {
+				while ($row_bulgaro=mysql_fetch_array($bulgaro)) {
+					$res_bulg = $utfConverter_ru->strToUtf8($row_bulgaro['traduccion']);
+					if ($row_bulgaro['estado']==1) { $idiomas.='<option value="'.$row_bulgaro['id_traduccion'].'">Bulgaro - '.$res_bulg.'</option>'; }
+				}
+			}
+			break;
+			
+			case 'Arabe':
+			$arabe=$query->buscar_traduccion($id_palabra,3);
+			if (mysql_num_rows($arabe) > 0) {
+				while ($row_arabe=mysql_fetch_array($arabe)) {
+					$res_ar = $utfConverter->strToUtf8($row_arabe['traduccion']);
+					if ($row_arabe['estado']==1) { $idiomas.='<option value="'.$row_arabe['id_traduccion'].'">Arabe - '.$res_ar.'</option>'; }
+				}
+			}
+			break;
+			
+			case 'Ingles':
+			$ingles=$query->buscar_traduccion($id_palabra,7);
+			if (mysql_num_rows($ingles) > 0) {
+				while ($row_ingles=mysql_fetch_array($ingles)) {
+					if ($row_ingles['estado']==1) { $idiomas.='<option value="'.$row_ingles['id_traduccion'].'">Ingles - '.$row_ingles['traduccion'].'</option>'; }
+				}
+			}
+			break;
+			
+			case 'Frances':
+			$frances=$query->buscar_traduccion($id_palabra,8);
+			if (mysql_num_rows($frances) > 0) {
+				while ($row_frances=mysql_fetch_array($frances)) {
+					if ($row_frances['estado']==1) { $idiomas.='<option value="'.$row_frances['id_traduccion'].'">Frances - '.$row_frances['traduccion'].'</option>'; }
+				}
+			}
+			break;
+			
+			case 'Catalan':
+			$catalan=$query->buscar_traduccion($id_palabra,9);
+			if (mysql_num_rows($catalan) > 0) {
+				while ($row_catalan=mysql_fetch_array($catalan)) {
+					if ($row_catalan['estado']==1) { $idiomas.='<option value="'.$row_catalan['id_traduccion'].'">Catalan - '.$row_catalan['traduccion'].'</option>'; }
+				}
+			}
+			break;
+	
+	}
+
+}
+
+$idiomas.='</select>';
+
+} else {
+
+$idiomas='No hay traducciones disponibles &nbsp;<input name="idioma" type="hidden" id="idioma" value="0" /><input name="id_traduccion" type="hidden" id="id_traduccion" value="0" /><br><br>';
+}
+
+
+return $idiomas;
+
+} // Cierro la funcion
+
+function idiomas_disponibles_modo_texto($id_palabra,$idiomas_disponibles,$query) {
+
+define("MAP_DIR","../../classes/utf8/MAPPING");
+define("CP1250",MAP_DIR . "/CP1250.MAP");
+define("CP1251",MAP_DIR . "/CP1251.MAP");
+define("CP1252",MAP_DIR . "/CP1252.MAP");
+define("CP1253",MAP_DIR . "/CP1253.MAP");
+define("CP1254",MAP_DIR . "/CP1254.MAP");
+define("CP1255",MAP_DIR . "/CP1255.MAP");
+define("CP1256",MAP_DIR . "/CP1256.MAP");
+define("CP1257",MAP_DIR . "/CP1257.MAP");
+define("CP1258",MAP_DIR . "/CP1258.MAP");
+define("CP874", MAP_DIR . "/CP874.MAP");
+define("CP932", MAP_DIR . "/CP932.MAP");
+define("CP936", MAP_DIR . "/CP936.MAP");
+define("CP949", MAP_DIR . "/CP949.MAP");
+define("CP950", MAP_DIR . "/CP950.MAP");
+define("GB2312", MAP_DIR . "/GB2312.MAP");
+define("BIG5", MAP_DIR . "/BIG5.MAP");
+
+include_once('../../classes/utf8/utf8.class.php');
+$utfConverter = new utf8(CP1251); //defaults to CP1250.
+$utfConverter->loadCharset(CP1256);
+
+$utfConverter_ru = new utf8(CP1251); //defaults to CP1250.
+$utfConverter_ru->loadCharset(CP1251);
+
+$utfConverter_ch = new utf8(GB2312); 
+$utfConverter_ch->loadCharset(GB2312);
+
+$num_traducciones=mysql_num_rows($idiomas_disponibles);
+
+if ($num_traducciones > 0) {
+
+$idiomas='<b>Traducciones disponibles:</b><br />';
+
+while ($row=mysql_fetch_array($idiomas_disponibles)) {
+
+	switch ($row['idioma']) {
+		
+		case 'Chino':
+			$chino=$query->buscar_traduccion($id_palabra,4);
+			if (mysql_num_rows($chino) > 0) {
+				while ($row_chino=mysql_fetch_array($chino)) {
+					if ($row_chino['estado']==1) { $idiomas.='Chino - '.$row_chino['traduccion'].'<br />'; }
+				}
+			}
+			break;
+			
+			case 'Rumano':
+			$rumano=$query->buscar_traduccion($id_palabra,2);
+			if (mysql_num_rows($rumano) > 0) {
+				while ($row_rumano=mysql_fetch_array($rumano)) {
+					if ($row_rumano['estado']==1) { $idiomas.='Rumano - '.$row_rumano['traduccion'].'<br />'; }
+				}
+			}
+			break;
+			
+			case 'Polaco':
+			$polaco=$query->buscar_traduccion($id_palabra,6);
+			if (mysql_num_rows($polaco) > 0) {
+				while ($row_polaco=mysql_fetch_array($polaco)) {
+					if ($row_polaco['estado']==1) { $idiomas.='Polaco - '.$row_polaco['traduccion'].'<br />'; }
+				}
+			}
+			break;
+			
+			case 'Ruso':
+			$ruso=$query->buscar_traduccion($id_palabra,1);
+			if (mysql_num_rows($ruso) > 0) {
+				while ($row_ruso=mysql_fetch_array($ruso)) {
+					$res_ru = $utfConverter_ru->strToUtf8($row_ruso['traduccion']);
+					if ($row_ruso['estado']==1) { $idiomas.='Ruso - '.$res_ru.'<br />'; }
+				}
+			}
+			break;
+			
+			case 'Bulgaro':
+			$bulgaro=$query->buscar_traduccion($id_palabra,5);
+			if (mysql_num_rows($bulgaro) > 0) {
+				while ($row_bulgaro=mysql_fetch_array($bulgaro)) {
+					$res_bulg = $utfConverter_ru->strToUtf8($row_bulgaro['traduccion']);
+					if ($row_bulgaro['estado']==1) { $idiomas.='Bulgaro - '.$res_bulg.'<br />'; }
+				}
+			}
+			break;
+			
+			case 'Arabe':
+			$arabe=$query->buscar_traduccion($id_palabra,3);
+			if (mysql_num_rows($arabe) > 0) {
+				while ($row_arabe=mysql_fetch_array($arabe)) {
+					$res_ar = $utfConverter->strToUtf8($row_arabe['traduccion']);
+					if ($row_arabe['estado']==1) { $idiomas.='Arabe - '.$res_ar.'<br />'; }
+				}
+			}
+			break;
+			
+			case 'Ingles':
+			$ingles=$query->buscar_traduccion($id_palabra,7);
+			if (mysql_num_rows($ingles) > 0) {
+				while ($row_ingles=mysql_fetch_array($ingles)) {
+					if ($row_ingles['estado']==1) { $idiomas.='Ingles - '.$row_ingles['traduccion'].'<br />'; }
+				}
+			}
+			break;
+			
+			case 'Frances':
+			$frances=$query->buscar_traduccion($id_palabra,8);
+			if (mysql_num_rows($frances) > 0) {
+				while ($row_frances=mysql_fetch_array($frances)) {
+					if ($row_frances['estado']==1) { $idiomas.='Frances - '.$row_frances['traduccion'].'<br />'; }
+				}
+			}
+			break;
+			
+			case 'Catalan':
+			$catalan=$query->buscar_traduccion($id_palabra,9);
+			if (mysql_num_rows($catalan) > 0) {
+				while ($row_catalan=mysql_fetch_array($catalan)) {
+					if ($row_catalan['estado']==1) { $idiomas.='Catalan - '.$row_catalan['traduccion'].'<br />'; }
+				}
+			}
+			break;
+	
+	}
+
+}
+
+$idiomas.='<br />';
+
+} else {
+
+$idiomas='No hay traducciones disponibles<br>';
+}
+
+
+return $idiomas;
+
+} // Cierro la funcion
+
+function flashmp3($texte) {
+$texte = preg_replace("'<flashmp3=([^\]>]+)>([^\[]+)<\/flashmp3>'Ui",'<br><br><object type="application/x-shockwave-flash" data="/son/dewplayer.swf?son=/son/\\1" width="200" height="20"><param name="movie" value="/son/dewplayer.swf?son=/son/\\1"></object><span valign="middle"><br>\\2</span>',$texte);
+return $texte;
+}
+
+function apres_propre($texte) {
+$texte = flashmp3($texte);
+return $texte;
+}
+// <flashmp3=nomdefichier.mp3>Escucha este fragmento, fruto de mis delirios musicales</flashmp3>
+
+//For Count Days
+function count_days($start, $end)
+{
+   if( $start != '0000-00-00' and $end != '0000-00-00' )
+   {
+       $timestamp_start = strtotime($start);
+       $timestamp_end = strtotime($end);
+       if( $timestamp_start >= $timestamp_end ) return 0;
+       $start_year = date("Y",$timestamp_start);
+       $end_year = date("Y", $timestamp_end);
+       $num_days_start = date("z",strtotime($start));
+       $num_days_end = date("z", strtotime($end));
+       $num_days = 1;
+       $i = 1;
+       if( $end_year > $start_year )
+       {
+           while( $i < ( $end_year - $start_year ) )
+           {
+             $num_days = $num_days + date("z", strtotime(($start_year + $i)."-12-31"));
+             $i++;
+           }
+         }
+         return ( $num_days_end + $num_days ) - $num_days_start;
+   }
+   else
+   {
+         return 0;
+     }
+}
+
+function compara_fechas($fecha1,$fecha2)
+            
+{
+            
+      if (preg_match("/[0-9]{1,2}\/[0-9]{1,2}\/([0-9][0-9]){1,2}/",$fecha1))
+            
+              list($dia1,$mes1,$año1)=split("/",$fecha1);
+            
+      if (preg_match("/[0-9]{1,2}-[0-9]{1,2}-([0-9][0-9]){1,2}/",$fecha1))
+            
+              list($dia1,$mes1,$año1)=split("-",$fecha1);
+        if (preg_match("/[0-9]{1,2}\/[0-9]{1,2}\/([0-9][0-9]){1,2}/",$fecha2))
+            
+              list($dia2,$mes2,$año2)=split("/",$fecha2);
+            
+      if (preg_match("/[0-9]{1,2}-[0-9]{1,2}-([0-9][0-9]){1,2}/",$fecha2))
+            
+        list($dia2,$mes2,$año2)=split("-",$fecha2);
+        $dif = mktime(0,0,0,$mes1,$dia1,$año1) - mktime(0,0,0, $mes2,$dia2,$año2);
+        return ($dif);                         
+            
+}
+
+function suma_fechas($fecha,$ndias)
+{
+            
+
+      if (preg_match("/[0-9]{1,2}\/[0-9]{1,2}\/([0-9][0-9]){1,2}/",$fecha))
+            
+
+              list($dia,$mes,$año)=split("/", $fecha);
+            
+
+      if (preg_match("/[0-9]{1,2}-[0-9]{1,2}-([0-9][0-9]){1,2}/",$fecha))
+            
+
+              list($dia,$mes,$año)=split("-",$fecha);
+        $nueva = mktime(0,0,0, $mes,$dia,$año) + $ndias * 24 * 60 * 60;
+        $nuevafecha=date("d-m-Y",$nueva);
+            
+
+      return ($nuevafecha);  
+}
+function saludo ()
+{
+if (Date("H") > 5 && Date("H")< 14) $mensaje = "Buenos Días";
+elseif (Date("H") > 13 && Date("H") < 20) $mensaje = "Buenas Tardes";
+elseif (Date("H") > 19 && Date("H") <= 23) $mensaje = "Buenas Noches";
+elseif (Date("H") >= 0 && Date("H") < 6) $mensaje = "Buenas Noches";
+return $mensaje;
+}
+
+function saludo_idioma($lang)
+{
+if (Date("H") > 5 && Date("H")< 14) $mensaje = $lang['buenos_dias'];
+elseif (Date("H") > 13 && Date("H") < 20) $mensaje = $lang['buenas_tardes'];
+elseif (Date("H") > 19 && Date("H") <= 23) $mensaje = $lang['buenas_noches'];
+elseif (Date("H") >= 0 && Date("H") < 6) $mensaje = $lang['buenas_noches'];
+return $mensaje;
+}
+
+/* FUNCION QUE REDIMENSIONA LAS IMAGENES                                                                */
+/* ---------------------------------------------------------------------------------------------------- */
+function redimensionar($filename,$max_size) 
+{ 
+		$source = imagecreatefromjpeg($filename);  
+   		$thumbX = $max_size;    
+   		$imageX = imagesx($source);
+   		$imageY = imagesy($source);    
+   		$thumbY = (int)(($thumbX*$imageY) / $imageX ); 
+		if ($imageX > $thumbX)
+		{
+			include("img/ImageEditor.php");
+			$f = $filename;
+			$d = strrpos($f, "/");
+			$file = substr($f, $d);
+			$path = substr($f, 0, $d);
+			$imageEditor = new ImageEditor($file,$path);
+			$imageEditor->resize($thumbX, $thumbY);
+			$imageEditor->outputFile($file,$path);
+		}        
+}
+
+/* FUNCION QUE LIMPIA LOS NOMBRES DE CARACTERES ESPECIALES */
+// CON ñ y N excluidas
+/* ---------------------------------------------------------------------------------------------------- */
+function es_parser_con_241_209($str) 
+{ 
+       $tmp = ""; 
+       for($i = 0; $i < strlen($str); $i++) { 
+               switch(ord($str[$i])) { 
+                       case 192: case 193: 
+                               $tmp .= "A"; 
+                               break; 
+                       case 200: case 201: 
+                               $tmp .= "E"; 
+                               break; 
+                       case 204: case 205:
+                               $tmp .= "I"; 
+                               break; 
+                       case 210: case 211: 
+                               $tmp .= "O"; 
+                               break; 
+                       case 217: case 218:
+                               $tmp .= "U"; 
+                               break; 
+                       case 224: case 225: 
+                               $tmp .= "a"; 
+                               break; 
+                       case 232: case 233:  
+                               $tmp .= "e"; 
+                               break; 
+                       case 236: case 237: 
+                               $tmp .= "i"; 
+                               break; 
+                       case 242: case 243: 
+                               $tmp .= "o"; 
+                               break; 
+                       case 249: case 250:                               
+					           $tmp .= "u"; 
+                               break; 
+                       case 231:                               
+					          $tmp .= "c"; 
+                               break; 
+                       case 199: 
+                               $tmp .= "C"; 
+                               break; 
+                       case 128:
+                               $tmp .= "EU"; 
+                               break; 
+					   case 220: 
+                               $tmp .= "U"; 
+                               break; 
+					   case 252: 
+                               $tmp .= "u"; 
+                               break;
+                       default: 
+                               $tmp .= (string)$str[$i]; 
+                               break; 
+               } 
+       } 
+       return($tmp); 
+} 
+
+/* FUNCION QUE LIMPIA LOS NOMBRES DE CARACTERES ESPECIALES */
+/* ---------------------------------------------------------------------------------------------------- */
+function es_parser($str) 
+{ 
+       $tmp = ""; 
+       for($i = 0; $i < strlen($str); $i++) { 
+               switch(ord($str[$i])) { 
+                       case 192: case 193: 
+                               $tmp .= "A"; 
+                               break; 
+                       case 200: case 201: 
+                               $tmp .= "E"; 
+                               break; 
+                       case 204: case 205:
+                               $tmp .= "I"; 
+                               break; 
+                       case 210: case 211: 
+                               $tmp .= "O"; 
+                               break; 
+                       case 217: case 218:
+                               $tmp .= "U"; 
+                               break; 
+                       case 224: case 225: 
+                               $tmp .= "a"; 
+                               break; 
+                       case 232: case 233:  
+                               $tmp .= "e"; 
+                               break; 
+                       case 236: case 237: 
+                               $tmp .= "i"; 
+                               break; 
+                       case 242: case 243: 
+                               $tmp .= "o"; 
+                               break; 
+                       case 249: case 250:                               
+					           $tmp .= "u"; 
+                               break; 
+                       case 241:                                
+					           $tmp .= "n"; 
+                               break; 
+                       case 209:
+                               $tmp .= "N"; 
+                               break; 
+                       case 231:                               
+					          $tmp .= "c"; 
+                               break; 
+                       case 199: 
+                               $tmp .= "C"; 
+                               break; 
+                       case 128:
+                               $tmp .= "EU"; 
+                               break; 
+					   case 220: 
+                               $tmp .= "U"; 
+                               break; 
+					   case 252: 
+                               $tmp .= "u"; 
+                               break;
+                       default: 
+                               $tmp .= (string)$str[$i]; 
+                               break; 
+               } 
+       } 
+       return($tmp); 
+} 
+
+/* FUNCION QUE AVERIGUA EL TAMAÑO QUE OCUPAN LOS ARCHIVOS ALMACENADOS EN LA CARPETA PERSONAL DE CADA WQ */
+/* ---------------------------------------------------------------------------------------------------- */
+function dir_size($dir) { /* Inicio la funcion */
+	$totalsize=0; /* inicializo la varieble */
+	if ($dirstream = @opendir($dir)) { /* Abro el directorio */
+		while (false !== ($filename = readdir ($dirstream))) /* Mientras haya archivos que leer en el directorio realizo el bucle */
+{
+			if ($filename!="." && $filename!="..") /* Me aseguro que el archivo no sea el indicador de directorios "." o ".." */
+			{
+				if (is_file($dir."/".$filename)) 
+					$totalsize+=filesize($dir."/".$filename); /* Si es archivo sumo el tamaño del archivo al valor actual de $totalsize */
+				if (is_dir($dir."/".$filename)) /* Si es directorio llamo nuevamente a la funcion dir_size con la nueva ruta */
+					//$totalsize+=dir_size($dir."/".$filename);
+					$totalsize=$totalsize;
+					}
+				}
+			}
+			closedir($dirstream); /* Cierro el directorio */
+			return $totalsize; /* Devuelvo el valor obtenido en la variable $totalsize */
+		}
+
+/* FUNCION QUE GENERA UN PASSWORD ALEATORIO DE LETRAS Y NUMEROS */
+function generar_password () { 
+$i=0;
+$password="";
+// Aqui colocamos el largo del password
+$pw_largo = 6; 
+// Colocamos el rango de caracteres ASCII para la creacion de el password
+$desde_ascii = 50; // "2" 
+$hasta_ascii = 122; // "z" 
+// Aqui quitamos caracteres especiales
+$no_usar = array (58,59,60,61,62,63,64,73,79,91,92,93,94,95,96,108,111); 
+while ($i < $pw_largo) { 
+mt_srand ((double)microtime() * 1000000); 
+// limites aleatorios con tabla ASCII
+$numero_aleat = mt_rand ($desde_ascii, $hasta_ascii); 
+if (!in_array ($numero_aleat, $no_usar)) { 
+$password = $password . chr($numero_aleat); 
+$i++; 
+} 
+} 
+return $password; 
+} 
+
+function hex2rgb($hex){ 
+  
+  if(! ereg("[0-9a-fA-F]{6}", $hex)) { 
+  echo "Error : input is not a valid hexadecimal number"; 
+  return 0; 
+  } 
+  
+  for($i=0; $i<3; $i++) { 
+  $temp = substr($hex, 2*$i, 2); 
+  $rgb[$i] = 16 * hexdec(substr($temp, 0, 1)) + 
+  hexdec(substr($temp, 1, 1)); 
+  } 
+  
+  return $rgb; 
+}
+
+function enviar_mail($from, $fromname,$email_destinatario,$asunto, $cuerpo, $cuerpo_html,$ruta) {
+
+	// primero hay que incluir la clase phpmailer para poder instanciar
+	//un objeto de la misma
+	require ($ruta."class.phpmailer.php");
+				
+	//instanciamos un objeto de la clase phpmailer al que llamamos 
+	//por ejemplo mail
+	$mail = new phpmailer();
+				
+	//Definimos las propiedades y llamamos a los métodos 
+	//correspondientes del objeto mail
+				
+	//Con PluginDir le indicamos a la clase phpmailer donde se 
+	//encuentra la clase smtp que como he comentado al principio de 
+	//este ejemplo va a estar en el subdirectorio includes
+	$mail->PluginDir = $ruta;
+				
+	//Con la propiedad Mailer le indicamos que vamos a usar un 
+	//servidor smtp
+	$mail->Mailer = "smtp";
+				
+	//Asignamos a Host el nombre de nuestro servidor smtp
+	$mail->Host = "smtp.aragon.es";
+				
+	//Le indicamos que el servidor smtp requiere autenticación
+	$mail->SMTPAuth = true;
+				
+	//Le decimos cual es nuestro nombre de usuario y password
+	$mail->Username = "arablogs@educa.aragon.es"; 
+	$mail->Password = "arablogs2006";
+				
+	//Indicamos cual es nuestra dirección de correo y el nombre que 
+	//queremos que vea el usuario que lee nuestro correo
+	$mail->From = $from;
+	$mail->FromName = $fromname;
+				
+	//el valor por defecto 10 de Timeout es un poco escaso dado que voy a usar 
+	//una cuenta gratuita, por tanto lo pongo a 30  
+	$mail->Timeout=30;
+				
+	//Indicamos cual es la dirección de destino del correo
+	$mail->AddAddress($email_destinatario);
+				
+	//Asignamos asunto y cuerpo del mensaje
+	//El cuerpo del mensaje lo ponemos en formato html, haciendo 
+	//que se vea en negrita
+	$mail->Subject = $asunto;
+	$mail->Body = $cuerpo_html;
+				
+	//Definimos AltBody por si el destinatario del correo no admite email con formato html 
+	$mail->AltBody = $cuerpo;
+				
+	//se envia el mensaje, si no ha habido problemas 
+	//la variable $exito tendra el valor true
+	$exito = $mail->Send();
+				
+	//Si el mensaje no ha podido ser enviado se realizaran 4 intentos mas como mucho 
+	//para intentar enviar el mensaje, cada intento se hara 5 segundos despues 
+	//del anterior, para ello se usa la funcion sleep	
+	$intentos=1; 
+		while ((!$exito) && ($intentos < 5)) {
+			sleep(5);
+			//echo $mail->ErrorInfo;
+			$exito = $mail->Send();
+			$intentos=$intentos+1;	
+		}
+				 
+				 if(!$exito)
+				   {
+					$mensaje_email="Problemas enviando correo electrónico a ".$valor."<br/>".$mail->ErrorInfo;
+				   }
+				   else
+				   {
+					$mensaje_email="Mensaje enviado correctamente";
+				   } 
+				   
+	return $mensaje_email;
+} //Fin Funcion	enviar Email	
+
+
+
+function file_ext($file) {
+  $extension = split("[.]", $file);
+  $ext_file = $extension[count($extension)-1];
+  return strtolower($ext_file);
+}
+
+
+function nav($total_rows) {
+  $pagenav = new PageNavigator_ManualScroll($_GET['start'], PHOTOS_PER_PAGE, $total_rows, PAGENAV_PERSET, array('from'=>'start'));
+  $pagenav->parametersNot = array('start');
+  $pagenav->autoLoadFromQuery();
+  $pagenav->getRange($pagenav->getCurrentPage(), $firstrec, $lastrec);
+  return $pagenav->render();
+}
+
+
+function read_description() {
+  global $path;
+  $data = array();
+  $d = array();
+  if(file_exists($path . DESCRIPTION_FILENAME)) {
+    $data = file($path . DESCRIPTION_FILENAME);
+  }
+  $num = count($data);
+  if($num > 0) {
+    for($i=0; $i < $num; $i++) {
+      list($file, $descr) = split('::', $data[$i]);
+      $d[$file] = $descr;
+    }
+  }
+  return $d;
+}
+
+function cmp_name_asc(&$a, &$b) 
+{ 
+    if ($a['name']==$b['name']) return 0; 
+        return ($a['name']<$b['name']) ? -1 : 1; 
+}
+function cmp_name_desc(&$a, &$b) 
+{ 
+    if ($a['name']==$b['name']) return 0; 
+        return ($a['name']>$b['name']) ? -1 : 1; 
+}
+function cmp_time_asc(&$a, &$b) 
+{ 
+    if ($a['last_modified']==$b['last_modified']) return 0; 
+        return ($a['last_modified']<$b['last_modified']) ? -1 : 1; 
+}
+function cmp_time_desc(&$a, &$b) 
+{ 
+    if ($a['last_modified']==$b['last_modified']) return 0; 
+        return ($a['last_modified']>$b['last_modified']) ? -1 : 1; 
+}
+function cmp_size_asc(&$a, &$b) 
+{ 
+    if ($a['size']==$b['size']) return 0; 
+        return ($a['size']<$b['size']) ? -1 : 1; 
+}
+function cmp_size_desc(&$a, &$b) 
+{ 
+    if ($a['size']==$b['size']) return 0; 
+        return ($a['size']>$b['size']) ? -1 : 1; 
+}
+
+function CleanFiles($dir)
+{
+
+	if (is_dir($dir) ) 
+        { 
+           $handle=opendir($dir); 
+           while (false!==($file = readdir($handle))) { 
+               if ($file != "." && $file != ".." && $file != "index.php") {  
+                   $Diff = (time() - filectime("$dir/$file"))/60/60/24;
+                   if ($Diff > 7) unlink("$dir/$file");
+
+               } 
+           }
+           closedir($handle); 
+        }
+	
+/*    //Borrar los ficheros temporales
+    $t=time();
+    $h=opendir($dir);
+    while($file=readdir($h))
+    {
+        if(substr($file,0,3)=='tmp')
+        {
+            $path=$dir.'/'.$file;
+            if($t-filemtime($path)>43200) //Establezo el tiempo 3600 (segundos) = 1h
+                @unlink($path);
+        }
+    }
+    closedir($h);*/
+} 
+
+
+
+function invert_image($input,$output,$color=false,$type='jpg')
+ {
+     if($type == 'jpg') { $bild = imagecreatefromjpeg($input); }
+     elseif($type == 'png') { $bild = imagecreatefrompng($input); }
+	 elseif($type == 'gif') { $bild = imagecreatefromgif($input); }
+  
+     $x = imagesx($bild);
+     $y = imagesy($bild);
+  
+     for($i=0; $i<$y; $i++)
+     {
+         for($j=0; $j<$x; $j++)
+         {
+             $pos = imagecolorat($bild, $j, $i);
+             $f = imagecolorsforindex($bild, $pos);
+             if($color == true)
+             {
+				 $col = imagecolorresolve($bild, 255-$f['red'], 255-$f['green'], 255-$f['blue']);
+             }else{
+                 $gst = $f['red']*0.15 + $f['green']*0.5 + $f['blue']*0.35;
+                 $col = imagecolorclosesthwb($bild, 255-$gst, 255-$gst, 255-$gst);
+            }
+             imagesetpixel($bild, $j, $i, $col);
+         }
+     }
+	 
+    if(empty($output)) { header('Content-type: image/'.$type); } else { $output=$output; }
+	
+    if($type == 'jpg') { imagejpeg($bild,$output,90); }
+    elseif($type == 'png') { imagepng($bild,$output); } 
+	elseif($type == 'gif') { imagegif($bild,$output); } 
+}
+
+
+function alto_contraste_png($input,$output,$newColor,$type='jpg')
+ {
+ 
+ 	 if($type == 'jpg') { $image = imagecreatefromjpeg($input); }
+     elseif($type == 'png') { $image = imagecreatefrompng($input); }
+	 elseif($type == 'gif') { $image = imagecreatefromgif($input); }
+	  
+        $colorToChange = "FFFFFF";  
+
+        $c1 = sscanf($colorToChange,"%2x%2x%2x"); 
+        $c2 = sscanf($newColor ,"%2x%2x%2x"); 
+
+        $cIndex = imagecolorexact($image,$c1[0],$c1[1],$c1[2]); 
+        imagecolorset($image,$cIndex,$c2[0],$c2[1],$c2[2]); 
+
+   if(empty($output)) { header('Content-type: image/'.$type); } else { $output=$output; } 
+		
+	if($type == 'jpg') { imagejpeg($image,$output); }
+    elseif($type == 'png') { imagepng($image,$output); }
+	elseif($type == 'gif') { imagegif($image,$output); }  
+	 
+}
+
+function alto_contraste_jpg($input,$output,$newColor,$type='jpg')
+ {
+ 
+ 	 if($type == 'jpg') { $image = imagecreatefromjpeg($input); }
+     elseif($type == 'png') { $image = imagecreatefrompng($input); }
+	 elseif($type == 'gif') { $image = imagecreatefromgif($input); }
+	  
+        $width = imagesx($image); 
+        $height = imagesy($image); 
+
+        $colorToChange = "FFFFFF"; 
+
+        $c1 = sscanf($colorToChange,"%2x%2x%2x"); 
+        $c2 = sscanf($newColor,"%2x%2x%2x"); 
+        
+        $cnew = imagecolorallocate($image,$c2[0],$c2[1],$c2[2]); 
+
+        for ($y=0;$y<$height;$y++) { 
+                for ($x=0;$x<$width;$x++) { 
+                        $rgb = imagecolorat($image,$x,$y); 
+                        $r = ($rgb >> 16) & 0xFF; 
+                        $g = ($rgb >> 8) & 0xFF; 
+                        $b = $rgb & 0xFF; 
+                        if (($r==$c1[0]) && ($g==$c1[1]) && ($b==$c1[2])) { 
+                                imagesetpixel($image,$x,$y,$cnew); 
+                        } 
+                } 
+        } 
+         
+
+   if(empty($output)) { header('Content-type: image/'.$type); } else { $output=$output; } 
+		
+	if($type == 'jpg') { imagejpeg($image,$output); }
+    elseif($type == 'png') { imagepng($image,$output); }
+	elseif($type == 'gif') { imagegif($image,$output); } 
+	 
+}
+
+function comprobar_email($email){ 
+   	$mail_correcto = 0; 
+   	//compruebo unas cosas primeras 
+   	if ((strlen($email) >= 6) && (substr_count($email,"@") == 1) && (substr($email,0,1) != "@") && (substr($email,strlen($email)-1,1) != "@")){ 
+      	 if ((!strstr($email,"'")) && (!strstr($email,"\"")) && (!strstr($email,"\\")) && (!strstr($email,"\$")) && (!strstr($email," "))) { 
+         	 //miro si tiene caracter . 
+         	 if (substr_count($email,".")>= 1){ 
+            	 //obtengo la terminacion del dominio 
+            	 $term_dom = substr(strrchr ($email, '.'),1); 
+            	 //compruebo que la terminación del dominio sea correcta 
+            	 if (strlen($term_dom)>1 && strlen($term_dom)<5 && (!strstr($term_dom,"@")) ){ 
+               	 //compruebo que lo de antes del dominio sea correcto 
+               	 $antes_dom = substr($email,0,strlen($email) - strlen($term_dom) - 1); 
+               	 $caracter_ult = substr($antes_dom,strlen($antes_dom)-1,1); 
+               	 if ($caracter_ult != "@" && $caracter_ult != "."){ 
+                  	 $mail_correcto = 1; 
+               	 } 
+            	 } 
+         	 } 
+      	 } 
+   	} 
+   	if ($mail_correcto) 
+      	 return 1; 
+   	else 
+      	 return 0; 
+} 
+?>

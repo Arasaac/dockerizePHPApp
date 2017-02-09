@@ -1,0 +1,83 @@
+<!--conf
+<sample in_favorites="false">
+              <product version="1.1" edition="std"/>
+                     <modifications>
+                            <modified date="070101"/>
+                     </modifications>
+               </sample>
+ --> 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+	<title>Loading by AJAX (content loading from html file)</title>
+	<link rel="STYLESHEET" type="text/css" href="../../codebase/dhtmlxtabbar.css">
+	<script  src="../../codebase/dhtmlxcommon.js"></script>
+	<script  src="../../codebase/dhtmlxtabbar.js"></script>
+	
+	 <link rel="STYLESHEET" type="text/css" href="../../../dhtmlxGrid/codebase/dhtmlxgrid.css">
+     <script  src="../../../dhtmlxGrid/codebase/dhtmlxcommon.js"></script>
+     <script  src="../../../dhtmlxGrid/codebase/dhtmlxgrid.js"></script>
+     <script  src="../../../dhtmlxGrid/codebase/dhtmlxgridcell.js"></script>
+</head>
+
+<body>
+<link rel='STYLESHEET' type='text/css' href='../common/style.css'>
+<table cellspacing="0" cellpadding="0" class="sample_header" border="0">
+	<tr valign="middle">
+		<!-- COMPONENT ICON -->
+		<td width="40" align="center"><img src="../common/dhtmlxtabbar_icon.gif" border="0"></td>
+		<!-- COMPONENT NAME -->
+		<td width="150" align="left" nowrap="true">Sample: dhtmlxTabbar</td>
+		<!-- SAMPLE TITLE -->
+		<td width="0" align="left" nowrap><b>Loading by AJAX (content loading from html file)</b></td>
+		<!-- LINK TO COMPONENT PAGE -->
+		<td width="0" align="right"><a href="http://www.dhtmlx.com/docs/products/dhtmlxTabbar/index.shtml">dhtmlxTabbar main page</a></td>
+		<!-- CLOSE BUTTON -->
+		<td width="50"><div class="sample_close"><a href="javascript:void(0);" onclick="self.close();"><img src="../common/sample_close.gif" width="14" height="14" border="0" alt="X"></a></div></td>
+	</tr>
+</table>
+	
+	
+	<p>
+		You can load tab content from html file and automaticaly place it on page using ajax.<br>
+		After selecting tab2, dhtmlxGrid will be initialized in it.</p>
+	
+	<table>
+		<tr>
+			<td>
+				<div id="a_tabbar" style="width:530; height:320;"/>
+			</td>
+        </tr>
+	</table>
+	<a href="#" onclick="goToNextTabA()">Next (cycle) </a><br>
+<br>
+<div class='sample_code'><div class="hl-main"><pre><span class="hl-code"> 
+&lt;?</span><span class="hl-identifier">xml</span><span class="hl-code"> </span><span class="hl-identifier">version</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">1.0</span><span class="hl-quotes">&quot;</span><span class="hl-code">?&gt;
+&lt;</span><span class="hl-identifier">tabbar</span><span class="hl-code">  </span><span class="hl-identifier">hrefmode</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">ajax-html</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;
+    &lt;</span><span class="hl-identifier">row</span><span class="hl-code">&gt;
+        &lt;</span><span class="hl-identifier">tab</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b1</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">width</span><span class="hl-code">=</span><span class="hl-quotes">'</span><span class="hl-string">100px</span><span class="hl-quotes">'</span><span class="hl-code"> </span><span class="hl-identifier">selected</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">1</span><span class="hl-quotes">&quot;</span><span class="hl-code">  </span><span class="hl-identifier">href</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">alfa.html</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;</span><span class="hl-identifier">features</span><span class="hl-code">&lt;/</span><span class="hl-identifier">tab</span><span class="hl-code">&gt;
+        &lt;</span><span class="hl-identifier">tab</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b2</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">width</span><span class="hl-code">=</span><span class="hl-quotes">'</span><span class="hl-string">100px</span><span class="hl-quotes">'</span><span class="hl-code"> </span><span class="hl-identifier">href</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">alfa2.html</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;</span><span class="hl-identifier">dhtmlx</span><span class="hl-code">&lt;/</span><span class="hl-identifier">tab</span><span class="hl-code">&gt;
+        &lt;</span><span class="hl-identifier">tab</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b3</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">width</span><span class="hl-code">=</span><span class="hl-quotes">'</span><span class="hl-string">100px</span><span class="hl-quotes">'</span><span class="hl-code"> </span><span class="hl-identifier">href</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">betta.txt</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;</span><span class="hl-identifier">browsers</span><span class="hl-code">&lt;/</span><span class="hl-identifier">tab</span><span class="hl-code">&gt;
+        &lt;</span><span class="hl-identifier">tab</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b4</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">width</span><span class="hl-code">=</span><span class="hl-quotes">'</span><span class="hl-string">100px</span><span class="hl-quotes">'</span><span class="hl-code"> </span><span class="hl-identifier">href</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">gamma.html</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;</span><span class="hl-identifier">other</span><span class="hl-code">&lt;/</span><span class="hl-identifier">tab</span><span class="hl-code">&gt;
+        
+    &lt;/</span><span class="hl-identifier">row</span><span class="hl-code">&gt;
+&lt;/</span><span class="hl-identifier">tabbar</span><span class="hl-code">&gt;</span></pre></div></div>
+	<script>
+
+			tabbar=new dhtmlXTabBar("a_tabbar","top");
+            tabbar.setImagePath("../../codebase/imgs/");
+            
+            tabbar.loadXML("tabs7a.xml");
+
+            function   goToNextTabA(){
+				var z=tabbar.goToNextTab();
+				if (!z) tabbar.setTabActive(tabbar.rows[0].childNodes[0].idd);
+			}
+	</script>
+<!-- FOOTER -->
+<table callspacing="0" cellpadding="0" border="0" class="sample_footer"><tr><td style="padding-left: 8px;">&copy; <a href="http://www.dhtmlx.com">DHTMLX LTD</a>. All rights reserved</td></tr></table>
+<!-- FOOTER -->
+
+</body>
+</html>

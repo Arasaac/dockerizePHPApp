@@ -1,0 +1,8 @@
+[02-Dec-2009 12:55:15] PHP Strict Standards:  Declaration of GraphTabTitle::SetPos() should be compatible with that of Text::SetPos() in /var/home/vsftpd/dromero/saac/classes/graficas/jpgraph/jpgraph.php on line 3159
+[02-Dec-2009 12:55:15] PHP Strict Standards:  Declaration of GraphTabTitle::Stroke() should be compatible with that of Text::Stroke() in /var/home/vsftpd/dromero/saac/classes/graficas/jpgraph/jpgraph.php on line 3159
+[02-Dec-2009 12:55:15] PHP Strict Standards:  Declaration of SuperScriptText::GetWidth() should be compatible with that of Text::GetWidth() in /var/home/vsftpd/dromero/saac/classes/graficas/jpgraph/jpgraph.php on line 3334
+[02-Dec-2009 12:55:15] PHP Strict Standards:  Declaration of SuperScriptText::GetFontHeight() should be compatible with that of Text::GetFontHeight() in /var/home/vsftpd/dromero/saac/classes/graficas/jpgraph/jpgraph.php on line 3334
+[02-Dec-2009 12:55:15] PHP Strict Standards:  Declaration of SuperScriptText::GetTextHeight() should be compatible with that of Text::GetTextHeight() in /var/home/vsftpd/dromero/saac/classes/graficas/jpgraph/jpgraph.php on line 3334
+[02-Dec-2009 12:55:15] PHP Strict Standards:  Declaration of LinearTicks::Set() should be compatible with that of Ticks::Set() in /var/home/vsftpd/dromero/saac/classes/graficas/jpgraph/jpgraph.php on line 4291
+[02-Dec-2009 12:55:15] PHP Strict Standards:  Declaration of RotImage::FilledArc() should be compatible with that of Image::FilledArc() in /var/home/vsftpd/dromero/saac/classes/graficas/jpgraph/jpgraph.php on line 7176
+[02-Dec-2009 12:55:15] PHP Strict Standards:  Assigning the return value of new by reference is deprecated in /var/home/vsftpd/dromero/saac/classes/graficas/jpgraph/jpgraph_plotmark.inc on line 63

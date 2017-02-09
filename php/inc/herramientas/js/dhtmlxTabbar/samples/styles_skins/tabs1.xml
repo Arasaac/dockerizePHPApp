@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<tabbar>
+    <row>
+        <tab id="b1" width='100px'>Jobs</tab>
+        <tab id="b2" width='120px' selected="1">Employees</tab>
+        <tab id="b3" width='100px'>Tasks</tab>
+        <tab id="b4" width='100px'>Reports</tab>
+    </row>
+</tabbar>

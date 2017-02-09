@@ -1,0 +1,77 @@
+<!--conf
+<sample in_favorites="true">
+              <product version="1.1" edition="std"/>
+                     <modifications>
+                            <modified date="070101"/>
+                     </modifications>
+               </sample>
+ --> 
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<head>
+	<title>Loading in iframes</title>
+	<link rel="STYLESHEET" type="text/css" href="../../codebase/dhtmlxtabbar.css">
+	<script  src="../../codebase/dhtmlxcommon.js"></script>
+	<script  src="../../codebase/dhtmlxtabbar.js"></script>
+</head>
+
+<body>
+<link rel='STYLESHEET' type='text/css' href='../common/style.css'>
+<table cellspacing="0" cellpadding="0" class="sample_header" border="0">
+	<tr valign="middle">
+		<!-- COMPONENT ICON -->
+		<td width="40" align="center"><img src="../common/dhtmlxtabbar_icon.gif" border="0"></td>
+		<!-- COMPONENT NAME -->
+		<td width="150" align="left" nowrap="true">Sample: dhtmlxTabbar</td>
+		<!-- SAMPLE TITLE -->
+		<td width="0" align="left" nowrap><b>Loading in iframes</b></td>
+		<!-- LINK TO COMPONENT PAGE -->
+		<td width="0" align="right"><a href="http://www.dhtmlx.com/docs/products/dhtmlxTabbar/index.shtml">dhtmlxTabbar main page</a></td>
+		<!-- CLOSE BUTTON -->
+		<td width="50"><div class="sample_close"><a href="javascript:void(0);" onclick="self.close();"><img src="../common/sample_close.gif" width="14" height="14" border="0" alt="X"></a></div></td>
+	</tr>
+</table>
+	
+	
+	<p>
+		Tabbar content can be loaded in iframes. Set <em>hrefmode</em> attribute value to <em>iframes</em> and add href attributes to tab tags
+		to load tab content in iframe, which will be autoimaticaly created for each tab.
+	</p>
+	
+	<table>
+		<tr>
+			<td>
+				<div id="a_tabbar" style="width:512px; height:300px;"/>
+			</td>
+        </tr>
+
+	</table>
+
+<div><a href="#" onclick="tabbar.removeTab('b2'); tabbar.addTab('b2','yahoo'); tabbar.setContentHref('b2','http://www.yahoo.com'); tabbar.setTabActive('b2'); ">Recreate second tab</a></div>
+<br>
+<div class='sample_code'><div class="hl-main"><pre><span class="hl-code"> 
+&lt;?</span><span class="hl-identifier">xml</span><span class="hl-code"> </span><span class="hl-identifier">version</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">1.0</span><span class="hl-quotes">&quot;</span><span class="hl-code">?&gt;
+&lt;</span><span class="hl-identifier">tabbar</span><span class="hl-code">  </span><span class="hl-identifier">hrefmode</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">iframes</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;
+    &lt;</span><span class="hl-identifier">row</span><span class="hl-code">&gt;
+        &lt;</span><span class="hl-identifier">tab</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b1</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">width</span><span class="hl-code">=</span><span class="hl-quotes">'</span><span class="hl-string">100px</span><span class="hl-quotes">'</span><span class="hl-code"> </span><span class="hl-identifier">href</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">http://ya.ru</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;</span><span class="hl-identifier">Yandex</span><span class="hl-code">&lt;/</span><span class="hl-identifier">tab</span><span class="hl-code">&gt;
+        &lt;</span><span class="hl-identifier">tab</span><span class="hl-code"> </span><span class="hl-identifier">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">b2</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">width</span><span class="hl-code">=</span><span class="hl-quotes">'</span><span class="hl-string">100px</span><span class="hl-quotes">'</span><span class="hl-code"> </span><span class="hl-identifier">selected</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">1</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-identifier">href</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">http://google.com</span><span class="hl-quotes">&quot;</span><span class="hl-code">&gt;</span><span class="hl-identifier">Google</span><span class="hl-code">&lt;/</span><span class="hl-identifier">tab</span><span class="hl-code">&gt;
+    &lt;/</span><span class="hl-identifier">row</span><span class="hl-code">&gt;
+&lt;/</span><span class="hl-identifier">tabbar</span><span class="hl-code">&gt;</span></pre></div></div>
+	<script>
+
+			tabbar=new dhtmlXTabBar("a_tabbar","top");
+            tabbar.setImagePath("../../codebase/imgs/");
+            tabbar.preventIECashing(true);
+            tabbar.loadXML("tabs6.xml");
+			tabbar.setSkinColors("white","#FFFACD");
+
+	</script>
+
+<!-- FOOTER -->
+<table callspacing="0" cellpadding="0" border="0" class="sample_footer"><tr><td style="padding-left: 8px;">&copy; <a href="http://www.dhtmlx.com">DHTMLX LTD</a>. All rights reserved</td></tr></table>
+<!-- FOOTER -->
+
+</body>
+</html>

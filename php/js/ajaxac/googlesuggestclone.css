@@ -1,0 +1,13 @@
+input { vertical-align : middle; }
+
+#fq { width : 300px; font-family : Arial, sans-serif; font-size : 13px; padding-left : 4px; }
+
+#search-results { width : 306px; border : 1px solid #000; background : #fff; display: compact; float : none;}
+* html div#search-results { width : 307px; } /* box model hack */
+.sr, .srs { width : 100%; float : left; font-family : Arial, sans-serif; font-size : 13px; padding : 1px 0 0 0; }
+.sr { background-color : #fff; color : #000; }
+.srs { background-color : #36c; color : #fff; cursor : pointer; }
+.sr .src { color : #008000; }
+.srs .src { color : #fff; }
+.srt { float : left; font-size : 10px; margin-left : 4px; }
+.src { float : right; font-size : 10px; margin-right : 3px; padding-top : 2px; }

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<tabbar  hrefmode="ajax">
+    <row>
+        <tab id="b1" width='100px' selected="1"  href="slow_ajax.php?num=0">Google</tab>
+        <tab id="b2" width='100px' href="slow_ajax.php?num=1">Yahoo</tab>
+    </row>
+</tabbar>

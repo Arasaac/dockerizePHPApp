@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Ajax Auto Suggest</title>
+<link rel="stylesheet" href="autoComplete_css.css" type="text/css" media="screen" charset="utf-8" />
+<script type="text/javascript" src="jquery-1.2.1.pack.js"></script>
+<script type="text/javascript" src="../ajax_herramientas.js"></script>
+
+<style type="text/css">
+	body {
+		font-family: Helvetica;
+		font-size: 11px;
+		color: #000;
+	}
+	
+	h3 {
+		margin: 0px;
+		padding: 0px;	
+	}
+
+
+</style>
+
+</head>
+
+<body>
+
+
+	<div>
+		<form>
+			<div>
+				<input name="s" type="text" id="s" onblur="fill();" onkeyup="lookup(this.value);" value="" size="95" />
+			    <input name="id_palabra" type="text" id="id_palabra" />
+                <input name="mi_seleccion" type="hidden" id="mi_seleccion" value="" />
+			</div>
+			
+			<div class="suggestionsBox" id="suggestions" style="display: none;">
+				<img src="upArrow.png" style="position: relative; top: -12px; left: 30px;" alt="upArrow" />
+				<div class="suggestionList" id="autoSuggestionsList">
+					&nbsp;
+				</div>
+			</div>
+		</form>
+	</div>
+
+</body>
+</html>

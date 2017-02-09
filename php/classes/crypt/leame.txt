@@ -1,0 +1,95 @@
++-----------------+
+| Notas del Autor |
++-----------------+
+Hola!!!
+mi nombre es Julian Lasso no soy el creador de 5CR,
+simplemente modifique el RC4, agregandole más funcionalidades
+y alterando un poco más el codigo de encriptación para convertirlo un
+poco más fuerte y dificil de desencriptar
+
+Logicamente mi script lo libero bajo licencia GPL
+cualquier modificación o bug encontrado, por favor
+comunicarmelo a julian_lasso@yahoo.com.mx
+no me hago responsable del mal uso que se le pueda
+dar ni de perdida de información o cosas por el estilo.
+
+5CR tiene dos metodos de encriptación:
+
++---------+
+| PRIMERA |
++---------+
+Encriptación para contraseñas; este tipo de encriptación es solo de ida
+¿¿ida?? ¿¿como asi?? pues si solo de ida porque no hay forma de desencriptar
+las contraseñas por este metodo!!!
+
+La forma correcta de encriptar en esta forma es asi:
+
++-----------------------------------------------------------------------------------+
+| <?php                                                                             |
+| include("5CR");                                                                   |
+|                                                                                   |
+| $llave = "14lo8sWw+23¡ds"; //llave que utilizaremos para encriptar                |
+| $pass = "Los Pollitos"; //contraseña a encriptar                                  |
+|                                                                                   |
+| $encript = new E5CR($llave); //definimos un nuevo elemento y pasamos la llave     |
+| $encript->encriptar($pass,0); //OJO cero(0) es para encriptar contraseñas         |
+| ?>                                                                                |
++-----------------------------------------------------------------------------------+
+
+El resultado será devuelto en la misma variable en que se le pasó la contraseña
+
++---------+
+| SEGUNDA |
++---------+
+Encriptación de variables que pasarán por el metodo GET; este tipo de encriptación,
+solo la recomiendo para para los valores que se pasarán por la URL para que no sean
+vistos. Es verdad se puede encriptar también contraseñas, pero hay un defecto, pueden
+ser desencriptadas facilmente si se conoce la llave asi que no lo recomiendo pues
+contraseña es contraseña y solo la debe de saber el usuario!!!
+
+La forma correcta de encriptar en esta forma es asi:
+
++--------------------------------------------------------------------------------------------------------+
+| <?php                                                                                                  |
+| include("5CR.php");                                                                                    |
+|                                                                                                        |
+| $llave = "h3·94hHa9'2"; //la llave utilizada                                                           |
+| $variables = "loguin=JALF&pass=2Rt378&tipo=Admin&fecha=12/2/2005"; //conjunto de variables a pasar     |
+|                                                                                                        |
+| $encript = new E5CR($llave); //definimos un nuevo elemento y pasamos la llave                          |
+| $encript->encriptar($variables,1); //OJO uno(1) es para encriptar variables para URL                   |
+| echo '<a href="archivo.php?val='.$variables.'">LINK</a>'; //val es una variable cualquiera que llevará |
+|                                                           //las demás variables encriptadas            |
+| ?>                                                                                                     |
++--------------------------------------------------------------------------------------------------------+
+
+La forma correcta de recibir el paquete encriptado y desencriptarlo, es asi:
++------------------------------------------------------------------------------------------------------------------+
+| <?php                                                                                                            |
+| include("5CR.php");                                                                                              |
+| $llave = "h3·94hHa9'2"; //la misma llave utilizada en el ejemplo anterior para poder que desencripte             |
+| $datos = $_GET['val']; //pasamos el paquete a una variable en nuestro caso es val que bien por el metodo GET     |
+|                                                                                                                  |
+| $encript = new E5CR($llave); //definimos un nuevo elemento y pasamos la llave                                    |
+| $encript->desencriptar($datos,4); //pasamos los datos a desencriptar y definimos el total de variables incluidas |
+|                                   //en el paquete                                                                |
+| //Impresión de los datos desencriptados                                                                          |
+| echo $datos['loguin']."<BR>";                                                                                    |
+| echo $datos['pass']."<BR>";                                                                                      |
+| echo $datos['tipo']."<BR>";                                                                                      |
+| echo $datos['fecha']."<BR>";                                                                                     |
+| ?>                                                                                                               |
++------------------------------------------------------------------------------------------------------------------+
+
+Bueno facil ¿¿NO?? pues la verdad que la llave tiene que ser exactamente la misma para poder desencriptar los datos
+correctamente, sin ella estaremos perdidos y la respuesta se da en la misma variable en que se encontraba el paquete
+pero la respuesta está en un array asociativo es decir, la posición no es un número sino el nombre de cada variable
+como se muestra en el ejemplo anterior y hay que definir cuantas variables hay porque si nos pillan como desencriptar
+las cosas, por lo menos que se maten la cabeza un rato más tratando de averiguar cuantas variables habrán!! ;-)
+
+Creo que esto es todo si tienes dudas o sugerencias o cualquier cosa, escribeme a julian_lasso@yahoo.com.mx
+Recuerda que la llave del sistema tiene que ser la misma para poder encriptar y desencriptar, si en criptas algo
+y espues botas la llave de la encriptación, estarás perdido; es como botar las llaves de la puerta de tu casa!!!
+¿¿como entrarás despues??
+
+Suerte!!!! y muchos saludos!!!!

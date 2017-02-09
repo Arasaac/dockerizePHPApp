@@ -1,0 +1,111 @@
+<!--conf
+<sample in_favorites="true">
+              <product version="1.1" edition="std"/>
+                     <modifications>
+                            <modified date="070101"/>
+                     </modifications>
+               </sample>
+ --> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>Nested TabBars</title>
+	<link rel="STYLESHEET" type="text/css" href="../../codebase/dhtmlxtabbar.css">
+	<script  src="../../codebase/dhtmlxcommon.js"></script>
+	<script  src="../../codebase/dhtmlxtabbar.js"></script>
+
+</head>
+
+<body>
+<link rel='STYLESHEET' type='text/css' href='../common/style.css'>
+<table cellspacing="0" cellpadding="0" class="sample_header" border="0">
+	<tr valign="middle">
+		<!-- COMPONENT ICON -->
+		<td width="40" align="center"><img src="../common/dhtmlxtabbar_icon.gif" border="0"></td>
+		<!-- COMPONENT NAME -->
+		<td width="150" align="left" nowrap="true">Sample: dhtmlxTabbar</td>
+		<!-- SAMPLE TITLE -->
+		<td width="0" align="left" nowrap><b>Nested TabBars</b></td>
+		<!-- LINK TO COMPONENT PAGE -->
+		<td width="0" align="right"><a href="http://www.dhtmlx.com/docs/products/dhtmlxTabbar/index.shtml">dhtmlxTabbar main page</a></td>
+		<!-- CLOSE BUTTON -->
+		<td width="50"><div class="sample_close"><a href="javascript:void(0);" onclick="self.close();"><img src="../common/sample_close.gif" width="14" height="14" border="0" alt="X"></a></div></td>
+	</tr>
+</table>
+	
+	
+	<p>You can nest tabbars within other tabbars  using setContent method</>
+	<a href='javascript:void(0)' onclick='doIt()'>Attach content to TabBar</a>
+	<br><br>
+	<table>
+		<tr>
+			<td>
+				<div id="a_tabbar" style="width:390px; height:390px;"/>
+			</td>
+            <td><div id='html_01' style='padding:5px;'><div id='html_1' style="width:300px; height:340px;"></div></div></td>
+            <td><div id='html_02' style='padding:5px;'><div id='html_2' style="width:300px; height:340px;"></div></div></td>
+        </tr>
+	</table>
+<br>
+<div class='sample_code'><div class="hl-main"><pre><span class="hl-code"> 
+</span><span class="hl-brackets">&lt;</span><span class="hl-reserved">div</span><span class="hl-code"> </span><span class="hl-var">id</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">a_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code"> </span><span class="hl-var">style</span><span class="hl-code">=</span><span class="hl-quotes">&quot;</span><span class="hl-string">width:400;height:100</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">&gt;</span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">div</span><span class="hl-brackets">&gt;</span><span class="hl-code">
+    </span><span class="hl-brackets">&lt;</span><span class="hl-reserved">script</span><span class="hl-brackets">&gt;</span><span class="hl-code"><div class="hl-main"><pre><span class="hl-code"> 
+        </span><span class="hl-identifier">tabbar</span><span class="hl-code">=</span><span class="hl-reserved">new</span><span class="hl-code"> </span><span class="hl-identifier">dhtmlXTabBar</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">a_tabbar</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">top</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+        ...
+        </span><span class="hl-identifier">tabbar2</span><span class="hl-code">=</span><span class="hl-reserved">new</span><span class="hl-code"> </span><span class="hl-identifier">dhtmlXTabBar</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">html_1</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">right</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+        ...
+        </span><span class="hl-identifier">tabbar3</span><span class="hl-code">=</span><span class="hl-reserved">new</span><span class="hl-code"> </span><span class="hl-identifier">dhtmlXTabBar</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">html_2</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">bottom</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+        ...
+        </span><span class="hl-identifier">tabbar</span><span class="hl-code">.</span><span class="hl-identifier">setContent</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">a1</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">html_01</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+        </span><span class="hl-identifier">tabbar</span><span class="hl-code">.</span><span class="hl-identifier">setContent</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">a2</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">html_02</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;
+        </span><span class="hl-identifier">tabbar</span><span class="hl-code">.</span><span class="hl-identifier">setContentHTML</span><span class="hl-brackets">(</span><span class="hl-quotes">&quot;</span><span class="hl-string">a3</span><span class="hl-quotes">&quot;</span><span class="hl-code">,</span><span class="hl-quotes">&quot;</span><span class="hl-string">&lt;br/&gt;The content can be set as &lt;b&gt;HTML&lt;/b&gt; node or as &lt;b&gt;HTML&lt;/b&gt; text.</span><span class="hl-quotes">&quot;</span><span class="hl-brackets">)</span><span class="hl-code">;</span></pre></div></span><span class="hl-brackets">&lt;/</span><span class="hl-reserved">script</span><span class="hl-brackets">&gt;</span></pre></div></div>
+	<script>
+			tabbar=new dhtmlXTabBar("a_tabbar","top");
+            tabbar.setImagePath("../../codebase/imgs/");
+
+            tabbar.setSkinColors("#FCFBFC","#F4F3EE");
+            tabbar.addTab("a1","Tab 1-1","100px");
+            tabbar.addTab("a2","Tab 1-2","100px");
+            tabbar.addTab("a3","Tab 1-3","100px");
+            tabbar.setTabActive("a1");
+
+
+			tabbar2=new dhtmlXTabBar("html_1","right");
+            tabbar2.setImagePath("../../codebase/imgs/");
+
+            tabbar2.setSkinColors("#FCFBFC","#F4F3EE");
+            tabbar2.addTab("a11","Tab 1-1","100px");
+            tabbar2.addTab("a21","Tab 1-2","100px");
+            tabbar2.addTab("a31","Tab 1-3","100px");
+            tabbar2.setTabActive("a11");
+            tabbar2.setContentHTML("a11","1-11");
+            tabbar2.setContentHTML("a21","1-21");
+            tabbar2.setContentHTML("a31","1-31");
+
+
+			tabbar3=new dhtmlXTabBar("html_2","bottom");
+            tabbar3.setImagePath("../../codebase/imgs/");
+
+            tabbar3.setSkinColors("#FCFBFC","#F4F3EE");
+            tabbar3.addTab("a12","Tab 1-1","100px");
+            tabbar3.addTab("a22","Tab 1-2","100px");
+            tabbar3.setTabActive("a12");
+            tabbar3.setContentHTML("a12","2-12");
+            tabbar3.setContentHTML("a22","2-22");
+            
+
+            function doIt(){
+                tabbar.setContent("a1","html_01");
+                tabbar.setContent("a2","html_02");
+                tabbar.setContentHTML("a3","<br/>The content can be set as <b>HTML</b> node or as <b>HTML</b> text.");
+            }
+	</script>
+
+<!-- FOOTER -->
+<table callspacing="0" cellpadding="0" border="0" class="sample_footer"><tr><td style="padding-left: 8px;">&copy; <a href="http://www.dhtmlx.com">DHTMLX LTD</a>. All rights reserved</td></tr></table>
+<!-- FOOTER -->
+
+</body>
+</html>
