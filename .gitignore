@@ -1,3 +1,12 @@
 dump/*
 bbdd/*
-docker-compose.yml
+php/api
+php/api_materiales
+php/classes/querys/conexion.php
+php/configuration
+php/importar
+php/zona-descargas
+php/repositorio
+php/upload
+php/usuarios
+php/zona_descargas
