@@ -74,8 +74,8 @@ services:
     volumes:
       - ./php:/home/arasaac/php
     ports:
-      - "2222:22"
-    command: juanda:123:1001
+      - "8005:22"
+    command: www-data:password:33:33
     networks:
       - frontend
 
