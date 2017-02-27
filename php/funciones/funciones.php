@@ -2354,18 +2354,18 @@ function enviar_mail($from,$fromname,$email_destinatario,$asunto, $cuerpo, $cuer
 	$mail->SMTPDebug  = 0;
 	$mail->Debugoutput = 'html';
 	// sets the prefix to the server
-	//$mail->SMTPSecure = "tls";
+	$mail->SMTPSecure = "tls";
 	// enable SMTP authentication
-	//$mail->SMTPAuth   = true;
+	$mail->SMTPAuth   = true;
 	// set the SMTP server
-	//$mail->Host       = "smtp.googlemail.com";
-	$mail->Host       = "172.27.13.170";
+	$mail->Host       = "smtp.gmail.com";
+	//$mail->Host       = "172.27.13.170";
 	// set the SMTP port for the SMTP server, 587 might be possible too
-	//$mail->Port       = 465; //No es necesario el puerto si es una cuenta de Gmail
+	$mail->Port       = 587; //No es necesario el puerto si es una cuenta de Gmail
 	// e-mail address username
-	//$mail->Username   = "arasaac@gmail.com";
+	$mail->Username   = "arasaac@gmail.com";
 	// e-mail address password
-	//$mail->Password   = "arasaac2008";
+	$mail->Password   = "%portal#arasaac2008%";
 				
 	//Indicamos cual es nuestra direccion de correo y el nombre que 
 	//queremos que vea el usuario que lee nuestro correo

@@ -1,5 +1,5 @@
 <?php 
-require('requires_basico.php');
+require('requires_basico_sin_sesion.php');
 require('operaciones_cesto.php');
 require('funciones/funciones.php');
 require('configuration/key.inc');
@@ -249,7 +249,7 @@ if (isset($_GET['id_material']) && $_GET['id_material'] > 0) {
     <?php require ('text_size_css.php'); ?>
 </head>
 
-<body>
+<body onload="cargar_div2('n_elementos_cesto.php','i=','n_cesto');">
            
 <div class="body_content"> 
 <?php include_once('include_facebook.php'); ?>
@@ -273,7 +273,7 @@ if (isset($_GET['id_material']) && $_GET['id_material'] > 0) {
 					if ($cadena_url_buscador !='') { $cadena_url_buscador=http_build_query($info).'&'; }
 					//************************************************************
 			
-			include('barra_opciones_materiales.php');
+			include('barra_opciones_materiales_ajax.php');
 			?>
   			
 
@@ -857,7 +857,7 @@ if (isset($_GET['id_material']) && $_GET['id_material'] > 0) {
 						 $ruta_cesto='ruta_cesto=zona_descargas/materiales/'.$row['id_material'].'/'.$ma[$i];
 						 $encript->encriptar($ruta_cesto,1);
 						 
-                         echo "<a href=\"".$PHP_SELF."?".$cadena_url."product_id=".$ruta_cesto."\"><img src=\"images/add_4.png\" alt=\"".$translate['add_seleccion']."\" title=\"".$translate['add_seleccion']."\"></a>&nbsp;<a href=\"descargar.php?d=".$archivo."\"><img src=\"images/download_5.png\" alt=\"".$translate['descargar_material']."\" title=\"".$translate['descargar_material']."\"></a>&nbsp;&nbsp;<a href=\"".$archivo."\" target=\"_blank\">".$ma[$i]."</a>";
+                         echo "<a href=\"javascript:void(0);\" onclick=\"cargar_div2('operaciones_cesto_ajax.php','product_id=".$ruta_cesto."','n_cesto');\"><img src=\"images/add_4.png\" alt=\"".$translate['add_seleccion']."\" title=\"".$translate['add_seleccion']."\"></a>&nbsp;<a href=\"descargar.php?d=".$archivo."\"><img src=\"images/download_5.png\" alt=\"".$translate['descargar_material']."\" title=\"".$translate['descargar_material']."\"></a>&nbsp;&nbsp;<a href=\"".$archivo."\" target=\"_blank\">".$ma[$i]."</a>";
 						 if (file_exists($archivo)) {
 						 		$peso_archivo = filesize($archivo);
 								echo '&nbsp;('.tamano_archivo($peso_archivo).')';
@@ -1153,7 +1153,7 @@ if (isset($_GET['id_material']) && $_GET['id_material'] > 0) {
                          $ruta_cesto='ruta_cesto=zona_descargas/materiales/'.$row['id_material'].'/'.$ma[$i];
 						 $encript->encriptar($ruta_cesto,1);
 						 
-                         echo "<a href=\"".$PHP_SELF."?".$cadena_url."product_id=".$ruta_cesto."\"><img src=\"images/add_4.png\" alt=\"".$translate['add_seleccion']."\" title=\"".$translate['add_seleccion']."\"></a>&nbsp;<a href=\"descargar.php?d=".$archivo."\"><img src=\"images/download_5.png\" alt=\"".$translate['descargar_material']."\" title=\"".$translate['descargar_material']."\"></a>&nbsp;&nbsp;<a href=\"".$archivo."\" target=\"_blank\">".$ma[$i]."</a>";
+                         echo "<a href=\"javascript:void(0);\" onclick=\"cargar_div2('operaciones_cesto_ajax.php','product_id=".$ruta_cesto."','n_cesto');\"><img src=\"images/add_4.png\" alt=\"".$translate['add_seleccion']."\" title=\"".$translate['add_seleccion']."\"></a>&nbsp;<a href=\"descargar.php?d=".$archivo."\"><img src=\"images/download_5.png\" alt=\"".$translate['descargar_material']."\" title=\"".$translate['descargar_material']."\"></a>&nbsp;&nbsp;<a href=\"".$archivo."\" target=\"_blank\">".$ma[$i]."</a>";
 						 if (file_exists($archivo)) {
 						 		$peso_archivo = filesize($archivo);
 								echo '&nbsp;('.tamano_archivo($peso_archivo).')';

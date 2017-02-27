@@ -43,10 +43,10 @@ if (isset($_POST['enviar_formulario_contacto'])) {
 	} else {
 		
 		if (comprobar_email($email)==1) { 
-			if (!isset($_POST['asunto']) || $_POST['asunto']=='') { $asunto=$translate['formulario_contacto'].": ARASAAC"; } else { $asunto=$translate['formulario_contacto']." ARASAAC: ".$_POST['asunto']; }
+			if (!isset($_POST['asunto']) || $_POST['asunto']=='') { $asunto=$translate['formulario_contacto'].": ARASAAC"; } else { $asunto=$translate['formulario_contacto']." ARASAAC: ".utf8_decode($_POST['asunto']); }
 			$ruta='classes/mail/';
 			
-			$destinatario = "arasaac@educa.aragon.es"; 
+			$destinatario = "arasaac@gmail.com"; 
 			enviar_mail($email,$p_contacto,$destinatario,$asunto, $cuerpo, $cuerpo,$ruta);
 			
 			$mensaje='<div class="mensaje">'.$translate['mensaje_enviado'].'</div>';
@@ -65,7 +65,7 @@ if (isset($_POST['enviar_formulario_contacto'])) {
  
 require('cabecera_html.php');
 ?>
-    <title>ARASAAC: <?php echo $translate['cabecera_contacta']; ?></title>
+    <title>ARASAAC - <?php echo $translate['cabecera_contacta']; ?></title>
 	<link rel="stylesheet" href="css/style2.css" type="text/css" />
     <link rel="stylesheet" href="css/green_pagstyle.css" type="text/css" />
 	<script type="text/javascript" src="js/ajax2.js"></script>

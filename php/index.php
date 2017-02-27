@@ -1,14 +1,11 @@
 <?php 
-require('requires_basico.php');
+require('requires_basico_sin_sesion.php');
 require('operaciones_cesto.php');
 require('funciones/funciones.php');
 
 require ('configuration/key.inc');
 require ('classes/crypt/5CR.php');
 $encript = new E5CR($llave);
-
-//Borro los archivos temporales
-CleanFiles("..\temp");
 
 $translate=$query->get_internacionalizacion_page_content($_SESSION['language'],2); 
 
@@ -55,7 +52,7 @@ require('cabecera_html.php');
     require('funciones/getres.php');
     ?>
 </head>
-<body>
+<body onload="cargar_div2('n_elementos_cesto.php','i=','n_cesto');">
 <?php include_once('include_facebook.php'); ?>
 <div class="body_content"> 
 
@@ -66,7 +63,7 @@ require('cabecera_html.php');
         <br /><h4><?php echo $translate['bienvenidos_arasaac']; ?></h4><br />
         <div id="clearcarpeta_trabajo"><?php echo $translate['descripcion_arasaac_breve_3']; ?></div>
         <?php include ('buscador.php'); ?>
-        <?php include ('cesto.php'); ?>               
+        <?php include ('cesto_ajax.php'); ?>               
 		<div id="principal">
 			<?php  if (isset($resultados) && $resultados !='') { ?>
            	 <form action="<?php echo $PHP_SELF; ?>" method="POST" name="descarga_pictogramas" id="descarga_pictogramas">  

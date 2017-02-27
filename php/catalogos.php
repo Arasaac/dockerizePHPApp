@@ -1,5 +1,5 @@
 <?php 
-require('requires_basico.php');
+require('requires_basico_sin_sesion.php');
 require ('funciones/funciones.php');
 require ('configuration/key.inc');
 require ('classes/crypt/5CR.php');
@@ -27,7 +27,7 @@ require('cabecera_html.php');
     ?>
 </head>
 
-<body>
+<body onload="cargar_div2('n_elementos_cesto.php','i=','n_cesto');">
             
 <div class="body_content"> 
 	  <div class="header">
@@ -37,7 +37,7 @@ require('cabecera_html.php');
         <?php include ('menu_subprincipal_catalogos.php'); ?>
         <?php echo '<h4>'.$translate['catalogos'].'</h4>'; ?>
         <?php include ('buscador.php'); ?>
-        <?php include ('cesto.php'); ?>  
+        <?php include ('cesto_ajax.php'); ?>  
 		<div id="principal">
 			<?php include ('catalogos_menu.php'); ?>
         </div><br />

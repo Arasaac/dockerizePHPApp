@@ -2677,8 +2677,15 @@ switch ($id_listado) {
 					if (mysql_num_rows($result2) > 0) {
 						
 						while ($row2=mysql_fetch_array($result2)) {
+							
+							$pcas="";
+							$pcas=str_replace("¿","",$row2['palabra']);
+							$pcas=str_replace("?","",$pcas);
+							$pcas=str_replace("¡","",$pcas);
+							$pcas=str_replace("!","",$pcas);
+							$pcas=str_replace("...","",$pcas);
 											
-							$palabras_castellano.=$row2['palabra'].'='.$row2['id_tipo_palabra'].';';
+							$palabras_castellano.=$pcas.'='.$row2['id_tipo_palabra'].';';
 							$id_palabra=$row2['id_palabra'];
 							
 							$traducciones=$query_class->buscar_traducciones_por_id_palabra($id_palabra);
@@ -2689,55 +2696,109 @@ switch ($id_listado) {
 																			
 										case 7:
 										if ($row3['traduccion']!= NULL) {
-											$palabras_ingles.=utf8_decode($row3['traduccion']).'='.$row2['id_tipo_palabra'].';';
+											$pi="";
+											$pi=str_replace("?","",utf8_decode($row3['traduccion']));
+											$pi=str_replace("¿","",$pi);
+											$pi=str_replace("¡","",$pi);
+											$pi=str_replace("!","",$pi);
+											$pi=str_replace("...","",$pi);
+											$palabras_ingles.=$pi.'='.$row2['id_tipo_palabra'].';';
 										}
 										break;
 										
 										case 8:
 										if ($row3['traduccion']!= NULL) {
-											$palabras_frances.=utf8_decode($row3['traduccion']).'='.$row2['id_tipo_palabra'].';';
+											$pf="";
+											$pf=str_replace("?","",utf8_decode($row3['traduccion']));
+											$pf=str_replace("¿","",$pf);
+											$pf=str_replace("¡","",$pf);
+											$pf=str_replace("!","",$pf);
+											$pf=str_replace("...","",$pf);
+											$palabras_frances.=$pf.'='.$row2['id_tipo_palabra'].';';
 										}
 										break;
 										
 										case 9:
 										if ($row3['traduccion']!= NULL) {
-											$palabras_catalan.=utf8_decode($row3['traduccion']).'='.$row2['id_tipo_palabra'].';'; 
+											$pc="";
+											$pc=str_replace("?","",utf8_decode($row3['traduccion']));
+											$pc=str_replace("¿","",$pc);
+											$pc=str_replace("¡","",$pc);
+											$pc=str_replace("!","",$pc);
+											$pc=str_replace("...","",$pc);
+											$palabras_catalan.=$pc.'='.$row2['id_tipo_palabra'].';'; 
 										}
 										break;
 										
 										case 10:
 										if ($row3['traduccion']!= NULL) {
-											$palabras_euskera.=utf8_decode($row3['traduccion']).'='.$row2['id_tipo_palabra'].';';
+											$pe="";
+											$pe=str_replace("?","",utf8_decode($row3['traduccion']));
+											$pe=str_replace("¿","",$pe);
+											$pe=str_replace("¡","",$pe);
+											$pe=str_replace("!","",$pe);
+											$pe=str_replace("...","",$pe);
+											$palabras_euskera.=$pe.'='.$row2['id_tipo_palabra'].';';
 										}
 										break;
 										
 										case 11:
 										if ($row3['traduccion']!= NULL) {
-											$palabras_aleman.=utf8_decode($row3['traduccion']).'='.$row2['id_tipo_palabra'].';';
+											$pa="";
+											$pa=str_replace("?","",utf8_decode($row3['traduccion']));
+											$pa=str_replace("¿","",$pa);
+											$pa=str_replace("¡","",$pa);
+											$pa=str_replace("!","",$pa);
+											$pa=str_replace("...","",$pa);
+											$palabras_aleman.=$pa.'='.$row2['id_tipo_palabra'].';';
 										}
 										break;
 										
 										case 12:
 										if ($row3['traduccion']!= NULL) {
-											$palabras_italiano.=utf8_decode($row3['traduccion']).'='.$row2['id_tipo_palabra'].';';
+											$pi="";
+											$pi=str_replace("?","",utf8_decode($row3['traduccion']));
+											$pi=str_replace("¿","",$pi);
+											$pi=str_replace("¡","",$pi);
+											$pi=str_replace("!","",$pi);
+											$pi=str_replace("...","",$pi);
+											$palabras_italiano.=$pi.'='.$row2['id_tipo_palabra'].';';
 										}
 										break;
 										
 										case 13:
 										if ($row3['traduccion']!= NULL) {
-											$palabras_portugues.=utf8_decode($row3['traduccion']).'='.$row2['id_tipo_palabra'].';';
+											$pp="";
+											$pp=str_replace("?","",utf8_decode($row3['traduccion']));
+											$pp=str_replace("¿","",$pp);
+											$pp=str_replace("¡","",$pp);
+											$pp=str_replace("!","",$pp);
+											$pp=str_replace("...","",$pp);
+											$palabras_portugues.=$pp.'='.$row2['id_tipo_palabra'].';';
 										}
 										break;
 										
 										case 14:
 										if ($row3['traduccion']!= NULL) {
-											$palabras_ga.=utf8_decode($row3['traduccion']).'='.$row2['id_tipo_palabra'].';';
+											$pg="";
+											$pg=str_replace("?","",utf8_decode($row3['traduccion']));
+											$pg=str_replace("¿","",$pg);
+											$pg=str_replace("¡","",$pg);
+											$pg=str_replace("!","",$pg);
+											$pg=str_replace("...","",$pg);
+											$palabras_ga.=$pg.'='.$row2['id_tipo_palabra'].';';
 										}
 										break;
 										
 										case 15:
 										if ($row3['traduccion']!= NULL) {
-											$palabras_br.=utf8_decode($row3['traduccion']).'='.$row2['id_tipo_palabra'].';';
+											$pbr="";
+											$pbr=str_replace("?","",utf8_decode($row3['traduccion']));
+											$pbr=str_replace("¿","",$pbr);
+											$pbr=str_replace("¡","",$pbr);
+											$pbr=str_replace("!","",$pbr);
+											$pbr=str_replace("...","",$pbr);
+											$palabras_br.=$pbr.'='.$row2['id_tipo_palabra'].';';
 										}
 										break;
 								
@@ -4355,6 +4416,35 @@ switch ($id_listado) {
 		<body>
 		</body>
 		</html>';
+	break;
+	
+	case 87: 
+		$xls->addRow(Array("id_palabra","palabra","traduccion","definicion"));
+		
+		$query = "SELECT palabras.* FROM palabras";
+
+        $connection = mysql_connect($HOST, $USERNAME, $PASSWORD);
+		
+		$SelectedDB = mysql_select_db($DBNAME);
+		$result = mysql_query($query); 
+		
+		while ($row=mysql_fetch_array($result)) {	
+		
+			$id_palabra=$row['id_palabra'];
+			if (strlen($row['definicion']) > 250) { $definicion=substr($row['definicion'],0,250)."(+)"; } else {  $definicion=$row['definicion'];  }
+			
+			$query2 = "SELECT traducciones.*
+				FROM traducciones 
+				WHERE traducciones.id_palabra='$id_palabra'
+				AND traducciones.id_idioma=9";
+			$result2 = mysql_query($query2);
+			$n_resultados=mysql_num_rows($result2);
+			$row2=mysql_fetch_array($result2);
+									
+			$xls->addRow(Array($row['id_palabra'],$row['palabra'],utf8_decode($row2['traduccion']),$definicion));
+
+		}
+ 	$xls->download("palabras_con_sin_traduccion_catalan.xls");
 	break;
 	
 }

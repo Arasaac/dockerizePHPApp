@@ -83,11 +83,6 @@
       <p>73-Palabras sin traducción al Euskera</p>
       <p>77-Palabras sin traducción al Gallego</p>
       <p>79-Palabras sin traduccion Polaco</p>
-      <p>78-Listado traducciones Francés</p>
-	  <p>83-Listado traducciones Portugués de Brasil</p>
-	  <p>84-Listado traducciones Finés</p>
-	  <p>85-Listado traducciones Inglés</p>
-	  <p>86-Listado traducciones Croata</p>
       <hr />
       <p><strong>PICTOSELECTOR</strong></p>
       <p>48-Listado de TODOS los PICTOGRAMAS de COLOR con indicacion de las palabras CASTELLANO asociadas</p>
@@ -100,6 +95,12 @@
       <p><strong>LISTADOS TRADUCIONES</strong></p>
       <p>81-Traducciones Chino</p>
       <p>82-Traducciones Francés</p>
+	  <p>78-Listado traducciones Francés</p>
+	  <p>83-Listado traducciones Portugués de Brasil</p>
+	  <p>84-Listado traducciones Finés</p>
+	  <p>85-Listado traducciones Inglés</p>
+	  <p>86-Listado traducciones Croata</p>
+	  <p>87-Listado traducciones y pendientes Catalán</p>
       </td>
       <td width="45%" align="center" valign="middle"><label><input name="id_listado" type="text" id="id_listado" size="3" maxlength="2" style="font-size:32px; " /></label>
         <br><br>

@@ -31,7 +31,7 @@ if ($cadena_url !='') { $cadena_url=http_build_query($info).'&'; }
 require('buscar_por_palabra.php');
 require('cabecera_html.php');
 ?>
-    <title>ARASAAC: <?php echo $translate['portal_aragones_caa_txt']; ?></title>
+    <title>ARASAAC - <?php echo $translate['portal_aragones_caa_txt']; ?></title>
 	<link rel="stylesheet" href="css/style2.css" type="text/css" />
     <link rel="stylesheet" href="css/green_pagstyle.css" type="text/css" />
     <link rel="stylesheet" href="js/autoComplete/autoComplete_css.css" type="text/css" media="screen" charset="utf-8" />

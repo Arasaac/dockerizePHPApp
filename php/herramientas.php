@@ -4,7 +4,7 @@ require('requires_basico.php');
 $translate=$query->get_internacionalizacion_page_content($_SESSION['language'],17); 
 require('cabecera_html.php');
 ?>
-    <title>ARASAAC: <?php echo $translate['herramientas']; ?></title>
+    <title>ARASAAC - <?php echo $translate['herramientas']; ?></title>
 	<link rel="stylesheet" href="css/style2.css" type="text/css" />
     <link rel="stylesheet" href="css/green_pagstyle.css" type="text/css" />
 	<link media="screen" rel="stylesheet" href="js/colorbox/example1/colorbox.css" />
