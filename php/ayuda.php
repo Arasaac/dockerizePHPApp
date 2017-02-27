@@ -3,7 +3,7 @@ require('requires_basico.php');
 $translate=$query->get_internacionalizacion_page_content($_SESSION['language'],1); 
 require('cabecera_html.php');
 ?>
-    <title>ARASAAC: <?php echo $translate['ayuda_preguntas_frecuentes']; ?></title>
+    <title>ARASAAC - <?php echo $translate['ayuda_preguntas_frecuentes']; ?></title>
 	<link rel="stylesheet" href="css/style2.css" type="text/css" />
     <link rel="stylesheet" href="css/green_pagstyle.css" type="text/css" />
     <?php require ('text_size_css.php'); ?>

@@ -8,9 +8,8 @@
 		if ($cadena_url !='') { $cadena_url=http_build_query($info).'&'; }
 		//************************************************************
 	?>
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $cadena_url; ?>l=1"><img src="images/ico_letra_aumentar.png" alt="<?php echo $translate['hacer_clic_aumentar_letra']; ?>" title="<?php echo $translate['hacer_clic_aumentar_letra']; ?>" /></a>&nbsp;<a href="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $cadena_url; ?>l=0"><img src="images/ico_letra_restablecer.png" alt="<?php echo $translate['hacer_clic_restablecer_letra']; ?>" title="<?php echo $translate['hacer_clic_restablecer_letra']; ?>" /></a>&nbsp;<a href="<?php echo $_SERVER['PHP_SELF']; ?>?<?php echo $cadena_url; ?>l=-1"><img src="images/ico_letra_reducir.png" alt="<?php echo $translate['hacer_clic_disminuir_letra']; ?>" title="<?php echo $translate['hacer_clic_disminuir_letra']; ?>" /></a>&nbsp;<br />
-                <div id="menu_cabecera">
-                </div>
+	<div id="menu_cabecera">
+	</div>
                 
 </div>
 
