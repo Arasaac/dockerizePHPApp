@@ -1,7 +1,8 @@
 <IfModule mod_rewrite.c>
 RewriteEngine On
-RewriteCond %{HTTP_HOST} !^www\.
-RewriteRule ^(.*)$ http://www.arasaac.org/$1 [R=301,L]
-
+#RewriteCond %{HTTP_HOST} !^www\.
+#RewriteRule ^(.*)$ http://www.arasaac.org/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} !^www.arasaac.org$ [NC]
+RewriteRule ^(.*)$ http://www.arasaac.org/$1 [L,R=301]
 #RewriteCond %{HTTP_HOST} arasaac.net
 </IfModule>
