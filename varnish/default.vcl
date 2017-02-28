@@ -18,31 +18,22 @@ backend server1 { # Define one backend
       "User-Agent: Varnish Health Probe";
 
     .interval  = 5s; # check the health of each backend every 5 seconds
-    .timeout   = 1s; # timing out after 1 second.
+    .timeout   = 3s; # timing out after 1 second.
     .window    = 5;  # If 3 out of the last 5 polls succeeded the backend is considered healthy, otherwise it will be marked as sick
     .threshold = 3;
   }
 
-  .first_byte_timeout     = 300s;   # How long to wait before we receive a first byte from our backend?
+  .first_byte_timeout     = 3s;   # How long to wait before we receive a first byte from our backend?
   .connect_timeout        = 5s;     # How long to wait for a backend connection?
   .between_bytes_timeout  = 2s;     # How long to wait between bytes received from our backend?
 }
 
-acl purge {
+#acl purge {
   # ACL we'll use later to allow purges
-  "localhost";
-  "127.0.0.1";
-  "::1";
-}
-
-/*
-acl editors {
-  # ACL to honor the "Cache-Control: no-cache" header to force a refresh but only from selected IPs
-  "localhost";
-  "127.0.0.1";
-  "::1";
-}
-*/
+#  "localhost";
+#  "127.0.0.1";
+#  "::1";
+#}
 
 sub vcl_init {
   # Called when VCL is loaded, before any requests pass through it.
@@ -55,11 +46,6 @@ sub vcl_init {
 }
 
 sub vcl_recv {
-  # Called at the beginning of a request, after the complete request has been received and parsed.
-  # Its purpose is to decide whether or not to serve the request, how to do it, and, if applicable,
-  # which backend to use.
-  # also used to modify the request
-
   set req.backend_hint = vdir.backend(); # send all traffic to the vdir director
 
   # Normalize the header, remove the port (in case you're testing this on various TCP ports)
@@ -68,17 +54,28 @@ sub vcl_recv {
   # Remove the proxy header (see https://httpoxy.org/#mitigate-varnish)
   unset req.http.proxy;
 
-  # Normalize the query arguments
-  set req.url = std.querysort(req.url);
+
+  if (req.http.host ~ "^arasaac.org" || req.http.host ~ "arasaac.net" || req.http.host ~ "arasaac.es" ) {
+     return (synth (750, ""));
+  }
+  if (req.url~ "^/index.php") {
+    set req.url = regsub(req.url, "index.php", "");
+  } 
 
   # Allow purging
   if (req.method == "PURGE") {
-    if (!client.ip ~ purge) { # purge is the ACL defined at the begining
+#    if (!client.ip ~ purge) { # purge is the ACL defined at the begining
       # Not from an allowed IP? Then die with an error.
-      return (synth(405, "This IP is not allowed to send PURGE requests."));
-    }
+#      return (synth(405, "This IP is not allowed to send PURGE requests."));
+#    }
     # If you got this stage (and didn't error out above), purge the cached result
     return (purge);
+  }
+  if (req.method == "BAN")
+  {
+    // TODO: Add client validation as needed
+    ban("obj.http.x-url ~ " + req.url);
+    return(synth(901, "BAN Set for " + req.url));
   }
 
   # Only deal with "normal" types
@@ -104,27 +101,7 @@ sub vcl_recv {
     return (pass);
   }
 
-  # Some generic URL manipulation, useful for all templates that follow
-  # First remove the Google Analytics added parameters, useless for our backend
-  if (req.url ~ "(\?|&)(utm_source|utm_medium|utm_campaign|utm_content|gclid|cx|ie|cof|siteurl)=") {
-    set req.url = regsuball(req.url, "&(utm_source|utm_medium|utm_campaign|utm_content|gclid|cx|ie|cof|siteurl)=([A-z0-9_\-\.%25]+)", "");
-    set req.url = regsuball(req.url, "\?(utm_source|utm_medium|utm_campaign|utm_content|gclid|cx|ie|cof|siteurl)=([A-z0-9_\-\.%25]+)", "?");
-    set req.url = regsub(req.url, "\?&", "?");
-    set req.url = regsub(req.url, "\?$", "");
-  }
 
-  # Strip hash, server doesn't need it.
-  if (req.url ~ "\#") {
-    set req.url = regsub(req.url, "\#.*$", "");
-  }
-
-  # Strip a trailing ? if it exists
-  if (req.url ~ "\?$") {
-    set req.url = regsub(req.url, "\?$", "");
-  }
-
-  # Some generic cookie manipulation, useful for all templates that follow
-  # Remove the "has_js" cookie
   set req.http.Cookie = regsuball(req.http.Cookie, "has_js=[^;]+(; )?", "");
 
   # Remove any Google Analytics based cookies
@@ -135,6 +112,15 @@ sub vcl_recv {
   set req.http.Cookie = regsuball(req.http.Cookie, "utmcmd.=[^;]+(; )?", "");
   set req.http.Cookie = regsuball(req.http.Cookie, "utmccn.=[^;]+(; )?", "");
 
+ #  Remove Arasaac Cookies for caching:
+  if (!(req.url ~ "cesta.php" || req.url ~ "pictogramas_color.php" || req.url ~ "pictogramas_byn.php"|| req.url ~ "imagenes.php" || req.url ~ "videos_lse.php" || req.url ~ "signos_lse_color.php" 
+       || req.url ~ "buscar.php" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php")) {
+      set req.http.Cookie = regsuball(req.http.Cookie, "(^|(?<=; )) *PHPSESSID.=[^;]+;? *", "\1");
+      # call identify_cookie;
+      # unset req.http.cookie;
+  }
+  
+  #unset req.http.cookie;  
   # Remove DoubleClick offensive cookies
   set req.http.Cookie = regsuball(req.http.Cookie, "__gads=[^;]+(; )?", "");
 
@@ -152,25 +138,6 @@ sub vcl_recv {
     unset req.http.cookie;
   }
 
-  if (req.http.Cache-Control ~ "(?i)no-cache") {
-  #if (req.http.Cache-Control ~ "(?i)no-cache" && client.ip ~ editors) { # create the acl editors if you want to restrict the Ctrl-F5
-  # http://varnish.projects.linpro.no/wiki/VCLExampleEnableForceRefresh
-  # Ignore requests via proxy caches and badly behaved crawlers
-  # like msnbot that send no-cache with every request.
-    if (! (req.http.Via || req.http.User-Agent ~ "(?i)bot" || req.http.X-Purge)) {
-      #set req.hash_always_miss = true; # Doesn't seems to refresh the object in the cache
-      return(purge); # Couple this with restart in vcl_purge and X-Purge header to avoid loops
-    }
-  }
-
-  # Large static files are delivered directly to the end-user without
-  # waiting for Varnish to fully read the file first.
-  # Varnish 4 fully supports Streaming, so set do_stream in vcl_backend_response()
-  if (req.url ~ "^[^?]*\.(7z|avi|bz2|flac|flv|gz|mka|mkv|mov|mp3|mp4|mpeg|mpg|ogg|ogm|opus|rar|tar|tgz|tbz|txz|wav|webm|xz|zip)(\?.*)?$") {
-    unset req.http.Cookie;
-    return (hash);
-  }
-
   # Remove all cookies for static files
   # A valid discussion could be held on this line: do you really need to cache static files that don't cause load? Only if you have memory left.
   # Sure, there's disk I/O, but chances are your OS will already have these files in their buffers (thus memory).
@@ -178,14 +145,6 @@ sub vcl_recv {
   if (req.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
     unset req.http.Cookie;
     return (hash);
-  }
-
-  # Send Surrogate-Capability headers to announce ESI support to backend
-  set req.http.Surrogate-Capability = "key=ESI/1.0";
-
-  if (req.http.Authorization) {
-    # Not cacheable by default
-    return (pass);
   }
 
   return (hash);
@@ -237,6 +196,10 @@ sub vcl_hash {
   }
 
   # hash cookies for requests that have them
+#    if (req.http.Language) {
+        #add cookie in hash
+#        hash_data(req.http.Language);
+#    }
   if (req.http.Cookie) {
     hash_data(req.http.Cookie);
   }
@@ -309,6 +272,16 @@ sub vcl_backend_response {
   if (bereq.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
     unset beresp.http.set-cookie;
   }
+    
+  if (!(bereq.url ~ "language_set.php" || bereq.url ~ "cesta.php" || bereq.url ~ "pictogramas_color.php" || bereq.url ~ "pictogramas_byn.php"|| bereq.url ~ "imagenes.php" || bereq.url ~ "videos_lse.php" || bereq.url ~ "signos_lse_color.php" || bereq.url ~ "buscar.php" || bereq.url ~ "n_elementos_cesto.php" || bereq.url ~ "herramientas" || bereq.url ~ "zip_cesto.php" || bereq.url ~ "carpeta_trabajo.php" || bereq.url ~ "admin.php")) {
+        set beresp.ttl = 86400s;
+        set beresp.http.cache-control = "public, max-age = 300";
+        #set beresp.http.log = "ha entrado aquí";
+        #set beresp.http.X-CacheReason = "varnishcache";
+        unset beresp.http.set-cookie;
+        return(deliver);
+  }
+  
 
   # Large static files are delivered directly to the end-user without
   # waiting for Varnish to fully read the file first.
@@ -399,7 +372,11 @@ sub vcl_synth {
     set resp.http.Location = resp.reason;
     set resp.status = 302;
     return (deliver);
-  }
+  } elseif (resp.status == 750) {
+     set resp.status = 301;
+     set resp.http.Location = "http://www.arasaac.org" + req.url;
+     return(deliver);
+    }
 
   return (deliver);
 }
