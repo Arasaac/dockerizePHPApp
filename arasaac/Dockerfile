@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install mysql
 
-RUN a2enmod rewrite
+#Done in varnish, .htaccess renamed to htaccess
+#RUN a2enmod rewrite
 
 # Set the locale
 #RUN apt-get clean && apt-get update
