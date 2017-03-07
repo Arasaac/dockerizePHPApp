@@ -288,7 +288,15 @@ sub vcl_backend_response {
   if (bereq.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
     unset beresp.http.set-cookie;
   }
-    
+  
+   if (bereq.url ~ "^/$") {
+    # en firfox a veces se cacheaba al cambiar el lenguaje dando datos erroneos
+    set beresp.ttl = 86400s;
+    set beresp.http.cache-control = "public, max-age = 0";
+    unset beresp.http.set-cookie;
+    return(deliver);
+ }
+  
   if (!(bereq.url ~ "language_set.php" || bereq.url ~ "cesta.php" || bereq.url ~ "pictogramas_color.php" || bereq.url ~ "pictogramas_byn.php"|| bereq.url ~ "imagenes.php" || bereq.url ~ "videos_lse.php" || bereq.url ~ "signos_lse_color.php" || bereq.url ~ "buscar.php" || bereq.url ~ "n_elementos_cesto.php" || bereq.url ~ "herramientas" || bereq.url ~ "zip_cesto.php" || bereq.url ~ "carpeta_trabajo.php" || bereq.url ~ "admin.php")) {
         set beresp.ttl = 86400s;
         set beresp.http.cache-control = "public, max-age = 300";
