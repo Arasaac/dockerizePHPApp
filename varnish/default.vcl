@@ -115,9 +115,7 @@ sub vcl_recv {
  #  Remove Arasaac Cookies for caching:
   if (!(req.url ~ "cesta.php" || req.url ~ "pictogramas_color.php" || req.url ~ "pictogramas_byn.php"|| req.url ~ "imagenes.php" || req.url ~ "videos_lse.php" || req.url ~ "signos_lse_color.php" 
        || req.url ~ "buscar.php" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php")) {
-      set req.http.Cookie = regsuball(req.http.Cookie, "(^|(?<=; )) *PHPSESSID.=[^;]+;? *", "\1");
-      # call identify_cookie;
-      # unset req.http.cookie;
+     set req.http.Cookie = regsuball(req.http.Cookie, "PHPSESSID=[^;]+(; )?", "");
   }
   
   #unset req.http.cookie;  
