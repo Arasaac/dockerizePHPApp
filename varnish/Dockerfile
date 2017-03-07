@@ -39,7 +39,7 @@ RUN \
 COPY start-varnishd.sh /usr/local/bin/start-varnishd
 
 ENV VARNISH_PORT 80
-ENV VARNISH_MEMORY 100m
+ENV VARNISH_MEMORY 500m
 
 EXPOSE 80
 CMD ["start-varnishd"]
