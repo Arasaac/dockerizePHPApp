@@ -54,6 +54,12 @@ sub vcl_recv {
   # Remove the proxy header (see https://httpoxy.org/#mitigate-varnish)
   unset req.http.proxy;
 
+  # when purging from php files, we need to send the request to varnish but process it as it were arasaac web server
+  if ( req.http.host ~ "varnish" ) {
+     set req.http.x-host = req.http.host;
+     set req.http.host = "www.arasaac.org";
+  }
+
 
   if (req.http.host ~ "^arasaac.org" || req.http.host ~ "arasaac.net" || req.http.host ~ "arasaac.es" ) {
      return (synth (750, ""));
@@ -116,6 +122,9 @@ sub vcl_recv {
   if (!(req.url ~ "cesta.php" || req.url ~ "pictogramas_color.php" || req.url ~ "pictogramas_byn.php"|| req.url ~ "imagenes.php" || req.url ~ "videos_lse.php" || req.url ~ "signos_lse_color.php" 
        || req.url ~ "buscar.php" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php")) {
      set req.http.Cookie = regsuball(req.http.Cookie, "PHPSESSID=[^;]+(; )?", "");
+     set req.http.Cookie = regsuball(req.http.Cookie, "preImg=x; ", "");
+     set req.http.Cookie = regsuball(req.http.Cookie, "; ", ";");
+
   }
   
   #unset req.http.cookie;  
@@ -143,6 +152,11 @@ sub vcl_recv {
   if (req.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
     unset req.http.Cookie;
     return (hash);
+  }
+  
+  #at the end because I need to remove previous cookies  
+  if (req.url ~ "purge.php") {
+     return (pass);
   }
 
   return (hash);
@@ -201,6 +215,10 @@ sub vcl_hash {
   if (req.http.Cookie) {
     hash_data(req.http.Cookie);
   }
+ #for debugging hash 
+ #std.log("######################################################################################################");
+ #std.log(req.http.Cookie + req.http.host + req.url);
+
 }
 
 sub vcl_hit {
