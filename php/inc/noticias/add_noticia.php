@@ -14,8 +14,8 @@ $estado=$_POST['estado'];
 $idioma=$_POST['idioma'];
 
 $datos_palabra=$query->add_noticia($id_usuario,$titulo,$noticia,$estado,$idioma);
-
 echo utf8_encode("Noticia añadida");
+
 
 } else {
 echo "Rellene todos los datos";

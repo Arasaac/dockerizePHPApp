@@ -25,6 +25,7 @@ require('cabecera_html.php');
 	<link rel="stylesheet" href="css/style2.css" type="text/css" />
     <link rel="stylesheet" href="css/green_pagstyle.css" type="text/css" />
     <link rel="stylesheet" href="js/autoComplete/autoComplete_css2.css" type="text/css" media="screen" charset="utf-8" />
+	<script type="text/javascript" src="js/autoComplete/jquery-1.2.1.pack.js"></script>
 	<script type="text/javascript" src="js/ajax2.js"></script>
     <script type="text/javascript" src="js/prototype/prototype.js"> </script>
     <script type="text/javascript">
@@ -52,7 +53,7 @@ require('cabecera_html.php');
     require('funciones/getres.php');
     ?>
 </head>
-<body onload="cargar_div2('n_elementos_cesto.php','i=','n_cesto');">
+<body>
 <?php include_once('include_facebook.php'); ?>
 <div class="body_content"> 
 
@@ -78,6 +79,11 @@ require('cabecera_html.php');
 	    <?php include ('footer_new.php'); ?>
 </div>   
 <?php include('google_stats.html'); ?>
-<?php //include('piwik_stats.html'); ?>
 </body>
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function(event) { 
+	  //your code
+	  cargar_div2('n_elementos_cesto.php','i=','n_cesto');
+	});
+	</script>
 </html>

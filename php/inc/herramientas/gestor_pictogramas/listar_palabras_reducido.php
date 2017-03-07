@@ -48,7 +48,7 @@ $letra=$_POST['letra'];
         <td><span style="width:500px; height:300px;">
           <input type="button" name="Submit2" value="S" onclick="add_palabra('palabra_seleccionada.php','<?php echo $entrada['id_palabra']; ?>','selected_word'); Dialog.closeInfo();" />         </span></td>
         <td align="left"><?php echo $entrada['id_palabra']; ?></td>
-        <td align="left"><?php echo $entrada['palabra']; ?></td>
+        <td align="left"><?php echo utf8_encode($entrada['palabra']); ?></td>
         <td align="left"><div id="palabra_<?php echo $entrada['id_palabra']?>"><?php echo utf8_encode($entrada['definicion']); ?></div></td>
       </tr>
       <?php } ?>

@@ -15,6 +15,7 @@ require('cabecera_html.php');
 	<link rel="stylesheet" href="css/style2.css" type="text/css" />
     <link rel="stylesheet" href="css/green_pagstyle.css" type="text/css" />
     <link rel="stylesheet" href="js/autoComplete/autoComplete_css.css" type="text/css" media="screen" charset="utf-8" />
+	<script type="text/javascript" src="js/autoComplete/jquery-1.2.1.pack.js"></script>
 	<script type="text/javascript" src="js/ajax2.js"></script>
     <script type="text/javascript" src="js/prototype/prototype.js"> </script> 
    	<?php require ('text_size_css.php'); ?>
@@ -27,7 +28,7 @@ require('cabecera_html.php');
     ?>
 </head>
 
-<body onload="cargar_div2('n_elementos_cesto.php','i=','n_cesto');">
+<body">
             
 <div class="body_content"> 
 	  <div class="header">
@@ -45,5 +46,11 @@ require('cabecera_html.php');
 </div>   
 <?php include('google_stats.html'); ?>
 </body>
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function(event) { 
+	  //your code
+	  cargar_div2('n_elementos_cesto.php','i=','n_cesto');
+	});
+	</script>
 </html>
 

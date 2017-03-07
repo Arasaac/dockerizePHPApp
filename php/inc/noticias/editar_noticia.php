@@ -45,38 +45,27 @@ function cargar_div(page,param,div){
 
 </script>
 
-<script language="javascript" type="text/javascript" src="../../js/tiny_mce/tiny_mce_gzip.php"></script>
-<script language="javascript" type="text/javascript">
-	tinyMCE.init({
-		theme : "advanced",
-		mode : "exact",
-		elements : "texto",
-		save_callback : "customSave",
-		content_css : "example_advanced.css",
-	theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,justifyleft,justifycenter,justifyright, justifyfull,bullist,numlist,undo,redo,link,unlink",
-	theme_advanced_buttons2 : "",
-	theme_advanced_buttons3 : "",
-	theme_advanced_toolbar_location : "top",
-	theme_advanced_toolbar_align : "left",
-	theme_advanced_path_location : "bottom",
-	extended_valid_elements : "a[name|href|target|title|onclick],img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout|name],hr[class|width|size|noshade],font[face|size|color|style],span[class|align|style]",
-		debug : false
-	});
+<script type="text/javascript" src="../../js/nicEdit/nicEdit.js"></script>
+<script type="text/javascript">
+var area1, area2, area3;
+function toggleAreas() {
+    area1=new nicEditor({iconsPath : '../../js/nicEdit/nicEditorIcons.gif'}).panelInstance('texto');
+}
 
-	// Custom save callback, gets called when the contents is to be submitted
-	function customSave(id, content) {
-			
-		var contenido=Url.encode(content);
-		
+function removeAreas() {
+	area1.removeInstance('texto');
+}
+
+bkLib.onDomLoaded(function() { toggleAreas(); });
+</script>
+<script language="javascript" type="text/javascript">
+		// Custom save callback, gets called when the contents is to be submitted
+	function customSave() {
+	
+		var contenido=Url.encode(document.getElementById('texto').value);
+
 		cargar_div('modificar_noticia.php','noticia='+contenido+'&idioma='+document.getElementById('idioma').value+'&titulo='+document.getElementById('titulo').value+'&estado='+document.getElementById('estado').value+'&id_noticia=<?php echo $_GET['id_noticia']; ?>','mensaje_actualizacion');
-		
-		<?php if ($_SERVER['HTTP_HOST']=='localhost') { ?>
-		var url ="http://<?php echo $_SERVER['HTTP_HOST']; ?>/saac/inc/inicio.php";
-		parent.changeHeadline(url);
-		<?php } else { ?>
-		var url ="http://<?php echo $_SERVER['HTTP_HOST']; ?>/internos/servicios/saac/inc/inicio.php";
-		parent.changeHeadline(url);
-		<?php } ?>
+				
 	}
 
 // CLASE QUE ME PERMITE ENVIAR EL CONTENIDO DE TINYCE CODIFICADO DE MODO QUE COJA LAS EÑES Y LOS ACENTOS
@@ -186,7 +175,7 @@ var Url = {
   <p>
     <textarea name="texto" cols="57" rows="13" id="texto"><?php echo utf8_encode($datos_noticia['noticia']); ?></textarea>
   </p>
-  <p align="center"><input type="button" name="save" value="Actualizar noticia" onclick="tinyMCE.triggerSave();" />
+  <p align="center"><input type="button" name="save" value="Actualizar noticia" onclick="removeAreas(); customSave();" />
   </p>
   </form>
  </div>

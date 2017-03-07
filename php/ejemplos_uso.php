@@ -124,6 +124,7 @@ if (isset($_GET['id_eu']) && $_GET['id_eu'] > 0) {
 ?>
 	<link rel="stylesheet" href="css/style2.css" type="text/css" />
     <link rel="stylesheet" href="css/green_pagstyle.css" type="text/css" />
+	<script type="text/javascript" src="js/autoComplete/jquery-1.2.1.pack.js"></script>
     <script type="text/javascript" src="js/ajax2.js"></script>
     <script type="text/javascript" src="js/prototype/prototype.js"> </script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
@@ -141,7 +142,7 @@ if (isset($_GET['id_eu']) && $_GET['id_eu'] > 0) {
     <?php require ('text_size_css.php'); ?>
 </head>
 
-<body onload="cargar_div2('n_elementos_cesto.php','i=','n_cesto');">
+<body>
         
 <div class="body_content"> 
 <?php include_once('include_facebook.php'); ?>
@@ -909,5 +910,11 @@ if (isset($_GET['id_eu']) && $_GET['id_eu'] > 0) {
 </div>   
 <?php include('google_stats.html'); ?>
 </body>
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function(event) { 
+	  //your code
+	  cargar_div2('n_elementos_cesto.php','i=','n_cesto');
+	});
+	</script>
 </html>
 

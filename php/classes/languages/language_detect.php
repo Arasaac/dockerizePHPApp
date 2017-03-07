@@ -122,7 +122,7 @@ class detect_language {
 	*/
 	function getLanguage() {
 	  if (empty($this->detected_language)) {
-		$this->detected_language = 'en';
+		$this->detected_language = 'es';
 		$cnt = 0;
 
 		while ($cnt < sizeof($this->accepted_language)) {

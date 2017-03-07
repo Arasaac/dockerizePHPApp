@@ -80,28 +80,28 @@ if (!isset($_GET['pg'])) {
 		<div id="principal">
                 <br />
                 <p align="right"><a href="rss/subscripcion.php?t=2" target="_blank"><?php echo $translate['subcribirse_canal_noticias']; ?></a>&nbsp;&nbsp;<a href="rss/subscripcion.php?t=2" target="_blank"><img src="images/feed.png" alt="<?php echo $translate['subcribirse_canal_noticias']; ?>" title="<?php echo $translate['subcribirse_canal_noticias']; ?>" width="16" height="16" border="0" /></a></p> 
-           <?php 
-              if (isset($_GET['id_noticia']) && $_GET['id_noticia']>0) {
+				<?php 
+					if (isset($_GET['id_noticia']) && $_GET['id_noticia']>0) {
 					$noticias=$query->datos_noticia($_GET['id_noticia']);
 					
 					if ($_SESSION['language']=='es') {
 				 ?>	
                  <!-- Start Main Content -->
 				  <div style="border:1px solid #CCCCCC; padding:20px; margin-bottom:20px;">			 		            
-					<div id="cabecera_noticia"><?php echo $noticias['titulo']; ?></div>			 
+					<div id="cabecera_noticia"><?php echo utf8_encode($noticias['titulo']); ?></div>			 
 					   <div id="info_noticias"><b><?php echo $translate['escrito_por']; ?>:</b> <em><?php echo utf8_encode($noticias['nombre']).'&nbsp;'.utf8_encode($noticias['primer_apellido']).'&nbsp;'.utf8_encode($noticias['segundo_apellido']); ?></em><b><?php echo $translate['el']; ?></b>&nbsp;<em><?php echo utf8_encode($noticias['fecha_modificacion']); ?></em> 
 						 
 					</div>
-					<p><?php echo $noticias['noticia']; ?></p>
+					<p><?php echo utf8_encode($noticias['noticia']); ?></p>
                     <div style="float:left; padding:5px;">
                     	<!-- Coloca esta etiqueta donde quieras que se muestre el botón +1. -->
-						<g:plusone size="tall" annotation="inline" width="120" href="http://catedu.es/arasaac/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>"></g:plusone>
+						<g:plusone size="tall" annotation="inline" width="120" href="http://www.arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>"></g:plusone>
                 	</div>
-                    <div style="float:left; padding:5px;"><a href="http://twitter.com/share" class="twitter-share-button" data-url="http://catedu.es/arasaac/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-text="<?php echo $noticias['titulo']; ?>" data-count="horizontal" data-via="arasaac" data-lang="<?php $_SESSION['language']; ?>">Tweet</a>
-				 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></div>
-                 <div style="float:left; padding:5px;">
-                 <div class="fb-like" data-href=http://arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-send="true" data-layout="button_count" data-width="150" data-show-faces="true"></div></div></div><p>&nbsp;</p>
-                    </div>
+					<div style="float:left; padding:5px;"><a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-text="<?php echo $noticias['titulo']; ?>" data-count="horizontal" data-via="arasaac" data-lang="<?php $_SESSION['language']; ?>">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></div>
+					<div style="float:left; padding:5px;"><div class="fb-like" data-href=http://arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-send="true" data-layout="button_count" data-width="150" data-show-faces="true"></div></div>
+					<p>&nbsp;</p>
+
+				</div>
 					<?php } else { ?>
                       <!-- Start Main Content -->
                       <div style="border:1px solid #CCCCCC; padding:20px; margin-bottom:20px;">			 		            
@@ -112,12 +112,13 @@ if (!isset($_GET['pg'])) {
                         <p><?php echo$noticias['noticia_'.$_SESSION['language'].'']; ?></p>
                         <div style="float:left; padding:5px;">
                     	<!-- Coloca esta etiqueta donde quieras que se muestre el botón +1. -->
-						<g:plusone size="tall" annotation="inline" width="120" href="http://catedu.es/arasaac/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>"></g:plusone>
+						<g:plusone size="tall" annotation="inline" width="120" href="http://www.arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>"></g:plusone>
                 	</div>
-                        <div style="float:left; padding:5px;"><a href="http://twitter.com/share" class="twitter-share-button" data-url="http://catedu.es/arasaac/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-text="<?php echo $noticias['titulo_'.$_SESSION['language'].'']; ?>" data-count="horizontal" data-via="arasaac" data-lang="<?php $_SESSION['language']; ?>">Tweet</a>
-				 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></div>
-                 <div style="float:left; padding:5px;">
-                 <div class="fb-like" data-href=http://arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-send="true" data-layout="button_count" data-width="150" data-show-faces="true"></div></div></div><p>&nbsp;</p>
+					<div style="float:left; padding:5px;"><a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-text="<?php echo $noticias['titulo']; ?>" data-count="horizontal" data-via="arasaac" data-lang="<?php $_SESSION['language']; ?>">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></div>
+					<div style="float:left; padding:5px;"><div class="fb-like" data-href=http://arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-send="true" data-layout="button_count" data-width="150" data-show-faces="true"></div></div>
+					<p>&nbsp;</p>
+
+				</div>
                     <?php } ?>
 					</div>
 				  <!-- End Main Content -->
@@ -130,19 +131,20 @@ if (!isset($_GET['pg'])) {
 					
 				  <!-- Start Main Content -->
 				  <div style="border:1px solid #CCCCCC; padding:20px; margin-bottom:20px;">			 		            
-					<div id="cabecera_noticia"><?php echo $noticias['titulo']; ?></div>			 
+					<div id="cabecera_noticia"><?php echo utf8_encode($noticias['titulo']); ?></div>			 
 					   <div id="info_noticias"><b><?php echo $translate['escrito_por']; ?>:</b> <em><?php echo utf8_encode($noticias['nombre']).'&nbsp;'.utf8_encode($noticias['primer_apellido']).'&nbsp;'.utf8_encode($noticias['segundo_apellido']); ?></em><b><?php echo $translate['el']; ?></b>&nbsp;<em><?php echo utf8_encode($noticias['fecha_modificacion']); ?></em> 
 				</div>
-					<p><?php echo $noticias['noticia']; ?></p>
+				
+					<p><?php echo utf8_encode($noticias['noticia']); ?></p>
                     <div style="float:left; padding:5px;">
                     	<!-- Coloca esta etiqueta donde quieras que se muestre el botón +1. -->
-						<g:plusone size="tall" annotation="inline" width="120" href="http://catedu.es/arasaac/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>"></g:plusone>
+						<g:plusone size="tall" annotation="inline" width="120" href="http://www.arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>"></g:plusone>
                 	</div>
-						<div style="float:left; padding:5px;"><a href="http://twitter.com/share" class="twitter-share-button" data-url="http://catedu.es/arasaac/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-text="<?php echo $noticias['titulo']; ?>" data-count="horizontal" data-via="arasaac" data-lang="<?php $_SESSION['language']; ?>">Tweet</a>
-				 <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></div>
-                 <div style="float:left; padding:5px;">
-                 <div class="fb-like" data-href=http://arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-send="true" data-layout="button_count" data-width="150" data-show-faces="true"></div></div></div><p>&nbsp;</p>
-					</div>
+					<div style="float:left; padding:5px;"><a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-text="<?php echo $noticias['titulo']; ?>" data-count="horizontal" data-via="arasaac" data-lang="<?php $_SESSION['language']; ?>">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></div>
+					<div style="float:left; padding:5px;"><div class="fb-like" data-href=http://arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-send="true" data-layout="button_count" data-width="150" data-show-faces="true"></div></div>
+					<p>&nbsp;</p>
+
+				</div>
 				  <!-- End Main Content -->
 		
 				<?php } else {  
@@ -158,13 +160,13 @@ if (!isset($_GET['pg'])) {
 					<p><?php echo $noticias['noticia_'.$_SESSION['language'].'']; ?></p>
                     <div style="float:left; padding:5px;">
                     	<!-- Coloca esta etiqueta donde quieras que se muestre el botón +1. -->
-						<g:plusone size="tall" annotation="inline" width="120" href="http://catedu.es/arasaac/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>"></g:plusone>
+						<g:plusone size="tall" annotation="inline" width="120" href="http://www.arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>"></g:plusone>
                 	</div>
-                    <div style="float:left; padding:5px;"><a href="http://twitter.com/share" class="twitter-share-button" data-url="http://catedu.es/arasaac/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-text="<?php echo $noticias['titulo_'.$_SESSION['language'].'']; ?>" data-count="horizontal" data-via="arasaac" data-lang="<?php $_SESSION['language']; ?>">Tweet</a>
-                             <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></div>
-                             <div style="float:left; padding:5px;">
-                             <div class="fb-like" data-href=http://arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-send="true" data-layout="button_count" data-width="150" data-show-faces="true"></div></div></div><p>&nbsp;</p>
-					</div>
+					<div style="float:left; padding:5px;"><a href="http://twitter.com/share" class="twitter-share-button" data-url="http://www.arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-text="<?php echo $noticias['titulo']; ?>" data-count="horizontal" data-via="arasaac" data-lang="<?php $_SESSION['language']; ?>">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></div>
+					<div style="float:left; padding:5px;"><div class="fb-like" data-href=http://arasaac.org/noticias.php?id_noticia=<?php echo $noticias['id_noticia']; ?>" data-send="true" data-layout="button_count" data-width="150" data-show-faces="true"></div></div>
+					<p>&nbsp;</p>
+
+				</div>
 				  <!-- End Main Content -->
 		
 			<?php  } // Cierro el IF de comprobación de si la noticia tiene contenido
