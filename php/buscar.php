@@ -31,7 +31,7 @@ if ($cadena_url !='') { $cadena_url=http_build_query($info).'&'; }
 require('buscar_por_palabra.php');
 require('cabecera_html.php');
 ?>
-    <title>ARASAAC - <?php echo $translate['portal_aragones_caa_txt']; ?></title>
+    <title>ARASAAC: <?php echo $translate['portal_aragones_caa_txt']; ?></title>
 	<link rel="stylesheet" href="css/style2.css" type="text/css" />
     <link rel="stylesheet" href="css/green_pagstyle.css" type="text/css" />
     <link rel="stylesheet" href="js/autoComplete/autoComplete_css.css" type="text/css" media="screen" charset="utf-8" />
@@ -63,7 +63,7 @@ require('cabecera_html.php');
         <?php include ('menu_principal.php'); ?>
         <?php include ('menu_subprincipal_catalogos.php'); ?>
         <?php include ('buscador.php'); ?>
-        <?php include ('cesto.php'); ?>  
+        <?php include ('cesto_ajax.php'); ?>  
 		<div id="principal">
         <?php  if (isset($resultados) && $resultados !='') { ?>
            	 <form action="<?php echo $PHP_SELF; ?>" method="POST" name="descarga_pictogramas" id="descarga_pictogramas">  
@@ -82,5 +82,11 @@ require('cabecera_html.php');
 </div>   
 <?php include('google_stats.html'); ?>
 </body>
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function(event) { 
+	  //your code
+	  cargar_div2('n_elementos_cesto.php','i=','n_cesto');
+	});
+	</script>
 </html>
 

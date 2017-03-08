@@ -149,7 +149,8 @@ require('cabecera_html.php');
     <title>ARASAAC: <?php echo $translate['catalogo_pictogramas_catedu_color']; ?></title>
 	<link rel="stylesheet" href="css/style2.css" type="text/css" />
     <link rel="stylesheet" href="css/green_pagstyle.css" type="text/css" />
-    <script type="text/javascript" src="js/js_catalogos.js"></script>
+	<script type="text/javascript" src="js/js_catalogos.js"></script>
+    <script type="text/javascript" src="js/prototype/prototype.js"> </script>
     <script type="text/javascript">
         var GB_ROOT_DIR = "js/greybox_v5/";
     </script>
@@ -174,7 +175,7 @@ require('cabecera_html.php');
   	<form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get" name="busqueda_avanzada" id="busqueda_avanzada">
   		<?php unset($info1['buscador']); $cadena_url_buscador=http_build_query($info1); if ($cadena_url_buscador !='') { $cadena_url_buscador=http_build_query($info1).'&'; } ?>
         <?php unset($info2['arbol']); $cadena_url_arbol=http_build_query($info2); if ($cadena_url_arbol !='') { $cadena_url_arbol=http_build_query($info2).'&'; } ?>
-        <?php require('barra_opciones_catalogos.php'); ?>
+        <?php require('barra_opciones_catalogos_ajax.php'); ?>
 		<?php include('arbol_de_categorias.php'); ?>
 		<?php include('buscador_simple_catalogos.php'); ?> 
     </form>
@@ -191,4 +192,24 @@ require('cabecera_html.php');
 </div>   
 <?php include('google_stats.html'); ?>
 </body>
+	<script type="text/javascript">
+		/*************************************************************************************************************/
+
+		function cargar_div2(page,param,div){
+
+			var myAjax = new Ajax.Request( page, {method: 'post', parameters: param, onComplete: showResponse4 } );
+
+				function showResponse4 (originalRequest) {
+					var animacion = document.getElementById(""+div+"");
+					animacion.innerHTML = originalRequest.responseText;
+				}
+		}
+
+		/*************************************************************************************************************/
+		
+	document.addEventListener("DOMContentLoaded", function(event) { 
+	  //your code
+	  cargar_div2('n_elementos_cesto.php','i=','n_cesto');
+	});
+	</script>
 </html>

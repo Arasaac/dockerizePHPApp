@@ -99,7 +99,7 @@ require('cabecera_html.php');
       </div>
       <?php include ('menu_principal.php'); ?>
 	  <?php include ('buscador.php'); ?>
-      <?php include ('cesto.php'); ?>  
+      <?php include ('cesto_ajax.php'); ?>  
       <br /><h4>
 	  <?php 	
 		if ($_SESSION['language']=='es') {
@@ -293,5 +293,11 @@ require('cabecera_html.php');
 </div>   
 <?php include('google_stats.html'); ?>
 </body>
+	<script type="text/javascript">
+	document.addEventListener("DOMContentLoaded", function(event) { 
+	  //your code
+	  cargar_div2('n_elementos_cesto.php','i=','n_cesto');
+	});
+	</script>
 </html>
 
