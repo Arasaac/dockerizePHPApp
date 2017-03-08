@@ -83,6 +83,11 @@ sub vcl_recv {
     ban("obj.http.x-url ~ " + req.url);
     return(synth(901, "BAN Set for " + req.url));
   }
+  
+  #administration staff without cache  
+  if (req.url ~ "inc") {
+     return (pass);
+  }
 
   # Only deal with "normal" types
   if (req.method != "GET" &&
@@ -118,13 +123,36 @@ sub vcl_recv {
   set req.http.Cookie = regsuball(req.http.Cookie, "utmcmd.=[^;]+(; )?", "");
   set req.http.Cookie = regsuball(req.http.Cookie, "utmccn.=[^;]+(; )?", "");
 
- #  Remove Arasaac Cookies for caching:
-  if (!(req.url ~ "cesta.php" || req.url ~ "pictogramas_color.php" || req.url ~ "pictogramas_byn.php"|| req.url ~ "imagenes.php" || req.url ~ "videos_lse.php" || req.url ~ "signos_lse_color.php" 
-       || req.url ~ "buscar.php" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php")) {
-     set req.http.Cookie = regsuball(req.http.Cookie, "PHPSESSID=[^;]+(; )?", "");
-     set req.http.Cookie = regsuball(req.http.Cookie, "preImg=x; ", "");
-     set req.http.Cookie = regsuball(req.http.Cookie, "; ", ";");
 
+
+ #  Remove Arasaac Cookies for caching:
+  #if (!(req.url ~ "cesta.php" || req.url ~ "pictogramas_color.php" || req.url ~ "pictogramas_byn.php"|| req.url ~ "imagenes.php" || req.url ~ "videos_lse.php" || req.url ~ "signos_lse_color.php" 
+  #     || req.url ~ "buscar.php" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php")) {
+
+    if (!(req.url ~ "product_id" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php")) {
+        set req.http.Cookie = regsuball(req.http.Cookie, "PHPSESSID=[^;]+(; )?", "");
+        set req.http.Cookie = regsuball(req.http.Cookie, "preImg=x; ", "");
+        set req.http.Cookie = regsuball(req.http.Cookie, "; ", ";");
+
+    if (!(req.http.Cookie ~ "selected_language")) {
+        if (req.http.Accept-Language ~ "^en") {
+            set req.http.Cookie = "selected_language=en;";
+        } elsif (req.http.Accept-Language ~ "^es") {
+            set req.http.Cookie = "selected_language=es;";
+        } elsif (req.http.Accept-Language ~ "^fr") {
+            set req.http.Cookie = "selected_language=fr;";
+        } elsif (req.http.Accept-Language ~ "^ro") {
+            set req.http.Cookie = "selected_language=ro;";
+        } elsif (req.http.Accept-Language ~ "^pt") {
+            set req.http.Cookie = "selected_language=pt;";
+        } elsif (req.http.Accept-Language ~ "^br") {
+            set req.http.Cookie = "selected_language=br;";
+        } else {
+            # unknown language. Remove the accept-language header and
+            # use the backend default.
+            set req.http.Cookie = "selected_language=en;";
+        }
+    }
   }
   
   #unset req.http.cookie;  
@@ -141,8 +169,8 @@ sub vcl_recv {
   set req.http.Cookie = regsuball(req.http.Cookie, "^;\s*", "");
 
   # Are there cookies left with only spaces or that are empty?
-  if (req.http.cookie ~ "^\s*$") {
-    unset req.http.cookie;
+  if (req.http.Cookie ~ "^\s*$") {
+    unset req.http.Cookie;
   }
 
   # Remove all cookies for static files
@@ -150,14 +178,14 @@ sub vcl_recv {
   # Sure, there's disk I/O, but chances are your OS will already have these files in their buffers (thus memory).
   # Before you blindly enable this, have a read here: https://ma.ttias.be/stop-caching-static-files/
   if (req.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
-    unset req.http.Cookie;
-    return (hash);
+    #unset req.http.Cookie;
+    return (pass);
   }
   
   #at the end because I need to remove previous cookies  
-  if (req.url ~ "purge.php") {
-     return (pass);
-  }
+  #if (req.url ~ "purge.php") {
+  #   return (pass);
+  #}
 
   return (hash);
 }
@@ -216,8 +244,8 @@ sub vcl_hash {
     hash_data(req.http.Cookie);
   }
  #for debugging hash 
- #std.log("######################################################################################################");
- #std.log(req.http.Cookie + req.http.host + req.url);
+ std.log("######################################################################################################");
+  std.log(req.http.Cookie + req.http.host + req.url);
 
 }
 
@@ -285,19 +313,22 @@ sub vcl_backend_response {
   # Enable cache for all static files
   # The same argument as the static caches from above: monitor your cache size, if you get data nuked out of it, consider giving up the static file cache.
   # Before you blindly enable this, have a read here: https://ma.ttias.be/stop-caching-static-files/
-  if (bereq.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
-    unset beresp.http.set-cookie;
-  }
+  #if (bereq.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
+  #  unset beresp.http.set-cookie;
+  #}
   
    if (bereq.url ~ "^/$") {
-    # en firfox a veces se cacheaba al cambiar el lenguaje dando datos erroneos
+    # en firefox a veces se cacheaba al cambiar el lenguaje dando datos erroneos
     set beresp.ttl = 86400s;
     set beresp.http.cache-control = "public, max-age = 0";
     unset beresp.http.set-cookie;
     return(deliver);
  }
-  
-  if (!(bereq.url ~ "language_set.php" || bereq.url ~ "cesta.php" || bereq.url ~ "pictogramas_color.php" || bereq.url ~ "pictogramas_byn.php"|| bereq.url ~ "imagenes.php" || bereq.url ~ "videos_lse.php" || bereq.url ~ "signos_lse_color.php" || bereq.url ~ "buscar.php" || bereq.url ~ "n_elementos_cesto.php" || bereq.url ~ "herramientas" || bereq.url ~ "zip_cesto.php" || bereq.url ~ "carpeta_trabajo.php" || bereq.url ~ "admin.php")) {
+
+ 
+  #if (!(bereq.url ~ "language_set.php" || bereq.url ~ "cesta.php" || bereq.url ~ "pictogramas_color.php" || bereq.url ~ "pictogramas_byn.php"|| bereq.url ~ "imagenes.php" || bereq.url ~ "videos_lse.php" || bereq.url ~ "signos_lse_color.php" || bereq.url ~ "buscar.php" || bereq.url ~ "n_elementos_cesto.php" || bereq.url ~ "herramientas" || bereq.url ~ "zip_cesto.php" || bereq.url ~ "carpeta_trabajo.php" || bereq.url ~ "admin.php")) {
+
+  if (!(bereq.url ~ "language_set.php" || bereq.url ~ "product_id" || bereq.url ~ "n_elementos_cesto.php" || bereq.url ~ "herramientas" || bereq.url ~ "zip_cesto.php" || bereq.url ~ "carpeta_trabajo.php" || bereq.url ~ "admin.php" || bereq.url  ~ "inc" )) {
         set beresp.ttl = 86400s;
         set beresp.http.cache-control = "public, max-age = 300";
         #set beresp.http.log = "ha entrado aquí";

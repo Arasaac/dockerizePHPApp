@@ -2,4 +2,3 @@
 query_cache_size = 16777216
 query_cache_type = 1
 query_cache_limit = 1048576
-innodb_force_recovery = 4
