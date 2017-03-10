@@ -23,23 +23,20 @@ services:
     environment:
       VARNISH_BACKEND_HOST: arasaac
       VARNISH_BACKEND_PORT: 80
-      VIRTUAL_HOST: "www.arasaac.catedu.aragon.es arasaac.catedu.aragon.es"
+      VIRTUAL_HOST: "www.arasaac.es,arasaac.es,www.arasaac.org,arasaac.org,www.arasaac.net,arasaac.net"
   db:
     hostname: db
-    image: mysql:5.7
+    image: mysql:5.5
     container_name: db-arasaac
     volumes:
       - ./bbdd:/var/lib/mysql
       - ./dump:/docker-entrypoint-initdb.d
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: root-password
-      MYSQL_DATABASE: saac
-      MYSQL_USER: user
-      MYSQL_PASSWORD: user-password
+      - ./db/:/etc/mysql/conf.d
+    extends:
+      file: docker-users.yml
+      service: db-users
     networks:
       - backend
-
   arasaac:
     container_name: arasaac
     hostname: arasaac
@@ -63,7 +60,7 @@ services:
     volumes:
      - /sessions
     environment:
-      VIRTUAL_HOST: "phpmyadmin.arasaac.catedu.aragon.es www.phpmyadmin.arasaac.catedu.aragon.es"
+      VIRTUAL_HOST: "phpmyadmin.arasaac.catedu.aragon.es,www.phpmyadmin.arasaac.catedu.aragon.es,phpmyadmin.arasaac.org,www.phpmyadmin.arasaac.org"
     networks:
       - frontend
       - backend   
@@ -75,7 +72,7 @@ services:
       - ./php:/home/arasaac/php
     ports:
       - "8005:22"
-    command: www-data:password:33:33
+    command: arasaac:24ladfnadsfgx:33:33
     networks:
       - frontend
 
