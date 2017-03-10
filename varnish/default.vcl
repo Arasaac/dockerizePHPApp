@@ -129,7 +129,7 @@ sub vcl_recv {
   #if (!(req.url ~ "cesta.php" || req.url ~ "pictogramas_color.php" || req.url ~ "pictogramas_byn.php"|| req.url ~ "imagenes.php" || req.url ~ "videos_lse.php" || req.url ~ "signos_lse_color.php" 
   #     || req.url ~ "buscar.php" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php")) {
 
-    if (!(req.url ~ "product_id" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php")) {
+    if (!(req.url ~ "product_id" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php" || req.url ~ "cesta.php")) {
         set req.http.Cookie = regsuball(req.http.Cookie, "PHPSESSID=[^;]+(; )?", "");
         set req.http.Cookie = regsuball(req.http.Cookie, "preImg=x; ", "");
         set req.http.Cookie = regsuball(req.http.Cookie, "; ", ";");
@@ -178,8 +178,8 @@ sub vcl_recv {
   # Sure, there's disk I/O, but chances are your OS will already have these files in their buffers (thus memory).
   # Before you blindly enable this, have a read here: https://ma.ttias.be/stop-caching-static-files/
   if (req.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
-    #unset req.http.Cookie;
-    return (pass);
+    unset req.http.Cookie;
+    #return (pass);
   }
   
   #at the end because I need to remove previous cookies  
@@ -244,8 +244,8 @@ sub vcl_hash {
     hash_data(req.http.Cookie);
   }
  #for debugging hash 
- std.log("######################################################################################################");
-  std.log(req.http.Cookie + req.http.host + req.url);
+ #std.log("######################################################################################################");
+ #std.log(req.http.Cookie + req.http.host + req.url);
 
 }
 
@@ -328,7 +328,7 @@ sub vcl_backend_response {
  
   #if (!(bereq.url ~ "language_set.php" || bereq.url ~ "cesta.php" || bereq.url ~ "pictogramas_color.php" || bereq.url ~ "pictogramas_byn.php"|| bereq.url ~ "imagenes.php" || bereq.url ~ "videos_lse.php" || bereq.url ~ "signos_lse_color.php" || bereq.url ~ "buscar.php" || bereq.url ~ "n_elementos_cesto.php" || bereq.url ~ "herramientas" || bereq.url ~ "zip_cesto.php" || bereq.url ~ "carpeta_trabajo.php" || bereq.url ~ "admin.php")) {
 
-  if (!(bereq.url ~ "language_set.php" || bereq.url ~ "product_id" || bereq.url ~ "n_elementos_cesto.php" || bereq.url ~ "herramientas" || bereq.url ~ "zip_cesto.php" || bereq.url ~ "carpeta_trabajo.php" || bereq.url ~ "admin.php" || bereq.url  ~ "inc" )) {
+  if (!(bereq.url ~ "language_set.php" || bereq.url ~ "product_id" || bereq.url ~ "n_elementos_cesto.php" || bereq.url ~ "herramientas" || bereq.url ~ "zip_cesto.php" || bereq.url ~ "carpeta_trabajo.php" || bereq.url ~ "admin.php" || bereq.url  ~ "inc" || bereq.url  ~ "cesta.php" )) {
         set beresp.ttl = 86400s;
         set beresp.http.cache-control = "public, max-age = 300";
         #set beresp.http.log = "ha entrado aquí";
@@ -337,6 +337,10 @@ sub vcl_backend_response {
         return(deliver);
   }
   
+  if (bereq.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
+    unset beresp.http.Cookie;
+    set beresp.http.cache-control = "public, max-age = 86400";
+  }
 
   # Large static files are delivered directly to the end-user without
   # waiting for Varnish to fully read the file first.
