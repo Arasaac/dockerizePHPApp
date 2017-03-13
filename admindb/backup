@@ -1,0 +1,12 @@
+#!/bin/bash
+USUARIO="root"
+
+#if [ -z "${MYSQL_DATABASE}" ]; then echo "Error: MYSQL_DATABASE not set"; echo "Finished: FAILURE"; exit 1; fi
+#if [ -z "${MYSQL_ROOT_PASSWORD}" ]; then echo "Error: MYSQL_ROOT_PASSWORD not set"; echo "Finished: FAILURE"; exit 1; fi
+
+NOMBRE=${MYSQL_DATABASE}_`date '+%Y%m%d-%H:%M:%S'`.sql.bz2
+echo "creating database dump: $NOMBRE "
+mysqldump -hdb --add-drop-table -u"$USUARIO" -p"${MYSQL_ROOT_PASSWORD}" ${MYSQL_DATABASE} | bzip2 -c > /backups/${NOMBRE}
+
+echo 'Finished: SUCCESS'
+

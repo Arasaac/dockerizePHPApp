@@ -71,12 +71,26 @@ services:
     image: atmoz/sftp
     volumes:
       - ./php:/home/arasaac/php
+      - ./backups:/home/arasaac/backups
     ports:
       - "8005:22"
-    command: arasaac:24ladfnadsfgx:33:33
+    command: arasaac:password:33:33
     networks:
       - frontend
 
+  admindb:
+    hostname: admindb
+    build: 
+      context: ./admindb
+    networks:
+      - backend 
+    depends_on:
+      - db
+    volumes:
+      - ./backups:/backups
+    extends:
+      file: docker-users.yml
+      service: db-users
 networks:
   frontend:
   backend:

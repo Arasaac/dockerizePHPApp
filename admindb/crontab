@@ -1,0 +1,2 @@
+0 3 * * * root /bin/backup >> /var/log/cron.log 2>&1
+

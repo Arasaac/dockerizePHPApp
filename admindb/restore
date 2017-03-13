@@ -1,0 +1,38 @@
+#!/bin/bash
+
+USUARIO="root"
+
+#if [ -z "$MYSQL_DATABASE" ]; then echo "Error: MYSQL_DATABASE not set"; echo "Finished: FAILURE"; exit 1; fi
+#if [ -z "$MYSQL_ROOT_PASSWORD" ]; then echo "Error: MYSQL_ROOT_PASSWORD not set"; echo "Finished: FAILURE"; exit 1; fi
+
+
+if ! [[ $1 ]]
+then
+  NOMBRE=$(ls /backups|grep ${MYSQL_DATABASE}|cut -d_ -f1|cut -d. -f1|sort -n|tail -1)
+else
+  NOMBRE=$1
+fi
+
+
+if ! [[ $NOMBRE =~ ^[a-zA-Z0-9_-]+$ ]]
+then
+  echo "The given backup name does not match the expected pattern: only characters, digits, underscore and dash are allowed ([a-zA-Z0-9_-])."
+  echo 'Finished: FAILURE'
+  exit 1
+fi
+
+NOMBRE=$(ls /backups|grep $NOMBRE|sort -n|tail -1)
+SQL_ARCHIVE="/backups/${NOMBRE}"
+
+
+if [[ ! -f $SQL_ARCHIVE ]]
+then
+  echo "The file $SQL_ARCHIVE does not exist. Aborting."
+  echo "Finished: FAILURE."
+  exit 1
+fi
+
+# restore database
+echo "restoring data from mysql dump file $SQL_ARCHIVE"
+bunzip2 < $SQL_ARCHIVE | mysql -u$USUARIO -p${MYSQL_ROOT_PASSWORD} -h db ${MYSQL_DATABASE}
+
