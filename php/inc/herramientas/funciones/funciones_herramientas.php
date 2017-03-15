@@ -1797,7 +1797,7 @@ function CleanFiles($dir)
 
             $path=$dir.'/'.$file;
 
-            if($t-filemtime($path)>10800) //Establezo el tiempo 3600 (segundos) = 1h
+            if($t-filemtime($path)>86400) //Establezo el tiempo 3600 (segundos) = 1h
 
                 @unlink($path);
 

@@ -2475,7 +2475,7 @@ function CleanFiles($dir)
                    //$Diff = (time() - filectime("$dir/$file"))/60/60/24;
                    //if ($Diff > 1) unlink("$dir/$file"); //Borro los archivos con mas de 2 dias de antiguedad
 				   $path=$dir.'/'.$file;
-				   if($t-filemtime($path)>10800) //Establezo el tiempo 3600 (segundos) = 1h
+				   if($t-filemtime($path)>86400) //Establezo el tiempo 3600 (segundos) = 1h
 				   @unlink($path);
 
                } 
