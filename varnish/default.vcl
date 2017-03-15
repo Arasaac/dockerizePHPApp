@@ -85,7 +85,7 @@ sub vcl_recv {
   }
   
   #administration staff without cache  
-  if (req.url ~ "inc") {
+  if (req.url ~ "inc" || req.url ~ "languages" || req.url ~ "gestionar_internacionalizacion.php") {
      return (pass);
   }
 
@@ -126,8 +126,6 @@ sub vcl_recv {
 
 
  #  Remove Arasaac Cookies for caching:
-  #if (!(req.url ~ "cesta.php" || req.url ~ "pictogramas_color.php" || req.url ~ "pictogramas_byn.php"|| req.url ~ "imagenes.php" || req.url ~ "videos_lse.php" || req.url ~ "signos_lse_color.php" 
-  #     || req.url ~ "buscar.php" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php")) {
 
     if (!(req.url ~ "product_id" || req.url ~ "n_elementos_cesto.php" || req.url ~ "herramientas" || req.url ~ "zip_cesto.php" || req.url ~ "carpeta_trabajo.php" || req.url ~ "admin.php" || req.url ~ "cesta.php")) {
         set req.http.Cookie = regsuball(req.http.Cookie, "PHPSESSID=[^;]+(; )?", "");
@@ -177,9 +175,13 @@ sub vcl_recv {
   # A valid discussion could be held on this line: do you really need to cache static files that don't cause load? Only if you have memory left.
   # Sure, there's disk I/O, but chances are your OS will already have these files in their buffers (thus memory).
   # Before you blindly enable this, have a read here: https://ma.ttias.be/stop-caching-static-files/
-  if (req.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
+  if (req.url ~ "^[^?]*\.(avi|bmp|css|csv|doc|docx|flac|flv|gif|ico|jpeg|jpg|js|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rtf|svg|svgz|swf|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz)(\?.*)?$") {
     unset req.http.Cookie;
     #return (pass);
+  }
+  if (req.url ~ "^[^?]*\.(7z|bz2|eot|gz|less|rar|tar|tbz|tgz|zip)(\?.*)?$") {
+    #unset req.http.Cookie;
+    return (pass);
   }
   
   #at the end because I need to remove previous cookies  
@@ -323,8 +325,18 @@ sub vcl_backend_response {
     set beresp.http.cache-control = "public, max-age = 0";
     unset beresp.http.set-cookie;
     return(deliver);
- }
+  }
+  if (bereq.url ~ "^[^?]*\.(7z|bz2|eot|gz|less|rar|tar|tbz|tgz|zip)(\?.*)?$") {
+    set beresp.http.cache-control = "public, max-age = 86400";
+    unset beresp.http.Cookie;
+    return (deliver);
+  }
 
+  if (bereq.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
+    unset beresp.http.Cookie;
+    set beresp.http.cache-control = "public, max-age = 86400";
+    return (deliver);
+  }
  
   #if (!(bereq.url ~ "language_set.php" || bereq.url ~ "cesta.php" || bereq.url ~ "pictogramas_color.php" || bereq.url ~ "pictogramas_byn.php"|| bereq.url ~ "imagenes.php" || bereq.url ~ "videos_lse.php" || bereq.url ~ "signos_lse_color.php" || bereq.url ~ "buscar.php" || bereq.url ~ "n_elementos_cesto.php" || bereq.url ~ "herramientas" || bereq.url ~ "zip_cesto.php" || bereq.url ~ "carpeta_trabajo.php" || bereq.url ~ "admin.php")) {
 
@@ -337,10 +349,6 @@ sub vcl_backend_response {
         return(deliver);
   }
   
-  if (bereq.url ~ "^[^?]*\.(7z|avi|bmp|bz2|css|csv|doc|docx|eot|flac|flv|gif|gz|ico|jpeg|jpg|js|less|mka|mkv|mov|mp3|mp4|mpeg|mpg|odt|otf|ogg|ogm|opus|pdf|png|ppt|pptx|rar|rtf|svg|svgz|swf|tar|tbz|tgz|ttf|txt|txz|wav|webm|webp|woff|woff2|xls|xlsx|xml|xz|zip)(\?.*)?$") {
-    unset beresp.http.Cookie;
-    set beresp.http.cache-control = "public, max-age = 86400";
-  }
 
   # Large static files are delivered directly to the end-user without
   # waiting for Varnish to fully read the file first.
